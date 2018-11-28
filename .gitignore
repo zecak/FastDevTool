@@ -5,3 +5,5 @@
 /.vs/FastDevTool/v15/Server/sqlite3
 /.vs/FastDevTool/v15
 /FastDevTool/obj/Debug
+/packages
+/FastDevTool/bin/Debug
