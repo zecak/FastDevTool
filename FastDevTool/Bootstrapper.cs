@@ -10,6 +10,6 @@ namespace FastDevTool
 {
     public class Bootstrapper : Bootstrapper<ShellViewModel>
     {
-        
+
     }
 }
