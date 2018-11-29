@@ -1,4 +1,5 @@
-﻿using FastDevTool.MVVM.NPCModel;
+﻿using FastDevTool.DataBase;
+using FastDevTool.MVVM.NPCModel;
 using Stylet;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,11 @@ namespace FastDevTool.MVVM
 {
     public class ShellViewModel : Screen
     {
+        LocalDbContext localDbContext = new LocalDbContext();
+        public ShellViewModel()
+        {
+            
+        }
 
         public string Name { get; set; } = "王者荣耀";
 

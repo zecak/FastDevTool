@@ -13,32 +13,36 @@ namespace FastDevTool.DataBase
 
     public class LocalDbContext : DbContext
     {
-        static string DBFileName
-        {
-            get
-            {
-                return System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + @"Data\FastDev.mdf");
-            }
-        }
-        public static AdoHelper GetDB()
-        {
-            return MyDB.GetDBHelperByProviderString("SqlServer", @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + DBFileName + ";Integrated Security=True");
-        }
 
         public LocalDbContext()
-               : base(GetDB())
+               : base(SQLHelper.MyDBCenter)
         {
 
         }
-        
+
         protected override bool CheckAllTableExists()
         {
-            //创建用户表
-            CheckTableExists<Tb_User>();
+            var cte = CheckTableExists<sys_table>();
+
+            //添加默认数据
+            
+            cte = CheckTableExists<sys_field_type>();
+
+            //添加默认数据
+            
+            cte = CheckTableExists<sys_enum>();
+
+            //添加默认数据
+            
+            cte = CheckTableExists<sys_table_column>();
+
+            //添加默认数据
+
+
             return true;
         }
 
-        
+
 
 
 

@@ -94,7 +94,10 @@
     </Compile>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="DataBase\LocalDbContext.cs" />
-    <Compile Include="DataBase\Model\Tb_User.cs" />
+    <Compile Include="DataBase\Model\sys_enum.cs" />
+    <Compile Include="DataBase\Model\sys_field_type.cs" />
+    <Compile Include="DataBase\Model\sys_table.cs" />
+    <Compile Include="DataBase\Model\sys_table_column.cs" />
     <Page Include="MVVM\ShellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -105,6 +108,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataBase\SQLHelper.cs" />
     <Compile Include="MVVM\NPCModel\Person.cs" />
     <Compile Include="MVVM\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
