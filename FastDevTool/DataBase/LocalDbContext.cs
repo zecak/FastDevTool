@@ -22,22 +22,26 @@ namespace FastDevTool.DataBase
 
         protected override bool CheckAllTableExists()
         {
-            var cte = CheckTableExists<sys_table>();
+            if(!CheckTableExists<sys_table>())//创建表并添加默认数据
+            {
 
-            //添加默认数据
+            }
+
+            if (!CheckTableExists<sys_field_type>())
+            {
+
+            }
+
+            if (!CheckTableExists<sys_enum>())
+            {
+
+            }
+
+            if (!CheckTableExists<sys_table_column>())
+            {
+
+            }
             
-            cte = CheckTableExists<sys_field_type>();
-
-            //添加默认数据
-            
-            cte = CheckTableExists<sys_enum>();
-
-            //添加默认数据
-            
-            cte = CheckTableExists<sys_table_column>();
-
-            //添加默认数据
-
 
             return true;
         }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace FastDevTool.DataBase.Model
 {
+    [PropertyChanged.DoNotNotify]
     public class sys_enum : EntityBase
     {
         [JsonIgnore]
