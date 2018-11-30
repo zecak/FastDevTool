@@ -29,8 +29,8 @@ namespace FastDevTool.DataBase.Model
             TableName = nameof(sys_table_column);
             IdentityName = nameof(ID);
             PrimaryKeys.Add(nameof(ID));
-            SetForeignKey<sys_field_type>(nameof(FieldTypeID));
-            SetForeignKey<sys_table>(nameof(TableID));
+            //SetForeignKey<sys_field_type>(nameof(FieldTypeID));
+            //SetForeignKey<sys_table>(nameof(TableID));
         }
 
         /// <summary>
@@ -99,10 +99,10 @@ namespace FastDevTool.DataBase.Model
         /// <summary>
         /// 枚举类型编号
         /// </summary>
-        public int EnumTypeID
+        public int EnumID
         {
-            get { return getProperty<int>(nameof(EnumTypeID)); }
-            set { setProperty(nameof(EnumTypeID), value); }
+            get { return getProperty<int>(nameof(EnumID)); }
+            set { setProperty(nameof(EnumID), value); }
         }
 
         /// <summary>
@@ -121,24 +121,6 @@ namespace FastDevTool.DataBase.Model
         {
             get { return getProperty<int>(nameof(TableID)); }
             set { setProperty(nameof(TableID), value); }
-        }
-        
-        /// <summary>
-        /// 名称前缀
-        /// </summary>
-        public string Prefix
-        {
-            get { return getProperty<string>(nameof(Prefix)); }
-            set { setProperty(nameof(Prefix), value, 50); }
-        }
-
-        /// <summary>
-        /// 名称后缀
-        /// </summary>
-        public string RestName
-        {
-            get { return getProperty<string>(nameof(RestName)); }
-            set { setProperty(nameof(RestName), value, 50); }
         }
 
         /// <summary>

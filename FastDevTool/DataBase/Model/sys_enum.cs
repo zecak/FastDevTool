@@ -59,6 +59,16 @@ namespace FastDevTool.DataBase.Model
         }
 
         /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title
+        {
+            get { return getProperty<string>(nameof(Title)); }
+            set { setProperty(nameof(Title), value, 50); }
+        }
+
+
+        /// <summary>
         /// 枚举数据
         /// </summary>
         public string JsonData

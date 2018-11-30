@@ -68,6 +68,15 @@ namespace FastDevTool.DataBase.Model
         }
 
         /// <summary>
+        /// 数据类型
+        /// </summary>
+        public string DbType
+        {
+            get { return getProperty<string>(nameof(DbType)); }
+            set { setProperty(nameof(DbType), value); }
+        }
+
+        /// <summary>
         /// 系统标志:0普通,1系统
         /// </summary>
         public int SystemMark
