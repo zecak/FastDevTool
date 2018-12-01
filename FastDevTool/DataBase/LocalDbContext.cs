@@ -66,15 +66,17 @@ namespace FastDevTool.DataBase
                     var model_table = table_list.FirstOrDefault(m => m.Name == table.GetTableName());
                     foreach (var item in table.Fields)
                     {
+                        var str = item.Key.Split('_');
+                        var fieldname = str[str.Length-1];
                         if (model_table != null)
                         {
                             var model_field = fieldtype_list.FirstOrDefault(m => m.DbType == item.Value.FieldDbType.ToString());
                             if (model_field != null)
                             {
-                                var model_enum = enum_list.FirstOrDefault(m => m.Name == item.Key);
+                                var model_enum = enum_list.FirstOrDefault(m => m.Name == fieldname);
                                 var enumid = 0;
                                 if (model_enum != null) { enumid = model_enum.ID; }
-                                Add(new sys_table_column() { GID = Guid.NewGuid(), Name = item.Key, FieldTypeID = model_field.ID, MaxLength = item.Value.FieldLength, DefaultValue = null, EnumID = enumid, TableID = model_table.ID, CreateTime = DateTime.Now, UpdateTime = DateTime.Now, SortNo = 0, Status = 1 });
+                                Add(new sys_table_column() { GID = Guid.NewGuid(), Name = fieldname, FieldTypeID = model_field.ID, MaxLength = item.Value.FieldLength, DefaultValue = null, EnumID = enumid, TableID = model_table.ID, CreateTime = DateTime.Now, UpdateTime = DateTime.Now, SortNo = 0, Status = 1 });
                             }
 
                         }
