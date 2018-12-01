@@ -108,6 +108,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataBase\MyColumn.cs" />
+    <Compile Include="DataBase\MyTable.cs" />
     <Compile Include="DataBase\SQLHelper.cs" />
     <Compile Include="MVVM\NPCModel\Person.cs" />
     <Compile Include="MVVM\ShellView.xaml.cs">

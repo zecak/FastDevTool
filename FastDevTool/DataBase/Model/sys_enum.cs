@@ -74,7 +74,7 @@ namespace FastDevTool.DataBase.Model
         public string JsonData
         {
             get { return getProperty<string>(nameof(JsonData)); }
-            set { setProperty(nameof(JsonData), value); }
+            set { setProperty(nameof(JsonData), value,4000); }
         }
 
         /// <summary>

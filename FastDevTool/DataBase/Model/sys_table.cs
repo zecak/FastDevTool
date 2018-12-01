@@ -24,13 +24,7 @@ namespace FastDevTool.DataBase.Model
             return Newtonsoft.Json.JsonConvert.SerializeObject(this);
         }
 
-        public Dictionary<string, SimplyField> Fields
-        {
-            get
-            {
-                return StringFieldSize;
-            }
-        }
+
 
         public sys_table()
         {

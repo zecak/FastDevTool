@@ -36,13 +36,13 @@ namespace FastDevTool.DataBase
 
                 var fieldtype_list = new List<sys_field_type>()
                 {
-                    new sys_field_type(){ GID=Guid.NewGuid(), Name="int", Title="整型", DbType=System.Data.DbType.Int32.ToString(), SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
-                    new sys_field_type(){ GID=Guid.NewGuid(), Name="decimal", Title="精确数值", DbType=System.Data.DbType.Decimal.ToString(), SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
-                    new sys_field_type(){ GID=Guid.NewGuid(), Name="money", Title="货币", DbType=System.Data.DbType.Currency.ToString(), SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
-                    new sys_field_type(){ GID=Guid.NewGuid(), Name="datetime", Title="日期时间", DbType=System.Data.DbType.DateTime.ToString(), SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
-                    new sys_field_type(){ GID=Guid.NewGuid(), Name="nvarchar", Title="字符串", DbType=System.Data.DbType.StringFixedLength.ToString(), SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
-                    new sys_field_type(){ GID=Guid.NewGuid(), Name="ntext", Title="文本", DbType=System.Data.DbType.String.ToString(), SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
-                    new sys_field_type(){ GID=Guid.NewGuid(), Name="uniqueidentifier", Title="全局唯一标记符", DbType=System.Data.DbType.Guid.ToString(), SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
+                    new sys_field_type(){ GID=Guid.NewGuid(), Name="int", Title="整型", SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
+                    new sys_field_type(){ GID=Guid.NewGuid(), Name="decimal", Title="精确数值", SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
+                    new sys_field_type(){ GID=Guid.NewGuid(), Name="money", Title="货币", SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
+                    new sys_field_type(){ GID=Guid.NewGuid(), Name="datetime", Title="日期时间", SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
+                    new sys_field_type(){ GID=Guid.NewGuid(), Name="nvarchar", Title="字符串", SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
+                    new sys_field_type(){ GID=Guid.NewGuid(), Name="ntext", Title="文本", SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
+                    new sys_field_type(){ GID=Guid.NewGuid(), Name="uniqueidentifier", Title="全局唯一标记符", SystemMark=1, CreateTime=DateTime.Now,UpdateTime=DateTime.Now, SortNo=0, Status=1 },
                 };
                 if (!CheckTableExists<sys_field_type>())
                 {
@@ -62,26 +62,23 @@ namespace FastDevTool.DataBase
 
                 if (!CheckTableExists<sys_table_column>())
                 {
-                    var table = new sys_table();
-                    var model_table = table_list.FirstOrDefault(m => m.Name == table.GetTableName());
-                    foreach (var item in table.Fields)
+                    foreach (var schema in TablesSchema)
                     {
-                        var str = item.Key.Split('_');
-                        var fieldname = str[str.Length-1];
-                        if (model_table != null)
+                        var model_table = table_list.FirstOrDefault(m => m.Name == schema.Name);
+                        foreach (var column in schema.Columns)
                         {
-                            var model_field = fieldtype_list.FirstOrDefault(m => m.DbType == item.Value.FieldDbType.ToString());
+                            var model_field = fieldtype_list.FirstOrDefault(m => m.Name == column.TypeName);
                             if (model_field != null)
                             {
-                                var model_enum = enum_list.FirstOrDefault(m => m.Name == fieldname);
+                                var model_enum = enum_list.FirstOrDefault(m => m.Name == column.Name);
                                 var enumid = 0;
                                 if (model_enum != null) { enumid = model_enum.ID; }
-                                Add(new sys_table_column() { GID = Guid.NewGuid(), Name = fieldname, FieldTypeID = model_field.ID, MaxLength = item.Value.FieldLength, DefaultValue = null, EnumID = enumid, TableID = model_table.ID, CreateTime = DateTime.Now, UpdateTime = DateTime.Now, SortNo = 0, Status = 1 });
+                                Add(new sys_table_column() { GID = Guid.NewGuid(), Name = column.Name, FieldTypeID = model_field.ID, MaxLength = column.MaxLength, DefaultValue = null, EnumID = enumid, TableID = model_table.ID, CreateTime = DateTime.Now, UpdateTime = DateTime.Now, SortNo = 0, Status = 1 });
                             }
-
                         }
-
                     }
+                   
+                   
 
                 }
 
@@ -92,7 +89,69 @@ namespace FastDevTool.DataBase
         }
 
 
+        List<MyTable> tablesSchema;
+        public List<MyTable> TablesSchema
+        {
+            get
+            {
+                if (tablesSchema == null)
+                {
+                    tablesSchema = GetTablesSchema();
+                }
+                return tablesSchema;
+            }
+        }
+        List<MyTable> GetTablesSchema()
+        {
+            try
+            {
+                var mytables = new List<MyTable>();
+                
+                var ds = this.CurrentDataBase.ExecuteDataSet("SELECT [sys].[tables].[name] tb_name, [sys].[tables].[object_id] tb_id,[sys].[extended_properties].[value] tb_desc FROM [sys].[tables] LEFT JOIN [sys].[extended_properties] ON [sys].[tables].[object_id] = [sys].[extended_properties].[major_id] and [sys].[extended_properties].[minor_id]=0");
+                foreach (System.Data.DataRow item in ds.Tables[0].Rows)
+                {
+                    var mytable = new MyTable();
+                    mytable.Name = item["tb_name"].ToString();
+                    mytable.TbId = Convert.ToInt32(item["tb_id"].ToString());
+                    mytable.Title = item["tb_desc"].ToString();
+                    mytable.SystemMark = mytable.Name.StartsWith("sys_") ? 1 : 0;
 
+                    var strs = mytable.Name.Split('_');
+                    if (strs.Length > 1)
+                    {
+                        mytable.Prefix = strs[0];
+                        mytable.RestName = mytable.Name.Substring(strs[0].Length + 1);
+                    }
+                    else
+                    {
+                        mytable.Prefix = "";
+                        mytable.RestName = mytable.Name;
+                    }
+
+                    var mytable_columns = new List<MyColumn>();
+                    var ds_column = this.CurrentDataBase.ExecuteDataSet("select column_name,max_length,typename,[sys].[extended_properties].[value] column_desc from (SELECT [object_id] tb_id ,[sys].[columns].[name] column_name,[column_id],[max_length] ,[sys].[systypes].[name] typename FROM [sys].[columns] LEFT JOIN [sys].[systypes] ON [sys].[columns].[user_type_id]=[sys].[systypes].[xusertype] WHERE object_id='" + mytable.TbId + "') t1 LEFT JOIN [sys].[extended_properties] ON t1.tb_id=[sys].[extended_properties].[major_id] and t1.column_id=[sys].[extended_properties].[minor_id]");
+                    foreach (System.Data.DataRow row_c in ds_column.Tables[0].Rows)
+                    {
+                        var mycolumn = new MyColumn();
+                        mycolumn.Name = row_c["column_name"].ToString();
+                        mycolumn.MaxLength = Convert.ToInt32(row_c["max_length"].ToString());
+
+                        mycolumn.TypeName = row_c["typename"].ToString();
+                        mycolumn.Title = row_c["column_desc"].ToString();
+
+                        mytable_columns.Add(mycolumn);
+                    }
+                    mytable.Columns = mytable_columns;
+                    mytables.Add(mytable);
+                }
+                return mytables;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
 
     }

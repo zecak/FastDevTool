@@ -25,5 +25,8 @@ namespace FastDevTool.DataBase
                 return MyDB.GetDBHelperByProviderString("SqlServer", @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + DBFileName + ";Integrated Security=True");
             }
         }
+
+
+
     }
 }
