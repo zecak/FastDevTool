@@ -11,10 +11,12 @@ namespace FastDevTool.MVVM
 {
     public class ShellViewModel : Screen
     {
+        private IWindowManager windowManager;
+
         LocalDbContext localDbContext = new LocalDbContext();
-        public ShellViewModel()
+        public ShellViewModel(IWindowManager windowManager)
         {
-            
+            this.windowManager = windowManager;
         }
 
         public string Name { get; set; } = "王者荣耀";
@@ -34,6 +36,11 @@ namespace FastDevTool.MVVM
             //{
             //    //_windowManger.ShowMessageBox(Name);
             //}
+        }
+
+        public void ShowUserModuleAdd()
+        {
+            windowManager.ShowDialog(new UserModuleAddViewModel());
         }
     }
 }

@@ -40,4 +40,58 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="MyTabItem" TargetType="{x:Type TabItem}">
+        <Setter Property="BorderBrush" Value="#FF727272"/>
+        <Setter Property="Background" Value="#FF727272"/>
+        <Setter Property="BorderThickness" Value="4 0 0 0"/>
+        <Setter Property="Foreground"  Value="#FFB2AFAF"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid Margin="2">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="10">
+                            <ContentPresenter ContentSource="Header" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Foreground"  Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="BorderBrush" Value="#FF3E6CBB"/>
+                            <Setter Property="Foreground"  Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MyTabItem_Right" TargetType="{x:Type TabItem}">
+        <Setter Property="BorderBrush" Value="#FF727272"/>
+        <Setter Property="Background" Value="#FF727272"/>
+        <Setter Property="BorderThickness" Value="4 0 0 0"/>
+        <Setter Property="Foreground"  Value="#FFB2AFAF"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid Margin="2">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="10">
+                            <ContentPresenter ContentSource="Header" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Foreground"  Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="BorderBrush" Value="#FF3E6CBB"/>
+                            <Setter Property="Foreground"  Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

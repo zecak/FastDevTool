@@ -16,18 +16,68 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <StackPanel>
-            <TextBlock FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Name}">
-            </TextBlock>
-            <Button Content="Say Hello" Command="{s:Action SayHello}"></Button>
-            <StackPanel>
-                <TextBlock FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MyPerson.FullName }">
-                </TextBlock>
-            </StackPanel>
-            <Button Content="Add User" Command="{s:Action AddUser}"></Button>
-            <ComboBox ItemsSource="{Binding datas}" DisplayMemberPath="FullName" SelectedValuePath="ID" SelectedValue="{Binding ID}" IsReadOnly="True" >
 
-            </ComboBox>
-        </StackPanel>
+        <TabControl>
+            <TabItem Header="模块设计" Style="{StaticResource MyTabItem}">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top">
+                        <Button Margin="4" Padding="10" Command="{s:Action ShowUserModuleAdd}">
+                            <TextBlock>新增模块</TextBlock>
+                        </Button>
+                        <Button Margin="4" Padding="10">
+                            <TextBlock>编辑模块</TextBlock>
+                        </Button>
+                        <Button Margin="4" Padding="10">
+                            <TextBlock>复制模块</TextBlock>
+                        </Button>
+                        <Button Margin="4" Padding="10">
+                            <TextBlock>删除模块</TextBlock>
+                        </Button>
+                        <Button Margin="4" Padding="10">
+                            <TextBlock>模块模板</TextBlock>
+                        </Button>
+                        <TextBlock></TextBlock>
+                    </DockPanel>
+                    <TabControl TabStripPlacement="Left" Padding="0">
+                        <TabItem Header="表" Style="{StaticResource MyTabItem}">
+                            
+                        </TabItem>
+                        <TabItem Header="表2" Style="{StaticResource MyTabItem}">
+                            <DataGrid Margin="5" AutoGenerateColumns="False" HeadersVisibility="All" RowHeaderWidth="0" ItemsSource="{Binding DataList}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="订房人" Binding="{Binding MemberName}" Width="1*" SortDirection="Descending"/>
+                                    <DataGridTextColumn Header="营业组别" Binding="{Binding GroupName}" Width="1*"/>
+                                    <DataGridTextColumn Header="开台日期" Binding="{Binding ConsumeDate, StringFormat=\{0:yyyy-MM-dd HH:mm:ss\}}" Width="1*"/>
+                                    <DataGridTextColumn Header="所开房台" Binding="{Binding SeatName}" Width="1*"/>
+                                    <DataGridTextColumn Header="房台类型" Binding="{Binding SeatTypeName}" Width="1*"/>
+                                    <DataGridTextColumn Header="消费金额" Binding="{Binding PayableAmount}" Width="1*"/>
+                                    <DataGridTextColumn  Header=""  Width="Auto"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+                    </TabControl>
+                </DockPanel>
+                
+            </TabItem>
+            <TabItem Header="系统模块" Style="{StaticResource MyTabItem}">
+                
+            </TabItem>
+            <TabItem Header="测试" Style="{StaticResource MyTabItem}">
+                <StackPanel>
+                    <TextBlock FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Name}">
+                    </TextBlock>
+                    <Button Content="Say Hello" Command="{s:Action SayHello}"></Button>
+                    <StackPanel>
+                        <TextBlock FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MyPerson.FullName }">
+                        </TextBlock>
+                    </StackPanel>
+                    <Button Content="Add User" Command="{s:Action AddUser}"></Button>
+                    <ComboBox ItemsSource="{Binding datas}" DisplayMemberPath="FullName" SelectedValuePath="ID" SelectedValue="{Binding ID}" IsReadOnly="True" >
+
+                    </ComboBox>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+       
     </Grid>
 </Window>

@@ -102,6 +102,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\UserModuleAddView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Res\ControlStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -111,11 +115,16 @@
     <Compile Include="DataBase\MyColumn.cs" />
     <Compile Include="DataBase\MyTable.cs" />
     <Compile Include="DataBase\SQLHelper.cs" />
+    <Compile Include="MVVM\NPCModel\ModuleInfo.cs" />
     <Compile Include="MVVM\NPCModel\Person.cs" />
     <Compile Include="MVVM\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\ShellViewModel.cs" />
+    <Compile Include="MVVM\UserModuleAddView.xaml.cs">
+      <DependentUpon>UserModuleAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\UserModuleAddViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -154,6 +163,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>FastDev.mdf</DependentUpon>
     </Content>
+    <None Include="ModuleTemplates\Def.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
