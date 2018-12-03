@@ -38,23 +38,38 @@
                         </Button>
                         <TextBlock></TextBlock>
                     </DockPanel>
-                    <TabControl TabStripPlacement="Left" Padding="0">
-                        <TabItem Header="表" Style="{StaticResource MyTabItem}">
-                            
-                        </TabItem>
-                        <TabItem Header="表2" Style="{StaticResource MyTabItem}">
-                            <DataGrid Margin="5" AutoGenerateColumns="False" HeadersVisibility="All" RowHeaderWidth="0" ItemsSource="{Binding DataList}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="订房人" Binding="{Binding MemberName}" Width="1*" SortDirection="Descending"/>
-                                    <DataGridTextColumn Header="营业组别" Binding="{Binding GroupName}" Width="1*"/>
-                                    <DataGridTextColumn Header="开台日期" Binding="{Binding ConsumeDate, StringFormat=\{0:yyyy-MM-dd HH:mm:ss\}}" Width="1*"/>
-                                    <DataGridTextColumn Header="所开房台" Binding="{Binding SeatName}" Width="1*"/>
-                                    <DataGridTextColumn Header="房台类型" Binding="{Binding SeatTypeName}" Width="1*"/>
-                                    <DataGridTextColumn Header="消费金额" Binding="{Binding PayableAmount}" Width="1*"/>
-                                    <DataGridTextColumn  Header=""  Width="Auto"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </TabItem>
+                    <TabControl TabStripPlacement="Left" Padding="0" ItemsSource="{Binding TableInfos}">
+                        <TabControl.ItemContainerStyle>
+                            <Style TargetType="TabItem" BasedOn="{StaticResource MyTabItem}">
+                                <Setter Property="HeaderTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <DockPanel>
+                                                <TextBlock Text="{Binding Title}"/>
+                                                <TextBlock Text="("></TextBlock>
+                                                <TextBlock Text="{Binding Name}"></TextBlock>
+                                                <TextBlock Text=")"></TextBlock>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TabControl.ItemContainerStyle>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <DataGrid Margin="5" AutoGenerateColumns="False" HeadersVisibility="All" RowHeaderWidth="0" ItemsSource="{Binding ColumnInfos}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="订房人" Binding="{Binding MemberName}" Width="1*" SortDirection="Descending"/>
+                                        <DataGridTextColumn Header="营业组别" Binding="{Binding GroupName}" Width="1*"/>
+                                        <DataGridTextColumn Header="开台日期" Binding="{Binding ConsumeDate, StringFormat=\{0:yyyy-MM-dd HH:mm:ss\}}" Width="1*"/>
+                                        <DataGridTextColumn Header="所开房台" Binding="{Binding SeatName}" Width="1*"/>
+                                        <DataGridTextColumn Header="房台类型" Binding="{Binding SeatTypeName}" Width="1*"/>
+                                        <DataGridTextColumn Header="消费金额" Binding="{Binding PayableAmount}" Width="1*"/>
+                                        <DataGridTextColumn  Header=""  Width="Auto"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
                     </TabControl>
                 </DockPanel>
                 

@@ -14,9 +14,15 @@ namespace FastDevTool.MVVM
         private IWindowManager windowManager;
 
         LocalDbContext localDbContext = new LocalDbContext();
+
+        public List<TableInfo> TableInfos { get; set; }
+
+
         public ShellViewModel(IWindowManager windowManager)
         {
             this.windowManager = windowManager;
+
+            TableInfos = localDbContext.GetTablesSchema().Where(m=>m.SystemMark!=1).ToList().ConvertAll(m=>new TableInfo() { Name=m.Name, Title=m.Title, ColumnInfos=m.Columns.ConvertAll(c=>new ColumnInfo() { Name=c.Name,Title=c.Title }) });
         }
 
         public string Name { get; set; } = "王者荣耀";
@@ -30,17 +36,12 @@ namespace FastDevTool.MVVM
         public void AddUser()
         {
             ID = 1;
-            //_windowManger.ShowDialog(_ChildDialog);
-            //var ok = LocalDbContext.Add("吕布", "123");
-            //if (ok)
-            //{
-            //    //_windowManger.ShowMessageBox(Name);
-            //}
         }
 
         public void ShowUserModuleAdd()
         {
             windowManager.ShowDialog(new UserModuleAddViewModel());
+            TableInfos = localDbContext.GetTablesSchema().Where(m => m.SystemMark != 1).ToList().ConvertAll(m => new TableInfo() { Name = m.Name, Title = m.Title });
         }
     }
 }

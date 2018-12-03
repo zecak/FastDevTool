@@ -5,6 +5,7 @@ using PWMIS.DataProvider.Adapter;
 using PWMIS.DataProvider.Data;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,8 +78,8 @@ namespace FastDevTool.DataBase
                             }
                         }
                     }
-                   
-                   
+
+
 
                 }
 
@@ -101,12 +102,12 @@ namespace FastDevTool.DataBase
                 return tablesSchema;
             }
         }
-        List<MyTable> GetTablesSchema()
+        public List<MyTable> GetTablesSchema()
         {
             try
             {
                 var mytables = new List<MyTable>();
-                
+
                 var ds = this.CurrentDataBase.ExecuteDataSet("SELECT [sys].[tables].[name] tb_name, [sys].[tables].[object_id] tb_id,[sys].[extended_properties].[value] tb_desc FROM [sys].[tables] LEFT JOIN [sys].[extended_properties] ON [sys].[tables].[object_id] = [sys].[extended_properties].[major_id] and [sys].[extended_properties].[minor_id]=0");
                 foreach (System.Data.DataRow item in ds.Tables[0].Rows)
                 {
@@ -153,6 +154,44 @@ namespace FastDevTool.DataBase
             }
         }
 
+        public DataSet ExecuteDataSet(string sql)
+        {
+            return this.CurrentDataBase.ExecuteDataSet(sql);
+        }
 
+        public object ExecuteScalar(string sql)
+        {
+            return this.CurrentDataBase.ExecuteScalar(sql);
+        }
+        public bool ExecuteNonQuery(string sql)
+        {
+            try
+            {
+                this.CurrentDataBase.ExecuteNonQuery(sql);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+        public bool ExistsUserTable(string tablename)
+        {
+            var sql = "select 1 from [sys].[tables] where name ='u_"+ ReplaceFieldValue(tablename) + "'";
+            var num = ExecuteScalar(sql);
+            return num != null;
+        }
+
+        /// <summary>
+        /// 过滤sql的单引号,防注入
+        /// </summary>
+        /// <param name="fieldvalue"></param>
+        /// <returns></returns>
+        string ReplaceFieldValue(string fieldvalue)
+        {
+            return fieldvalue.Replace("'", "''");
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FastDevTool.DataBase;
+﻿using FastDevTool.Common;
+using FastDevTool.DataBase;
 using FastDevTool.MVVM.NPCModel;
 using Stylet;
 using System;
@@ -11,6 +12,7 @@ namespace FastDevTool.MVVM
 {
     public class UserModuleAddViewModel : Screen
     {
+        LocalDbContext localDbContext = new LocalDbContext();
         public ModuleInfo MyModuleInfo { get; set; } = new ModuleInfo();
 
         public UserModuleAddViewModel()
@@ -20,14 +22,32 @@ namespace FastDevTool.MVVM
 
         public void AddNew()
         {
-            if(string.IsNullOrWhiteSpace(MyModuleInfo.Name))
+            if (string.IsNullOrWhiteSpace(MyModuleInfo.Name))
             {
                 System.Windows.MessageBox.Show("请填写名称");
                 return;
             }
+            if (string.IsNullOrWhiteSpace(MyModuleInfo.Title))
+            {
+                System.Windows.MessageBox.Show("请填写标题");
+                return;
+            }
 
+            if (localDbContext.ExistsUserTable(MyModuleInfo.Name))
+            {
+                System.Windows.MessageBox.Show("该模块已存在");
+                return;
+            }
 
+            var template = TemplateManage.GetTemplateDef(MyModuleInfo.Name.Trim(), MyModuleInfo.Title.Trim());
 
+            var ok = localDbContext.ExecuteNonQuery(template);
+            if(!ok)
+            {
+                System.Windows.MessageBox.Show("新增模块失败");
+                return;
+            }
+            this.RequestClose(true);
         }
     }
 }

@@ -93,6 +93,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Common\TemplateManage.cs" />
     <Compile Include="DataBase\LocalDbContext.cs" />
     <Compile Include="DataBase\Model\sys_enum.cs" />
     <Compile Include="DataBase\Model\sys_field_type.cs" />
@@ -115,8 +116,10 @@
     <Compile Include="DataBase\MyColumn.cs" />
     <Compile Include="DataBase\MyTable.cs" />
     <Compile Include="DataBase\SQLHelper.cs" />
+    <Compile Include="MVVM\NPCModel\ColumnInfo.cs" />
     <Compile Include="MVVM\NPCModel\ModuleInfo.cs" />
     <Compile Include="MVVM\NPCModel\Person.cs" />
+    <Compile Include="MVVM\NPCModel\TableInfo.cs" />
     <Compile Include="MVVM\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
@@ -153,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataBase\BLL\" />
+    <Folder Include="ModuleTemplates\All\" />
     <Folder Include="Res\pic\" />
   </ItemGroup>
   <ItemGroup>
