@@ -12,4 +12,102 @@ CREATE TABLE [u_{0}](
 	[VersonTime] [timestamp] NOT NULL,
 )
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'{1}' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'u_{0}'
+
+EXEC sys.sp_addextendedproperty @name = N'MS_Description',
+    @value = N'编号',
+    @level0type = N'SCHEMA',
+    @level0name = N'dbo',
+    @level1type = N'TABLE',
+    @level1name = N'u_{0}',
+    @level2type = N'COLUMN',
+    @level2name = N'ID'
+
+EXEC sys.sp_addextendedproperty @name = N'MS_Description',
+    @value = N'全局编号',
+    @level0type = N'SCHEMA',
+    @level0name = N'dbo',
+    @level1type = N'TABLE',
+    @level1name = N'u_{0}',
+    @level2type = N'COLUMN',
+    @level2name = N'GID'
+
+EXEC sys.sp_addextendedproperty @name = N'MS_Description',
+    @value = N'名称',
+    @level0type = N'SCHEMA',
+    @level0name = N'dbo',
+    @level1type = N'TABLE',
+    @level1name = N'u_{0}',
+    @level2type = N'COLUMN',
+    @level2name = N'Name'
+
+EXEC sys.sp_addextendedproperty @name = N'MS_Description',
+    @value = N'排序',
+    @level0type = N'SCHEMA',
+    @level0name = N'dbo',
+    @level1type = N'TABLE',
+    @level1name = N'u_{0}',
+    @level2type = N'COLUMN',
+    @level2name = N'SortNo'
+
+EXEC sys.sp_addextendedproperty @name = N'MS_Description',
+    @value = N'状态',
+    @level0type = N'SCHEMA',
+    @level0name = N'dbo',
+    @level1type = N'TABLE',
+    @level1name = N'u_{0}',
+    @level2type = N'COLUMN',
+    @level2name = N'Status'
+
+EXEC sys.sp_addextendedproperty @name = N'MS_Description',
+    @value = N'创建时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'dbo',
+    @level1type = N'TABLE',
+    @level1name = N'u_{0}',
+    @level2type = N'COLUMN',
+    @level2name = N'CreateTime'
+
+EXEC sys.sp_addextendedproperty @name = N'MS_Description',
+    @value = N'更新时间',
+    @level0type = N'SCHEMA',
+    @level0name = N'dbo',
+    @level1type = N'TABLE',
+    @level1name = N'u_{0}',
+    @level2type = N'COLUMN',
+    @level2name = N'UpdateTime'
+
+EXEC sys.sp_addextendedproperty @name = N'MS_Description',
+    @value = N'时间戳',
+    @level0type = N'SCHEMA',
+    @level0name = N'dbo',
+    @level1type = N'TABLE',
+    @level1name = N'u_{0}',
+    @level2type = N'COLUMN',
+    @level2name = N'VersonTime'
+
+
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd1')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd2')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd3')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd4')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd5')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd6')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd7')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd8')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd9')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd10')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd11')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd12')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd13')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd14')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd15')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd16')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd17')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd18')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd19')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd20')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd21')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd22')
+	INSERT INTO [u_{0}] ([Name]) VALUES (N'asd23')
+
 end

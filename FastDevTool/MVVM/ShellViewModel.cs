@@ -22,7 +22,7 @@ namespace FastDevTool.MVVM
         {
             this.windowManager = windowManager;
 
-            TableInfos = localDbContext.GetTablesSchema().Where(m=>m.SystemMark!=1).ToList().ConvertAll(m=>new TableInfo() { Name=m.Name, Title=m.Title, ColumnInfos=m.Columns.ConvertAll(c=>new ColumnInfo() { Name=c.Name,Title=c.Title }) });
+            TableInfos = localDbContext.GetTablesSchema().Where(m => m.SystemMark != 1).ToList().ConvertAll(m => new TableInfo() { Name = m.Name, Title = m.Title, Table = localDbContext.GetListForPage(m.Name, new Common.Paging(), m.Columns) });
         }
 
         public string Name { get; set; } = "王者荣耀";
@@ -41,7 +41,7 @@ namespace FastDevTool.MVVM
         public void ShowUserModuleAdd()
         {
             windowManager.ShowDialog(new UserModuleAddViewModel());
-            TableInfos = localDbContext.GetTablesSchema().Where(m => m.SystemMark != 1).ToList().ConvertAll(m => new TableInfo() { Name = m.Name, Title = m.Title });
+            TableInfos = localDbContext.GetTablesSchema().Where(m => m.SystemMark != 1).ToList().ConvertAll(m => new TableInfo() { Name = m.Name, Title = m.Title,Paging=new Common.Paging(), Table = localDbContext.GetListForPage(m.Name, new Common.Paging(), m.Columns) });
         }
     }
 }

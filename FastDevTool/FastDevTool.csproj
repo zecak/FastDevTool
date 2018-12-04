@@ -93,6 +93,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Common\Paging.cs" />
     <Compile Include="Common\TemplateManage.cs" />
     <Compile Include="DataBase\LocalDbContext.cs" />
     <Compile Include="DataBase\Model\sys_enum.cs" />

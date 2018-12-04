@@ -33,7 +33,7 @@ namespace FastDevTool.MVVM
                 return;
             }
 
-            if (localDbContext.ExistsUserTable(MyModuleInfo.Name))
+            if (localDbContext.ExistsTable(MyModuleInfo.Name))
             {
                 System.Windows.MessageBox.Show("该模块已存在");
                 return;

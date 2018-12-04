@@ -18,7 +18,7 @@
     <Grid>
 
         <TabControl>
-            <TabItem Header="模块设计" Style="{StaticResource MyTabItem}">
+            <TabItem Header="模块设计" Style="{DynamicResource MyTabItem}">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top">
                         <Button Margin="4" Padding="10" Command="{s:Action ShowUserModuleAdd}">
@@ -57,16 +57,7 @@
                         </TabControl.ItemContainerStyle>
                         <TabControl.ContentTemplate>
                             <DataTemplate>
-                                <DataGrid Margin="5" AutoGenerateColumns="False" HeadersVisibility="All" RowHeaderWidth="0" ItemsSource="{Binding ColumnInfos}">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="订房人" Binding="{Binding MemberName}" Width="1*" SortDirection="Descending"/>
-                                        <DataGridTextColumn Header="营业组别" Binding="{Binding GroupName}" Width="1*"/>
-                                        <DataGridTextColumn Header="开台日期" Binding="{Binding ConsumeDate, StringFormat=\{0:yyyy-MM-dd HH:mm:ss\}}" Width="1*"/>
-                                        <DataGridTextColumn Header="所开房台" Binding="{Binding SeatName}" Width="1*"/>
-                                        <DataGridTextColumn Header="房台类型" Binding="{Binding SeatTypeName}" Width="1*"/>
-                                        <DataGridTextColumn Header="消费金额" Binding="{Binding PayableAmount}" Width="1*"/>
-                                        <DataGridTextColumn  Header=""  Width="Auto"/>
-                                    </DataGrid.Columns>
+                                <DataGrid Margin="5" AutoGenerateColumns="True" Style="{DynamicResource MyStyle_AzureDataGrid}" ItemsSource="{Binding Table}"  >
                                 </DataGrid>
                             </DataTemplate>
                         </TabControl.ContentTemplate>
@@ -75,7 +66,7 @@
                 
             </TabItem>
             <TabItem Header="系统模块" Style="{StaticResource MyTabItem}">
-                
+              
             </TabItem>
             <TabItem Header="测试" Style="{StaticResource MyTabItem}">
                 <StackPanel>
