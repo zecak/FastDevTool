@@ -70,8 +70,15 @@
     </Style>
 
     <Style x:Key="MyStyle_AzureDataGrid" TargetType="{x:Type DataGrid}">
+        <Setter Property="ColumnHeaderStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
         <Setter Property="AlternationCount" Value="2"></Setter>
-        <Setter Property="RowHeight" Value="32" />
+        <Setter Property="RowHeight" Value="28" />
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type DataGridRow}">
@@ -83,6 +90,9 @@
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                             <Setter Property="Background" Value="White" />
                         </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#7FB0B0B0" />
+                        </Trigger>
                     </Style.Triggers>
                 </Style>
             </Setter.Value>
@@ -90,9 +100,18 @@
         <Setter Property="CellStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center" >
+                           <ContentPresenter />
+                                </TextBlock>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#FF23A1D1"/>
+                            <Setter Property="Foreground" Value="#FF389CCB"/>
                             <Setter Property="BorderThickness" Value="0"></Setter>
                         </Trigger>
                     </Style.Triggers>

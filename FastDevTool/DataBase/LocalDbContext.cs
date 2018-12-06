@@ -1,5 +1,6 @@
 ﻿using FastDevTool.Common;
 using FastDevTool.DataBase.Model;
+using FastDevTool.MVVM.NPCModel;
 using PWMIS.Core.Extensions;
 using PWMIS.DataMap.Entity;
 using PWMIS.DataProvider.Adapter;
@@ -207,7 +208,7 @@ namespace FastDevTool.DataBase
             return dset.Tables[0];
         }
 
-        public DataTable GetListForPage(string tablename, Paging paging, List<MyColumn> myColumns)
+        public DataTable GetListForPage(string tablename, Paging paging, List<ColumnInfo> myColumns)
         {
             if (string.IsNullOrWhiteSpace(tablename)) { return null; }
             tablename = ReplaceFieldValue(tablename);
@@ -216,8 +217,8 @@ namespace FastDevTool.DataBase
             var sql = string.Format("SELECT TOP {0} * FROM (SELECT ROW_NUMBER() OVER (ORDER BY id) AS RowNumber,* FROM [{1}]) as A WHERE RowNumber > {0}*({2}-1)", paging.PageSize, tablename, paging.PageIndex);
             var dset = ExecuteDataSet(sql);
             var dt = dset.Tables[0];
-            dt.Columns.Remove("RowNumber");
-            dt.Columns.Remove("VersonTime");
+            dt.Columns.RemoveAt(0);
+            //dt.Columns.Remove("VersonTime");
             foreach (DataColumn c in dt.Columns)
             {
                 var myc = myColumns.FirstOrDefault(m => m.Name == c.ColumnName);

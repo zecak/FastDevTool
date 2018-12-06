@@ -22,17 +22,18 @@ namespace FastDevTool.MVVM
 
         public void AddNew()
         {
-            if (string.IsNullOrWhiteSpace(MyModuleInfo.Name))
-            {
-                System.Windows.MessageBox.Show("请填写名称");
-                return;
-            }
             if (string.IsNullOrWhiteSpace(MyModuleInfo.Title))
             {
                 System.Windows.MessageBox.Show("请填写标题");
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(MyModuleInfo.Name))
+            {
+                System.Windows.MessageBox.Show("请填写名称");
+                return;
+            }
+           
             if (localDbContext.ExistsTable(MyModuleInfo.Name))
             {
                 System.Windows.MessageBox.Show("该模块已存在");
@@ -48,6 +49,15 @@ namespace FastDevTool.MVVM
                 return;
             }
             this.RequestClose(true);
+        }
+
+        public void GetPinyin(string title)
+        {
+            if(string.IsNullOrWhiteSpace(title))
+            {
+                title = "";
+            }
+            MyModuleInfo.Name = Helper.GetPinyin(title).Trim().Replace(' ','_');
         }
     }
 }

@@ -53,8 +53,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPinyinPro, Version=0.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPinyinPro.0.3.3\lib\net20\NPinyinPro.dll</HintPath>
     </Reference>
     <Reference Include="PropertyChanged, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.2.6.0\lib\net452\PropertyChanged.dll</HintPath>
@@ -70,6 +76,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -93,6 +102,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Common\Helper.cs" />
+    <Compile Include="Common\Pager.cs" />
     <Compile Include="Common\Paging.cs" />
     <Compile Include="Common\TemplateManage.cs" />
     <Compile Include="DataBase\LocalDbContext.cs" />
@@ -100,6 +111,7 @@
     <Compile Include="DataBase\Model\sys_field_type.cs" />
     <Compile Include="DataBase\Model\sys_table.cs" />
     <Compile Include="DataBase\Model\sys_table_column.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Page Include="MVVM\ShellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -119,7 +131,6 @@
     <Compile Include="DataBase\SQLHelper.cs" />
     <Compile Include="MVVM\NPCModel\ColumnInfo.cs" />
     <Compile Include="MVVM\NPCModel\ModuleInfo.cs" />
-    <Compile Include="MVVM\NPCModel\Person.cs" />
     <Compile Include="MVVM\NPCModel\TableInfo.cs" />
     <Compile Include="MVVM\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>

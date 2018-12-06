@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:FastDevTool.MVVM"
         mc:Ignorable="d"
          xmlns:s="https://github.com/canton7/Stylet"
+          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         d:DataContext="{d:DesignInstance local:UserModuleAddViewModel}"
         Title="新增模块" Height="500" Width="400">
     <Grid>
@@ -14,12 +15,20 @@
                 <TabItem Header="新模块">
                     <StackPanel Margin="40">
                         <DockPanel Margin="10">
-                            <TextBlock Text="名称(英文名称):"></TextBlock>
-                            <TextBox Text="{Binding MyModuleInfo.Name}"></TextBox>
+                            <TextBlock Text="模块标题:"></TextBlock>
+                            <TextBox x:Name="mTitle" Text="{Binding MyModuleInfo.Title}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <i:InvokeCommandAction Command="{s:Action GetPinyin}" CommandParameter="{Binding ElementName=mTitle,Path=Text}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
                         </DockPanel>
                         <DockPanel Margin="10">
-                            <TextBlock Text="标题(显示名称):"></TextBlock>
-                            <TextBox Text="{Binding MyModuleInfo.Title}"></TextBox>
+                            <TextBlock Text="模块名称:"></TextBlock>
+                            <TextBox Text="{Binding MyModuleInfo.Name}">
+                                
+                            </TextBox>
                         </DockPanel>
                         <DockPanel Margin="10">
                             <Button Command="{s:Action AddNew}">
