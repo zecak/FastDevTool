@@ -78,13 +78,24 @@
                                             <TextBlock Text="页"/>
                                         </DockPanel>
                                         <DockPanel HorizontalAlignment="Right">
-                                            <Button Margin="4 0" Command="{s:Action GoPageIndex}" CommandParameter="{Binding Paging.First}" Content="首页"/>
-                                            <Button Margin="4 0" Command="{s:Action GoPageIndex}" CommandParameter="{Binding Paging.Previous}" Content="上一页"/>
-                                            <DockPanel x:Name="dpnlBtns">
-                                                <Button Content="1"/>
+                                            <Button Margin="4 0" Command="{s:Action GoPageFirst}" CommandParameter="{Binding}" Content="首页"/>
+                                            <Button Margin="4 0" Command="{s:Action GoPagePrevious}" CommandParameter="{Binding}" Content="上一页"/>
+                                            <DockPanel>
+                                                <ItemsControl ItemsSource="{Binding PageNumberList}" >
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Button Margin="4 0" Padding="4" Width="25"   Content="{Binding}"   />
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
                                             </DockPanel>
-                                            <Button Margin="4 0" Command="{s:Action GoPageIndex}" CommandParameter="{Binding Paging.Next}" Content="下一页"/>
-                                            <Button Margin="4 0" Command="{s:Action GoPageIndex}" CommandParameter="{Binding Paging.Last}" Content="尾页"/>
+                                            <Button Margin="4 0" Command="{s:Action GoPageNext}" CommandParameter="{Binding}" Content="下一页"/>
+                                            <Button Margin="4 0" Command="{s:Action GoPageLast}" CommandParameter="{Binding}" Content="尾页"/>
                                             <Label Margin="4 0" VerticalAlignment="Center" Content="第"/>
                                             <TextBox x:Name="txtGoNum" Margin="4 0" Width="30" Text="{Binding Paging.PageIndex}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                                             <Label Margin="4 0" VerticalAlignment="Center" Content="页"/>

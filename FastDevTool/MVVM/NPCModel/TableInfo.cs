@@ -22,6 +22,8 @@ namespace FastDevTool.MVVM.NPCModel
 
         public Paging Paging { get; set; }
 
+        public List<int> PageNumberList { get; set; }
+
         public int DataPageIndex { get; set; }
 
         public List<ColumnInfo> ColumnInfos { get; set; }
