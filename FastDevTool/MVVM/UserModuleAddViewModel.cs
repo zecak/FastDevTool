@@ -13,11 +13,12 @@ namespace FastDevTool.MVVM
     public class UserModuleAddViewModel : Screen
     {
         LocalDbContext localDbContext = new LocalDbContext();
+        
         public ModuleInfo MyModuleInfo { get; set; } = new ModuleInfo();
 
         public UserModuleAddViewModel()
         {
-
+             
         }
 
         public void AddNew()

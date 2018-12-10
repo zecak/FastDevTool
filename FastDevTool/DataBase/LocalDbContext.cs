@@ -14,7 +14,9 @@ using System.Threading.Tasks;
 
 namespace FastDevTool.DataBase
 {
-
+    /// <summary>
+    /// MSSQL
+    /// </summary>
     public class LocalDbContext : DbContext
     {
 
@@ -142,6 +144,15 @@ namespace FastDevTool.DataBase
                         mycolumn.TypeName = row_c["typename"].ToString();
                         mycolumn.Title = row_c["column_desc"].ToString();
 
+                        if (mycolumn.TypeName == "nvarchar" || mycolumn.TypeName == "varchar")
+                        {
+                            mycolumn.MaxLength = mycolumn.MaxLength / 2;
+                        }
+                        else
+                        {
+                            mycolumn.MaxLength = -1;
+                        }
+
                         mytable_columns.Add(mycolumn);
                     }
                     mytable.Columns = mytable_columns;
@@ -228,6 +239,29 @@ namespace FastDevTool.DataBase
                 }
             }
             return dt;
+        }
+
+        public bool AddColumn(string tableName,string fieldName,string fieldType,int maxLength)
+        {
+            var str = "";
+            if(fieldType== "nvarchar"||fieldType== "varchar")
+            {
+                str =" "+ fieldType+"("+ maxLength.ToString() + ") ";
+            }
+            else
+            {
+                str = " "+ fieldType+" ";
+            }
+            var sql = "alter table "+tableName+" add column "+fieldName+" "+ str + ";";
+            var num = ExecuteNonQuery(sql);
+            return num;
+        }
+
+        public bool DelColumn(string tableName, string fieldName)
+        {
+            var sql = "alter table "+ ReplaceFieldValue(tableName) +" drop column "+ ReplaceFieldValue(fieldName) +";";
+            var num = ExecuteNonQuery(sql);
+            return num;
         }
     }
 }

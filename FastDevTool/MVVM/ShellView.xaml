@@ -9,7 +9,7 @@
          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:common="clr-namespace:FastDevTool.Common"
         d:DataContext="{d:DesignInstance local:ShellViewModel}"
-        Title="主界面" MinHeight="600" MinWidth="800" Style="{DynamicResource WindowStyle1}">
+        Title="主界面"  MinHeight="600" MinWidth="800" Height="600" Width="800" Style="{DynamicResource WindowStyle1}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -27,9 +27,6 @@
                             <TextBlock>新增模块</TextBlock>
                         </Button>
                         <Button Margin="4" Padding="10">
-                            <TextBlock>编辑模块</TextBlock>
-                        </Button>
-                        <Button Margin="4" Padding="10">
                             <TextBlock>复制模块</TextBlock>
                         </Button>
                         <Button Margin="4" Padding="10">
@@ -40,7 +37,7 @@
                         </Button>
                         <TextBlock></TextBlock>
                     </DockPanel>
-                    <TabControl TabStripPlacement="Left" Padding="0" ItemsSource="{Binding TableInfos}">
+                    <TabControl TabStripPlacement="Left" Padding="0" ItemsSource="{Binding TableInfos}" SelectedIndex="{Binding IndexTableInfo}">
                         <TabControl.ItemContainerStyle>
                             <Style TargetType="TabItem" BasedOn="{StaticResource MyTabItem}">
                                 <Setter Property="HeaderTemplate">
@@ -59,16 +56,18 @@
                         </TabControl.ItemContainerStyle>
                         <TabControl.ContentTemplate>
                             <DataTemplate>
-                                <StackPanel Margin="8">
-                                    <DockPanel Margin="0 0 0 10">
-                                        <Button Command="{Binding LoadDataCommand}">
-                                            <TextBlock Text="列管理"></TextBlock>
-                                        </Button>
+                                <DockPanel Margin="8">
+                                    <DockPanel DockPanel.Dock="Top" Margin="0 0 0 10">
+                                        <WrapPanel>
+                                            <Button Margin="2" Padding="10" Command="{s:Action ShowColumnManage}" CommandParameter="{Binding }">
+                                                <TextBlock Text="列管理"></TextBlock>
+                                            </Button>
+                                            <Button Margin="2" Padding="10">
+                                                <TextBlock Text="数据管理"></TextBlock>
+                                            </Button>
+                                        </WrapPanel>
                                     </DockPanel>
-
-                                    <DataGrid AutoGenerateColumns="True" Style="{DynamicResource MyStyle_AzureDataGrid}" ItemsSource="{Binding Table}" SelectedIndex="{Binding IndexTableInfo}"  >
-                                    </DataGrid>
-                                    <DockPanel>
+                                    <DockPanel DockPanel.Dock="Bottom">
                                         <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                             <TextBlock Text="找到"/>
                                             <TextBlock Text="{Binding Paging.Count}"/>
@@ -76,6 +75,7 @@
                                             <TextBlock Text="共"/>
                                             <TextBlock Text="{Binding Paging.PageCount}"/>
                                             <TextBlock Text="页"/>
+
                                         </DockPanel>
                                         <DockPanel HorizontalAlignment="Right">
                                             <Button Margin="4 0" Command="{s:Action GoPageFirst}" CommandParameter="{Binding}" Content="首页"/>
@@ -89,7 +89,7 @@
                                                     </ItemsControl.ItemsPanel>
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
-                                                            <Button Margin="4 0" Padding="4" Width="25"   Content="{Binding}"   />
+                                                            <Button Margin="4 0" Padding="4" Width="25"   Content="{Binding}" Tag="{Binding Path=DataContext,ElementName=dg_grid}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}"  Command="{s:Action GoPageNumber}"   />
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
@@ -104,7 +104,10 @@
                                         </DockPanel>
 
                                     </DockPanel>
-                                </StackPanel>
+                                    <DataGrid x:Name="dg_grid" AutoGenerateColumns="True" Style="{DynamicResource MyStyle_AzureDataGrid}" ItemsSource="{Binding Table}"  SelectedIndex="{Binding IndexTableInfo}" MinHeight="400" >
+                                    </DataGrid>
+                                    
+                                </DockPanel>
                             </DataTemplate>
                         </TabControl.ContentTemplate>
                     </TabControl>

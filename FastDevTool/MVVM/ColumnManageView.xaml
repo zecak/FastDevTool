@@ -1,0 +1,100 @@
+﻿<Window x:Class="FastDevTool.MVVM.ColumnManageView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FastDevTool.MVVM"
+        mc:Ignorable="d" 
+        xmlns:s="https://github.com/canton7/Stylet" 
+        d:DataContext="{d:DesignInstance local:ColumnManageViewModel}"
+        Title="列管理" Height="450" Width="600">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Res/ControlStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <DockPanel Margin="10">
+            <DockPanel DockPanel.Dock="Top">
+                <Button DockPanel.Dock="Left" Margin="4" Command="{Binding AddColumnCommand}">
+                    <TextBlock Text="新增" Margin="8"></TextBlock>
+                </Button>
+                <Label></Label>
+            </DockPanel>
+            <DockPanel>
+                <DataGrid Margin="5"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="All"
+                  RowHeaderWidth="0" Style="{DynamicResource MyStyle_AzureDataGrid}"
+                  SelectionUnit="FullRow" IsReadOnly="True" SelectionMode="Extended" ItemsSource="{Binding TableInfo.ColumnInfos}" >
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Binding="{Binding Title}" Width="1*">
+                            <DataGridTextColumn.Header>
+                                <TextBlock TextWrapping="Wrap" Height="auto">标题</TextBlock>
+                            </DataGridTextColumn.Header>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="Height" Value="auto"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Name}" Width="1*">
+                            <DataGridTextColumn.Header>
+                                <TextBlock TextWrapping="Wrap" Height="auto">名称</TextBlock>
+                            </DataGridTextColumn.Header>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="Height" Value="auto"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Binding="{Binding TypeName}" Width="1*">
+                            <DataGridTextColumn.Header>
+                                <TextBlock TextWrapping="Wrap" Height="auto">类型</TextBlock>
+                            </DataGridTextColumn.Header>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="Height" Value="auto"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Binding="{Binding MaxLength}" Width="1*">
+                            <DataGridTextColumn.Header>
+                                <TextBlock TextWrapping="Wrap" Height="auto">最大长度</TextBlock>
+                            </DataGridTextColumn.Header>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="Height" Value="auto"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Width="1*" >
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock TextWrapping="Wrap" Height="auto">操作</TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <WrapPanel>
+                                        <Button Command="{Binding DelColumnCommand}" CommandParameter="{Binding Name}" Margin="4 4 14 4">删除</Button>
+                                    </WrapPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                
+            </DockPanel>
+        </DockPanel>
+    </Grid>
+</Window>

@@ -111,7 +111,15 @@
     <Compile Include="DataBase\Model\sys_field_type.cs" />
     <Compile Include="DataBase\Model\sys_table.cs" />
     <Compile Include="DataBase\Model\sys_table_column.cs" />
+    <Compile Include="MVVM\ColumnManageView.xaml.cs">
+      <DependentUpon>ColumnManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\ColumnManageViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Page Include="MVVM\ColumnManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\ShellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

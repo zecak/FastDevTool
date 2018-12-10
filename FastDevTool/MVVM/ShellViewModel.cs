@@ -17,16 +17,15 @@ namespace FastDevTool.MVVM
 
         LocalDbContext localDbContext = new LocalDbContext();
 
-        public List<TableInfo> TableInfos { get; set; }
+        public List<TableInfo> TableInfos { get; set; } 
 
-        public int IndexTableInfo { get; set; }
-        
+        public int IndexTableInfo { get; set; } = -1;
+
 
         public ShellViewModel(IWindowManager windowManager)
         {
             this.windowManager = windowManager;
             LoadData();
-            IndexTableInfo = -1;
         }
 
         public void ShowUserModuleAdd()
@@ -35,13 +34,13 @@ namespace FastDevTool.MVVM
             LoadData();
         }
 
-        public void LoadData(int curindex = 1)
+        public void LoadData()
         {
             var tables = localDbContext.GetTablesSchema().Where(m => m.SystemMark != 1).ToList();
             var tableInfos = new List<TableInfo>();
             foreach (var tb in tables)
             {
-                var tableInfo = new TableInfo() { Name = tb.Name, Title = tb.Title, Paging = new Paging(), ColumnInfos = tb.Columns.ConvertAll(m => new ColumnInfo() { Name = m.Name, Title = m.Title }) };
+                var tableInfo = new TableInfo() { Name = tb.Name, Title = tb.Title, Paging = new Paging(), ColumnInfos = tb.Columns.ConvertAll(m => new ColumnInfo() { Name = m.Name, Title = m.Title, MaxLength=m.MaxLength, TypeName=m.TypeName }) };
                 tableInfo.Table = localDbContext.GetListForPage(tableInfo.Name, tableInfo.Paging, tableInfo.ColumnInfos);
                 tableInfo.PageNumberList = new List<int>();
                 for (int i = tableInfo.Paging.StartIndex; i < tableInfo.Paging.EndIndex; i++)
@@ -52,7 +51,7 @@ namespace FastDevTool.MVVM
                 tableInfos.Add(tableInfo);
             }
             TableInfos = tableInfos;
-            IndexTableInfo = 0;
+            IndexTableInfo = TableInfos.Count-1;
             
         }
 
@@ -66,6 +65,14 @@ namespace FastDevTool.MVVM
                 r.ItemArray = row.ItemArray;
                 tableInfo.Table.Rows.Add(r);
             }
+        }
+
+        public void GoPageNumber(object obj)
+        {
+            var btn = obj as System.Windows.Controls.Button;
+            var tableInfo = btn.Tag as TableInfo;
+            tableInfo.Paging.PageIndex = (int)btn.Content;
+            LDAction(tableInfo);
         }
 
         public void GoPageIndex(TableInfo tableInfo)
@@ -97,5 +104,10 @@ namespace FastDevTool.MVVM
             LDAction(tableInfo);
         }
          
+        public void ShowColumnManage(TableInfo tableInfo)
+        {
+            windowManager.ShowDialog(new ColumnManageViewModel(tableInfo));
+            LoadData();
+        }
     }
 }
