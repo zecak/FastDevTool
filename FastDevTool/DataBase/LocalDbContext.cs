@@ -228,8 +228,8 @@ namespace FastDevTool.DataBase
             var sql = string.Format("SELECT TOP {0} * FROM (SELECT ROW_NUMBER() OVER (ORDER BY id) AS RowNumber,* FROM [{1}]) as A WHERE RowNumber > {0}*({2}-1)", paging.PageSize, tablename, paging.PageIndex);
             var dset = ExecuteDataSet(sql);
             var dt = dset.Tables[0];
-            dt.Columns.RemoveAt(0);
-            //dt.Columns.Remove("VersonTime");
+            dt.Columns.Remove("RowNumber");
+            dt.Columns.Remove("VersonTime");
             foreach (DataColumn c in dt.Columns)
             {
                 var myc = myColumns.FirstOrDefault(m => m.Name == c.ColumnName);

@@ -119,6 +119,7 @@
       <DependentUpon>ColumnManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\ColumnManageViewModel.cs" />
+    <Compile Include="MVVM\NPCModel\FieldTypeInfo.cs" />
     <Compile Include="RelayCommand.cs" />
     <Page Include="MVVM\ColumnAddView.xaml">
       <SubType>Designer</SubType>

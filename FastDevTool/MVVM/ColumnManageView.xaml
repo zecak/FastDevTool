@@ -18,7 +18,7 @@
     <Grid>
         <DockPanel Margin="10">
             <DockPanel DockPanel.Dock="Top">
-                <Button DockPanel.Dock="Left" Margin="4" Command="{Binding AddColumnCommand}">
+                <Button DockPanel.Dock="Left" Margin="4" Command="{s:Action AddColumn}">
                     <TextBlock Text="新增" Margin="8"></TextBlock>
                 </Button>
                 <Label></Label>
@@ -30,8 +30,18 @@
                   RowHeaderWidth="0" Style="{DynamicResource MyStyle_AzureDataGrid}"
                   SelectionUnit="FullRow" IsReadOnly="True" SelectionMode="Extended" ItemsSource="{Binding TableInfo.ColumnInfos}" >
                     <DataGrid.Columns>
-
-                        <DataGridTextColumn Binding="{Binding Title}" Width="1*">
+                        <DataGridTextColumn Binding="{Binding ID}" Width="1*">
+                            <DataGridTextColumn.Header>
+                                <TextBlock TextWrapping="Wrap" Height="auto">序号</TextBlock>
+                            </DataGridTextColumn.Header>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="Height" Value="auto"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Title}" Width="1.5*">
                             <DataGridTextColumn.Header>
                                 <TextBlock TextWrapping="Wrap" Height="auto">标题</TextBlock>
                             </DataGridTextColumn.Header>
@@ -42,7 +52,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Name}" Width="1*">
+                        <DataGridTextColumn Binding="{Binding Name}" Width="1.5*">
                             <DataGridTextColumn.Header>
                                 <TextBlock TextWrapping="Wrap" Height="auto">名称</TextBlock>
                             </DataGridTextColumn.Header>
@@ -54,7 +64,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Binding="{Binding TypeName}" Width="1*">
+                        <DataGridTextColumn Binding="{Binding TypeTitle}" Width="1.5*">
                             <DataGridTextColumn.Header>
                                 <TextBlock TextWrapping="Wrap" Height="auto">类型</TextBlock>
                             </DataGridTextColumn.Header>

@@ -1,5 +1,6 @@
 ﻿using FastDevTool.Common;
 using FastDevTool.DataBase;
+using FastDevTool.DataBase.Model;
 using FastDevTool.MVVM.NPCModel;
 using Stylet;
 using System;
@@ -17,7 +18,7 @@ namespace FastDevTool.MVVM
 
         LocalDbContext localDbContext = new LocalDbContext();
 
-        public List<TableInfo> TableInfos { get; set; } 
+        public List<TableInfo> TableInfos { get; set; }
 
         public int IndexTableInfo { get; set; } = -1;
 
@@ -38,10 +39,20 @@ namespace FastDevTool.MVVM
         {
             var tables = localDbContext.GetTablesSchema().Where(m => m.SystemMark != 1).ToList();
             var tableInfos = new List<TableInfo>();
+            var columns = localDbContext.QueryAllList<sys_field_type>();
             foreach (var tb in tables)
             {
-                var tableInfo = new TableInfo() { Name = tb.Name, Title = tb.Title, Paging = new Paging(), ColumnInfos = tb.Columns.ConvertAll(m => new ColumnInfo() { Name = m.Name, Title = m.Title, MaxLength=m.MaxLength, TypeName=m.TypeName }) };
+                var tableInfo = new TableInfo() { Name = tb.Name, Title = tb.Title, Paging = new Paging(), ColumnInfos = tb.Columns.Where(m=>m.Name != "RowNumber" && m.Name != "VersonTime").ToList().ConvertAll(m => new ColumnInfo() { Name = m.Name, Title = m.Title, MaxLength = m.MaxLength, TypeName = m.TypeName }) };
                 tableInfo.Table = localDbContext.GetListForPage(tableInfo.Name, tableInfo.Paging, tableInfo.ColumnInfos);
+                for (int i = 0; i < tableInfo.ColumnInfos.Count; i++)
+                {
+                    tableInfo.ColumnInfos[i].ID = i + 1;
+                    var column = columns.FirstOrDefault(m => m.Name == tableInfo.ColumnInfos[i].TypeName);
+                    if (column != null)
+                    {
+                        tableInfo.ColumnInfos[i].TypeTitle = column.Title;
+                    }
+                }
                 tableInfo.PageNumberList = new List<int>();
                 for (int i = tableInfo.Paging.StartIndex; i < tableInfo.Paging.EndIndex; i++)
                 {
@@ -51,8 +62,8 @@ namespace FastDevTool.MVVM
                 tableInfos.Add(tableInfo);
             }
             TableInfos = tableInfos;
-            IndexTableInfo = TableInfos.Count-1;
-            
+            IndexTableInfo = TableInfos.Count - 1;
+
         }
 
         void LDAction(TableInfo tableInfo)
@@ -103,10 +114,10 @@ namespace FastDevTool.MVVM
             tableInfo.Paging.PageIndex = tableInfo.Paging.Previous;
             LDAction(tableInfo);
         }
-         
+
         public void ShowColumnManage(TableInfo tableInfo)
         {
-            windowManager.ShowDialog(new ColumnManageViewModel(tableInfo));
+            windowManager.ShowDialog(new ColumnManageViewModel(windowManager, tableInfo));
             LoadData();
         }
     }

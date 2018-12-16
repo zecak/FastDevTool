@@ -5,8 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FastDevTool.MVVM"
         mc:Ignorable="d"
-        Title="ColumnAddView" Height="450" Width="800">
+        Title="ColumnAddView" Height="450" Width="400">
     <Grid>
-        
+        <DockPanel Margin="10">
+            <StackPanel>
+                <DockPanel Margin="10">
+                    <TextBlock>类型:</TextBlock>
+                    <ComboBox ItemsSource="{Binding FieldTypeInfoList}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <TextBlock Text="{Binding Title}"></TextBlock>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </DockPanel>
+                <DockPanel Margin="10">
+                    <TextBlock>长度:</TextBlock>
+                    <ComboBox ItemsSource="{Binding MaxLengthTypeList}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <TextBlock Text="{Binding Key}"></TextBlock>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </DockPanel>
+                <DockPanel Margin="10">
+                    <TextBlock>标题:</TextBlock>
+                    <TextBox></TextBox>
+                </DockPanel>
+                <DockPanel Margin="10">
+                    <TextBlock>名称:</TextBlock>
+                    <TextBox></TextBox>
+                </DockPanel>
+                <DockPanel Margin="10">
+                    <Button>
+                        <TextBlock Text="保存">
+                        </TextBlock>
+                    </Button>
+                </DockPanel>
+            </StackPanel>
+        </DockPanel>
     </Grid>
 </Window>

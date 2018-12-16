@@ -7,20 +7,12 @@ using System.Threading.Tasks;
 
 namespace FastDevTool.MVVM.NPCModel
 {
-    public class ColumnInfo : INotifyPropertyChanged
+    public class FieldTypeInfo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
         public int ID { get; set; }
-
         public string Name { get; set; }
 
         public string Title { get; set; }
-
-        public string TypeName { get; set; }
-
-        public string TypeTitle { get; set; }
-
-        public int MaxLength { get; set; }
     }
 }

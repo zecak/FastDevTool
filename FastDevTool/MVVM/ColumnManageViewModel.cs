@@ -12,16 +12,19 @@ namespace FastDevTool.MVVM
 {
     public class ColumnManageViewModel : Screen
     {
+        private IWindowManager windowManager;
         public TableInfo TableInfo { get; set; }
         LocalDbContext localDbContext = new LocalDbContext();
-        public ColumnManageViewModel(TableInfo tableInfo)
+
+        public ColumnManageViewModel(IWindowManager windowManager, TableInfo tableInfo)
         {
+            this.windowManager = windowManager;
             TableInfo = tableInfo;
         }
 
         public void AddColumn()
         {
-
+            windowManager.ShowDialog(new ColumnAddViewModel(windowManager, TableInfo));
         }
 
         public void DelColumn(string fieldName)
