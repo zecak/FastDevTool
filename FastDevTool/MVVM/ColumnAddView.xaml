@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FastDevTool.MVVM"
         mc:Ignorable="d"
-        Title="ColumnAddView" Height="450" Width="400">
+         xmlns:s="https://github.com/canton7/Stylet" 
+        d:DataContext="{d:DesignInstance local:ColumnAddViewModel}"
+        Title="新增列" Height="450" Width="400">
     <Grid>
         <DockPanel Margin="10">
             <StackPanel>
@@ -42,7 +44,7 @@
                     <TextBox></TextBox>
                 </DockPanel>
                 <DockPanel Margin="10">
-                    <Button>
+                    <Button Command="{s:Action SaveData}">
                         <TextBlock Text="保存">
                         </TextBlock>
                     </Button>
