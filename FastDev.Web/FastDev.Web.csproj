@@ -80,9 +80,31 @@
     <Content Include="App_Data\FastDev_log.ldf">
       <DependentUpon>FastDev.mdf</DependentUpon>
     </Content>
+    <Content Include="res\css\bootstrap-theme.css" />
+    <Content Include="res\css\bootstrap-theme.min.css" />
+    <Content Include="res\css\bootstrap.css" />
+    <Content Include="res\css\bootstrap.min.css" />
+    <Content Include="res\css\font-awesome.css" />
+    <Content Include="res\css\font-awesome.min.css" />
+    <Content Include="res\fonts\fontawesome-webfont.svg" />
+    <Content Include="res\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="index.html" />
-    <Content Include="res\js\jquery-3.3.1.js" />
-    <Content Include="res\js\jquery-3.3.1.min.js" />
+    <Content Include="res\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="res\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="res\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="res\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="res\css\bootstrap.min.css.map" />
+    <Content Include="res\css\bootstrap.css.map" />
+    <Content Include="res\css\bootstrap-theme.min.css.map" />
+    <Content Include="res\css\bootstrap-theme.css.map" />
+    <None Include="res\js\jquery-3.1.1.intellisense.js" />
+    <Content Include="res\js\bootstrap.js" />
+    <Content Include="res\js\bootstrap.min.js" />
+    <Content Include="res\js\jquery-3.1.1.js" />
+    <Content Include="res\js\jquery-3.1.1.min.js" />
+    <Content Include="res\js\jquery-3.1.1.slim.js" />
+    <Content Include="res\js\jquery-3.1.1.slim.min.js" />
+    <Content Include="res\js\main.js" />
     <Content Include="res\js\vue.js" />
     <Content Include="res\js\vue.min.js" />
     <Content Include="Web.config" />
@@ -99,7 +121,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ajax\one.ashx" />
+    <Content Include="res\fonts\FontAwesome.otf" />
+    <Content Include="res\fonts\fontawesome-webfont.woff2" />
+    <Content Include="res\fonts\fontawesome-webfont.woff" />
+    <Content Include="res\fonts\fontawesome-webfont.ttf" />
+    <Content Include="res\fonts\fontawesome-webfont.eot" />
     <None Include="packages.config" />
+    <Content Include="res\js\jquery-3.1.1.slim.min.map" />
+    <Content Include="res\js\jquery-3.1.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -109,7 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Admin\" />
-    <Folder Include="res\css\" />
     <Folder Include="res\image\" />
   </ItemGroup>
   <PropertyGroup>

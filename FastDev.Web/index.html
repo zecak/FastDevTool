@@ -1,13 +1,20 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title></title>
-    <script src="res/js/jquery-3.3.1.js"></script>
+    <link href="res/css/bootstrap.css" rel="stylesheet" />
+    <link href="res/css/font-awesome.css" rel="stylesheet" />
+
+    <script src="res/js/jquery-3.1.1.js"></script>
+    <script src="res/js/bootstrap.js"></script>
     <script src="res/js/vue.js"></script>
+    <script src="res/js/main.js"></script>
     <script>
         $(function () {
-           
+
             var app3 = new Vue({
                 el: '#app-3',
                 data: {
@@ -64,26 +71,62 @@
         });
 
         function getdata1() {
-            $.post(
-                "/Ajax/one.ashx",
-                {},
-                function (msg) {
-                    if (msg.code == 1) {
-                        var app = new Vue({
-                            el: '#app-8',
-                            data: {
-                                list: msg.data
-                            }
-                        });
-                    }
-                },
-                "json"
-            );
-           
+            var apiurl = "/Ajax/one.ashx";
+            PostAjax(apiurl,{}, function (msg) {
+                if (msg.code == 1) {
+                    var app = new Vue({
+                        el: '#app-8',
+                        data: {
+                            list: msg.data
+                        }
+                    });
+                }
+            });
+
         }
     </script>
 </head>
 <body>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">快速框架</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">首页</a></li>
+                    <li><a href="#about">关于</a></li>
+                    <li><a href="#contact">联系</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">其他 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">动作</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">导航</li>
+                            <li><a href="#">链接</a></li>
+                            <li><a href="#">更多</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="starter-template">
+            <h1>Bootstrap starter template</h1>
+            <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+        </div>
+
+    </div><!-- /.container -->
+
     <div id="app">
         {{ message }}
     </div>
@@ -128,7 +171,7 @@
         <ol>
             <li v-for="item in list" v-bind:d_item="item" v-bind:key="item.ID">{{ item.Name }}-{{ item.GID }}</li>
         </ol>
-        
+
     </div>
 
 </body>
