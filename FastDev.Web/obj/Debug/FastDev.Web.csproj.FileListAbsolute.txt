@@ -29,7 +29,6 @@ C:\work\github.com\FastDevTool\FastDev.Web\bin\roslyn\VBCSCompiler.exe
 C:\work\github.com\FastDevTool\FastDev.Web\bin\roslyn\VBCSCompiler.exe.config
 C:\work\github.com\FastDevTool\FastDev.Web\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\work\github.com\FastDevTool\FastDev.Web\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\work\github.com\FastDevTool\FastDev.Web\obj\Debug\FastDev.Web.csprojAssemblyReference.cache
 C:\work\github.com\FastDevTool\FastDev.Web\obj\Debug\FastDev.Web.csproj.CoreCompileInputs.cache
 C:\work\github.com\FastDevTool\FastDev.Web\obj\Debug\FastDev.Web.csproj.CopyComplete
 C:\work\github.com\FastDevTool\FastDev.Web\obj\Debug\FastDev.Web.dll

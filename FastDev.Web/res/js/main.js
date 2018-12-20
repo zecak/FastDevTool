@@ -29,7 +29,16 @@ function init_databind() {
                 var v = new Vue({
                     el: d[0],
                     data: {
-                        list: msg.data
+                        list: msg.data,
+                        page: msg.page
+                    },
+                    methods: {
+                        PageGo: function (event) {
+                            if (event) {
+                                var elm = $(event.currentTarget);
+                                alert(elm.attr("tag"));
+                            }
+                        }
                     }
                 });
             }

@@ -53,19 +53,65 @@
         </div>
     </div><!-- /.container -->
 
-    <div class="load_data" api-url='/Ajax/one.ashx' api-data='{tname:"u_o_o_j_k_j",pindex:1}'>
-        <ol>
-            <li v-for="item in list" v-bind:d_item="item" v-bind:key="item.ID">
-                {{ item.Name }}-{{ item.GID }}
-            </li>
-        </ol>
+    <div class="load_data" api-url='/Ajax/one.ashx' api-data='{tname:"u_o_o_j_k_j",pindex:7,psize:1}'>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>GID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in list" v-bind:d_item="item" v-bind:key="item.ID">
+                    <th scope="row">{{ item.ID }}</th>
+                    <td>{{ item.Name }}</td>
+                    <td>{{ item.GID }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li>
+                    <a v-on:click="PageGo" v-bind:tag="page.First">
+                        <span>首页</span>
+                    </a>
+                </li>
+                <li>
+                    <a v-on:click="PageGo" v-bind:tag="page.Previous">
+                        <span>上页</span>
+                    </a>
+                </li>
+                <li v-on:click="PageGo" v-for="(value, key) in page.EndIndex">
+                <a v-if="value > page.StartIndex" v-bind:tag="value" >{{ value }}</a>
+                </li>
+                <li>
+                    <a v-on:click="PageGo" v-bind:tag="page.Next">
+                        <span>下页</span>
+                    </a>
+                </li>
+                <li>
+                    <a v-on:click="PageGo" v-bind:tag="page.Last">
+                        <span>末页</span>
+                    </a>
+                </li>
+                <li>
+                    <input type="text" class="form-control" width="34" style="float:none;" />
+                </li>
+                <li>
+                    <a v-on:click="PageGo" v-bind:tag="page.First">
+                        <span>跳转</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
 
-    <div class="load_data" api-url='/Ajax/one.ashx' api-data='{tname:"u_o_o_j_k_j",pindex:2}'>
+    <div class="load_data" api-url='/Ajax/one.ashx' api-data='{tname:"sys_table_column",pindex:2,psize:8}'>
         <ol>
             <li v-for="item in list" v-bind:d_item="item" v-bind:key="item.ID">
-                {{ item.Name }}-{{ item.GID }}
+                {{ item.Title }}-{{ item.Name }}
             </li>
         </ol>
     </div>

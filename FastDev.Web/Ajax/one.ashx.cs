@@ -20,13 +20,15 @@ namespace FastDev.Web.Ajax
             var paging = new Paging();
             var tablename = context.Request.Form.Get("tname");
             var pageindex = context.Request.Form.Get("pindex");
-            if (string.IsNullOrWhiteSpace(tablename)|| string.IsNullOrWhiteSpace(pageindex))
+            var pagesize = context.Request.Form.Get("psize");
+            if (string.IsNullOrWhiteSpace(tablename)|| string.IsNullOrWhiteSpace(pageindex) || string.IsNullOrWhiteSpace(pagesize))
             {
                 context.Response.Write(new Msg() { code = -1, msg = "缺少参数", }.ToJson());
                 context.Response.End();
             }
             paging.PageIndex = Convert.ToInt32(pageindex);
-           var table= localDbContext.GetListForPage(tablename, paging);
+            paging.PageSize = Convert.ToInt32(pagesize);
+            var table= localDbContext.GetListForPage(tablename, paging);
 
             context.Response.Write(new Msg() { code=1, msg="操作成功",data= table, page= paging }.ToJson());
         }
