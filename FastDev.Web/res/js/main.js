@@ -1,4 +1,11 @@
 ﻿/// <reference path="jquery-3.1.1.js" />
+/// <reference path="vue.js" />
+
+$(function () {
+
+    init_databind();
+
+});
 
 function PostAjax(url,data,callback) {
     $.post(
@@ -9,4 +16,23 @@ function PostAjax(url,data,callback) {
         },
         "json"
     );
+}
+
+function init_databind() {
+    var datalist = $(".load_data");
+    $.each(datalist, function (i, t) {
+        var d = $(t);
+        var url = d.attr("api-url");
+        var data = eval('(' + d.attr("api-data") + ')');
+        PostAjax(url, data, function (msg) {
+            if (msg.code == 1) {
+                var v = new Vue({
+                    el: d[0],
+                    data: {
+                        list: msg.data
+                    }
+                });
+            }
+        });
+    });
 }
