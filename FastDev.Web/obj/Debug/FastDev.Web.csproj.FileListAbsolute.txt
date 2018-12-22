@@ -43,3 +43,4 @@ C:\work\github.com\FastDevTool\FastDev.Web\bin\PWMIS.Core.xml
 C:\work\github.com\FastDevTool\FastDev.Web\bin\PWMIS.Core.dll.config
 C:\work\github.com\FastDevTool\FastDev.Web\bin\PWMIS.Core.Extensions.pdb
 C:\work\github.com\FastDevTool\FastDev.Web\bin\PWMIS.Core.Extensions.xml
+C:\work\github.com\FastDevTool\FastDev.Web\obj\Debug\FastDev.Web.csprojAssemblyReference.cache

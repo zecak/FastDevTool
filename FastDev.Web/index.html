@@ -53,7 +53,7 @@
         </div>
     </div><!-- /.container -->
 
-    <div class="load_data" api-url='/Ajax/one.ashx' api-data='{tname:"u_o_o_j_k_j",pindex:7,psize:1}'>
+    <div class="load_data" api-url="/Ajax/one.ashx" api-data-tname="u_o_o_j_k_j" api-data-where="" api-data-pindex="7" api-data-psize="10">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -82,8 +82,8 @@
                         <span>上页</span>
                     </a>
                 </li>
-                <li v-on:click="PageGo" v-for="(value, key) in page.EndIndex">
-                <a v-if="value > page.StartIndex" v-bind:tag="value" >{{ value }}</a>
+                <li v-on:click="PageGo" v-bind:tag="value" v-for="(value, key) in page.EndIndex"  v-bind:class="value == page.PageIndex?'active':''">
+                    <a v-if="value > page.StartIndex">{{ value }}</a>
                 </li>
                 <li>
                     <a v-on:click="PageGo" v-bind:tag="page.Next">
@@ -96,19 +96,24 @@
                     </a>
                 </li>
                 <li>
-                    <input type="text" class="form-control" width="34" style="float:none;" />
-                </li>
-                <li>
-                    <a v-on:click="PageGo" v-bind:tag="page.First">
-                        <span>跳转</span>
-                    </a>
+                    <div class="input-group" style="width: 96px;float: left;margin-left: 8px;">
+                        <input type="text" class="form-control" v-model="goindex"/>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default" v-on:click="PageGo" v-bind:tag="goindex">跳转</button>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </nav>
+        <div>
+            <span>123</span>
+            <vpage></vpage>
+        </div>
+        
     </div>
 
 
-    <div class="load_data" api-url='/Ajax/one.ashx' api-data='{tname:"sys_table_column",pindex:2,psize:8}'>
+    <div class="load_data" api-url="/Ajax/one.ashx" api-data-tname="sys_table_column" api-data-where="" api-data-pindex="1" api-data-psize="10">
         <ol>
             <li v-for="item in list" v-bind:d_item="item" v-bind:key="item.ID">
                 {{ item.Title }}-{{ item.Name }}

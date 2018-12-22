@@ -80,6 +80,8 @@
     <Content Include="App_Data\FastDev_log.ldf">
       <DependentUpon>FastDev.mdf</DependentUpon>
     </Content>
+    <Content Include="components\header.html" />
+    <Content Include="components\vpage.html" />
     <Content Include="res\css\bootstrap-theme.css" />
     <Content Include="res\css\bootstrap-theme.min.css" />
     <Content Include="res\css\bootstrap.css" />
