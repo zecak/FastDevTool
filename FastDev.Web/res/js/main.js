@@ -5,29 +5,26 @@ var mapfile = [];
 
 $(function () {
 
-    var files = [{ key: "vpage", value: "/components/vpage.html" }];
+    var files = [{ key: "vpage", value: "/components/vpage.html" }];//公共模板
+    LoadFile(files);
+
+});
+
+function LoadFile(files) {
     $.each(files, function (i, file) {
         mapfile.push({ key: file.key });
         var mf = mapfile.find(f => f.key == file.key);
         mf.value = $("<div></div>").load(file.value, function (responseTxt, statusTxt, xhr) {
             i++;
             if (statusTxt == "success") {
-                //FileLoaded(file.key, mf.value[0].outerHTML);
                 if (i == files.length) {
                     FileAllLoaded();
                 }
             }
         });
     });
+}
 
-});
-
-//function FileLoaded(file,str) {
-//    Vue.component(file, {
-//        props: ['model'],
-//        template: str
-//    });
-//}
 function FileAllLoaded() {
     init_databind();
 }
@@ -47,6 +44,8 @@ function init_databind() {
     var datalist = $(".load_data");
     $.each(datalist, function (i, t) {
         var d = $(t);
+        var mf = mapfile.find(f => f.key == "vpage");
+        var p = d.find(".vpage"); p.append(mf.value[0].innerHTML);
         var url = d.attr("api-url");
         var _tname = d.attr("api-data-tname");
         var _where = d.attr("api-data-where");
@@ -62,13 +61,6 @@ function init_databind() {
                         list: msg.data,
                         page: msg.page
                     },
-                    //components: {
-                    //    'vpage': {
-                    //        props: ['page'],
-                    //        methods: PageGo,
-                    //        template: mapfile.find(f => f.key == "vpage").value[0].outerHTML,
-                    //    }
-                    //},
                     methods: {
                         PageGo: function (event) {
                             var vm = this;
