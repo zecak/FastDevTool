@@ -1,5 +1,35 @@
-﻿
-    <div>
-        <h1>公共头部文件</h1>
-        <h3></h3>
-    </div>
+﻿<nav>
+    <ul class="pagination">
+        <li>
+            <a v-on:click="PageGo" v-bind:tag="page.First">
+                <span>首页</span>
+            </a>
+        </li>
+        <li>
+            <a v-on:click="PageGo" v-bind:tag="page.Previous">
+                <span>上页</span>
+            </a>
+        </li>
+        <li v-on:click="PageGo" v-bind:tag="value" v-for="(value, key) in page.EndIndex" v-bind:class="value == page.PageIndex?'active':''">
+            <a v-if="value > page.StartIndex">{{ value }}</a>
+        </li>
+        <li>
+            <a v-on:click="PageGo" v-bind:tag="page.Next">
+                <span>下页</span>
+            </a>
+        </li>
+        <li>
+            <a v-on:click="PageGo" v-bind:tag="page.Last">
+                <span>末页</span>
+            </a>
+        </li>
+        <li>
+            <div class="input-group" style="width: 96px;float: left;margin-left: 8px;">
+                <input type="text" class="form-control" v-model="page.goindex" />
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" v-on:click="PageGo" v-bind:tag="page.goindex">跳转</button>
+                </div>
+            </div>
+        </li>
+    </ul>
+</nav>

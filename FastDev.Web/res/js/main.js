@@ -1,22 +1,36 @@
 ﻿/// <reference path="jquery-3.1.1.js" />
 /// <reference path="vue.js" />
 
+var mapfile = [];
 
-var pagination ;
 $(function () {
 
-    pagination= $("<div></div>").load("/components/vpage.html", function (responseTxt, statusTxt, xhr) {
-        if (statusTxt == "success") {
-            Vue.component('vpage', {
-                props: ['post'],
-                template: pagination[0].outerHTML
-            })
-        }
+    var files = [{ key: "vpage", value: "/components/vpage.html" }];
+    $.each(files, function (i, file) {
+        mapfile.push({ key: file.key });
+        var mf = mapfile.find(f => f.key == file.key);
+        mf.value = $("<div></div>").load(file.value, function (responseTxt, statusTxt, xhr) {
+            i++;
+            if (statusTxt == "success") {
+                //FileLoaded(file.key, mf.value[0].outerHTML);
+                if (i == files.length) {
+                    FileAllLoaded();
+                }
+            }
+        });
     });
 
-    init_databind();
-
 });
+
+//function FileLoaded(file,str) {
+//    Vue.component(file, {
+//        props: ['model'],
+//        template: str
+//    });
+//}
+function FileAllLoaded() {
+    init_databind();
+}
 
 function PostAjax(url, data, callback) {
     $.post(
@@ -38,16 +52,23 @@ function init_databind() {
         var _where = d.attr("api-data-where");
         var _pindex = d.attr("api-data-pindex");
         var _psize = d.attr("api-data-psize");
-        var data = { tname: _tname, where: _where, pindex: _pindex, psize: _psize};
+        var data = { tname: _tname, where: _where, pindex: _pindex, psize: _psize };
         PostAjax(url, data, function (msg) {
             if (msg.code == 1) {
+                msg.page.goindex = msg.page.PageIndex;
                 var v = new Vue({
                     el: d[0],
                     data: {
                         list: msg.data,
-                        page: msg.page,
-                        goindex:msg.page.PageIndex
+                        page: msg.page
                     },
+                    //components: {
+                    //    'vpage': {
+                    //        props: ['page'],
+                    //        methods: PageGo,
+                    //        template: mapfile.find(f => f.key == "vpage").value[0].outerHTML,
+                    //    }
+                    //},
                     methods: {
                         PageGo: function (event) {
                             var vm = this;
@@ -57,16 +78,19 @@ function init_databind() {
                                 data.pindex = parseInt(index);
                                 PostAjax(url, data, function (msg2) {
                                     if (msg2.code == 1) {
+                                        msg2.page.goindex = msg2.page.PageIndex;
                                         vm.list = msg2.data;
                                         vm.page = msg2.page;
-                                        vm.goindex = msg2.page.PageIndex;
                                     }
                                 });
                             }
                         }
                     }
                 });
+                
             }
         });
     });
 }
+
+
