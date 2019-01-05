@@ -29,8 +29,9 @@ namespace RunTaskForAny.Module.Test.PageRule
             }
         }
 
-        public List<string> GetPageValue(string url)
+        public List<string> GetPageValue()
         {
+            string url = Config.Url;
             var rulesindex = Config.RowRules.FindIndex(kv => kv.Key == "{内容}");
             List<KeyValue> kvspage = new List<KeyValue>();
             if (rulesindex == -1) { return null; }
@@ -857,7 +858,7 @@ namespace RunTaskForAny.Module.Test.PageRule
         /// </summary>
         /// <param name="duan"></param>
         /// <returns></returns>
-        NSoup.Nodes.Element GetElementsFirstRow(NSoup.Nodes.Element doc)
+        public NSoup.Nodes.Element GetElementsFirstRow(NSoup.Nodes.Element doc)
         {
             var duan = GetElementsFirst(doc);
             if (duan == null) { return null; }
