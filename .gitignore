@@ -7,3 +7,16 @@
 /FastDevTool/obj/Debug
 /packages
 /FastDevTool/bin/Debug
+/RunTaskForAny/.vs/RunTaskForAny/v15/Server/sqlite3
+/RunTaskForAny/Modules/RunTaskForAny.Module.Test/obj/Debug
+/RunTaskForAny/packages
+/RunTaskForAny/.vs/RunTaskForAny/v15
+/RunTaskForAny/RunTaskForAny/bin/Debug
+/RunTaskForAny/RunTaskForAny/obj/Debug
+/RunTaskForAny/RunTaskForAny.Common/bin/Debug
+/RunTaskForAny/RunTaskForAny.Common/obj/Debug
+/RunTaskForAny/RunTaskForAny.DataBase/bin/Debug
+/RunTaskForAny/RunTaskForAny.DataBase/obj/Debug
+/RunTaskForAny/WpfApp1/bin/Debug
+/RunTaskForAny/WpfApp1/obj/Debug
+/.gitattributes
