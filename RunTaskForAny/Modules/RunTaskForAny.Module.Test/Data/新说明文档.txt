@@ -21,9 +21,9 @@
 默认规则示例:[Attr::class=game_turnpage]$$[FIndex]$$[Attr::id=A2]$$[FIndex]$$[Link]
 ----------------
 集合功能:(集合功能随后需加索引功能或[下载集合=href=保存目录名称])
-	[Attr::class=red](查找属性值),
-	[Tag::a](查找标签名),
-	[Child](查找子元素)
+	[Attr::class=red](根据属性值查找元素),
+	[Tag::a](根据标签名查找元素),
+	[Child](获取子元素)
 索引功能:
 	[RowIndex::0](行索引:列表特有功能),
 	[Index::0](-1为最后一个元素,-2为倒数第二个元素..),
@@ -41,13 +41,15 @@
 	[PrevText](上节点内容),
 	[NextText](下节点内容),
 	[GetAttr::class]
-下载功能:
-	[DownLink](下载链接),
-	[DownPic](下载图片),
-	[Down::href](下载属性地址),
-	[Downs::href=保存目录名称](上接集合功能)
+x下载功能x(剔除下载功能,专职获取数据):
+	x[DownLink]x(下载链接),
+	x[DownPic]x(下载图片),
+	x[Down::href]x(下载属性地址),
+	x[Downs::href=保存目录名称]x(上接集合功能)
 清除字符串功能:
 	[Clear::src=http://img.xxxx.com]
+	[TrimStart::src=http://img.xxxx.com](删除前缀匹配的字符串)
+	[TrimEnd::src=http://img.xxxx.com](删除后缀匹配的字符串)
 ===========================================================================
 内容规则:有两种,一种为[列表规则]且不能使用[行索引=0]功能,另一种为[XPath规则]
 XPath规则:XPath路径+功能组合,以" "分隔

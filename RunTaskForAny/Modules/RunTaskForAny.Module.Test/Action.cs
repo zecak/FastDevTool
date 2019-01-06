@@ -1,8 +1,10 @@
 ﻿using RunTaskForAny.Common.Domain;
 using RunTaskForAny.Common.Helper;
 using RunTaskForAny.Module.Test.PageRule;
+using RunTaskForAny.Module.Test.PageRule.FunctionRule;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -138,75 +140,123 @@ namespace RunTaskForAny.Module.Test
             Task.Factory.StartNew(() =>
             {
                 //获取配置
-                var filepath = System.IO.Path.Combine
-                   (AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\def_v1.json");
-                if (!System.IO.File.Exists(filepath))
-                {
-                    Tool.Log.Error("配置文件不存在");
-                    return;
-                }
-                var config = System.IO.File.ReadAllText(filepath).JsonTo<AcquisitionRule>();
+                var config = GetConfig();
                 if (config == null)
                 {
                     Tool.Log.Error("配置文件错误");
                     return;
                 }
-                Tool.Log.Debug("开始获取html");
+                Tool.Log.Debug("获取html");
+
+                CollectRule collectRule = new CollectRule(config);
 
 
+                //确定单页=>确定列表地址:如果有则直接(处理列表),没有则进入(确定列表)
+
+                //确定列表
+
+                //处理列表
+                var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\has列表.txt");
+                var html = System.IO.File.ReadAllText(filepath);
+
+
+                Uri nextpage = null;
+                do
                 {
-                    var list = new List<System.Data.DataRow>();
+                    nextpage = collectRule.GetNextUrl();
+                    dataTable = collectRule.GetNextPageList();
+                    System.IO.File.WriteAllText(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_1.json"), dataTable.ToJson());
+                } while (nextpage != null) ;
 
-                    var rule = new Rule(config);
 
-                    var pv = rule.GetPageValue();
-                    Tool.Log.Debug("GetPageValue: " + pv.ToJson());
-                    if (pv.Count == 4)
-                    {
-                        var url = pv[pv.Count - 1];
-                        var html = HttpTool.AjaxGet(url);
-                        var doc = NSoup.NSoupClient.Parse(html);
-                        var duan = rule.GetElementsFirstRow(doc);
-                        
-                        //列表
-                        NSoup.Select.Elements rows = rule.GetElements(doc);
-                        var length = rows.Count;
-                        int indextemp = 0;
-                        Uri nextpage = null;
-                        do
-                        {
-                            nextpage = rule.GetNextUrl(duan);
-                            Tool.Log.Debug("GetNextUrl: " + nextpage.ToJson());
-                            
-                            for (int i = indextemp; i < length; i++)
-                            {
-                                var rowstr = string.Empty;
-                                var row = rule.GetRowValue(duan, indextemp);
-                                indextemp++;
-                                Tool.Log.Debug("GetRowValue: " + row.ItemArray.ToJson());
-                                if (!string.IsNullOrWhiteSpace(rowstr))
-                                {
-                                    list.Add(row);
-                                }
+                Tool.Log.Debug("采集完成");
 
-                            }
-                            System.IO.File.WriteAllText(System.IO.Path.Combine
-                   (AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_1.json"), list.ToJson());
-                            break;
-                            
+                //{
+                //    var list = new List<System.Data.DataRow>();
 
-                        } while (nextpage != null);
+                //    var rule = new Rule(config);
 
-                        Tool.Log.Debug("采集完成");
+                //    var pv = rule.GetPageValue();
+                //    Tool.Log.Debug("GetPageValue: " + pv.ToJson());
+                //    if (pv.Count == 4)
+                //    {
+                //        var url = pv[pv.Count - 1];
+                //        var html = HttpTool.AjaxGet(url);
+                //        var doc = NSoup.NSoupClient.Parse(html);
+                //        var duan = rule.GetElementsFirstRow(doc);
 
-                    }
+                //        //列表
+                //        NSoup.Select.Elements rows = rule.GetElements(doc);
+                //        var length = rows.Count;
+                //        int indextemp = 0;
+                //        Uri nextpage = null;
+                //        do
+                //        {
+                //            nextpage = rule.GetNextUrl(duan);
+                //            Tool.Log.Debug("GetNextUrl: " + nextpage.ToJson());
 
-                }
+                //            for (int i = indextemp; i < length; i++)
+                //            {
+                //                var rowstr = string.Empty;
+                //                var row = rule.GetRowValue(duan, indextemp);
+                //                indextemp++;
+                //                Tool.Log.Debug("GetRowValue: " + row.ItemArray.ToJson());
+                //                if (!string.IsNullOrWhiteSpace(rowstr))
+                //                {
+                //                    list.Add(row);
+                //                }
+
+                //            }
+                //            System.IO.File.WriteAllText(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_1.json"), list.ToJson());
+                //            break;
+
+
+                //        } while (nextpage != null);
+
+                //        Tool.Log.Debug("采集完成");
+
+                //    }
+
+                //}
 
 
 
             });
         }
 
+
+        CollectRuleConfig GetConfig()
+        {
+            var config = new CollectRuleConfig()
+            {
+                Name = "默认采集规则",
+                Url = "https://qqjj18.com",
+                FirstSinglePageRuleSegment = new FunctionRuleSegment("", "[Attr::id=PoShow_Box]"),
+                FirstSinglePageRuleSegments = new List<FunctionRuleSegment>()
+                {
+                    new FunctionRuleSegment("标题","[Attr::class=list]$$[Index::1]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Text]"),
+                    new FunctionRuleSegment("新地址","[Attr::class=list]$$[Index::1]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Link]"),
+                    new FunctionRuleSegment("采集标题","[Attr::class=list]$$[Index::10]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Text]"),
+                    new FunctionRuleSegment("采集地址","[Attr::class=list]$$[Index::10]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Link]"),
+                },
+                FirstSinglePageListRuleSegment = new FunctionRuleSegment("采集地址", "[Attr::class=list]$$[Index::10]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Link]"),
+
+                ListRuleSegment = new FunctionRuleSegment("", "[Attr::class=Po_topic]"),
+                ListPageRuleSegments = new List<FunctionRuleSegment>()
+                {
+                     new FunctionRuleSegment("列表标题","[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Text]"),
+                     new FunctionRuleSegment("列表链接","[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]"),
+                     new FunctionRuleSegment("列表编号","[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Clear::href=https://ww2464.com/content_censored/]$$[Clear::href=.htm]$$[GetAttr::href]"),
+                     new FunctionRuleSegment("列表小图","[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]"),
+                     new FunctionRuleSegment("列表大图","[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[Clear::onmouseover=showtrail(']$$[Clear::onmouseover=','',10,10)]$$[GetAttr::onmouseover]"),
+                },
+            };
+            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\def_config.json");
+            if (!System.IO.File.Exists(filepath))
+            {
+                System.IO.File.WriteAllText(filepath, config.ToJson());
+            }
+            return System.IO.File.ReadAllText(filepath).JsonTo<CollectRuleConfig>();
+        }
     }
 }
