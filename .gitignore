@@ -19,3 +19,12 @@
 /.vs/config
 /.vs/FastDevTool/v15/Server/sqlite3
 /.vs/FastDevTool/v15
+/RunTaskForAny/Modules/RunTaskForAny.Module.Collect/bin/Release
+/RunTaskForAny/Modules/RunTaskForAny.Module.Collect/obj
+/RunTaskForAny/Modules/RunTaskForAny.Module.Test/obj/Release
+/RunTaskForAny/RunTaskForAny/bin/Release/Modules
+/RunTaskForAny/RunTaskForAny/obj/Release
+/RunTaskForAny/RunTaskForAny.Common/bin/Release
+/RunTaskForAny/RunTaskForAny.Common/obj/Release
+/RunTaskForAny/RunTaskForAny.DataBase/obj/Release
+/RunTaskForAny/WpfApp1/obj/Release

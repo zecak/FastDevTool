@@ -1,0 +1,56 @@
+{
+  "Name": "默认采集规则",
+  "Url": "https://qqjj18.com",
+  "FirstSinglePageRuleSegment": {
+    "Name": "",
+    "Segments": "[Attr::class=categorythr]$$[FIndex]"
+  },
+  "FirstSinglePageRuleSegments": [
+    {
+      "Name": "标题",
+      "Segments": "[Attr::class=list]$$[Index::1]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Text]"
+    },
+    {
+      "Name": "新地址",
+      "Segments": "[Attr::class=list]$$[Index::1]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Link]"
+    },
+    {
+      "Name": "采集标题",
+      "Segments": "[Attr::class=list]$$[Index::10]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Text]"
+    },
+    {
+      "Name": "采集地址",
+      "Segments": "[Attr::class=list]$$[Index::10]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Link]"
+    }
+  ],
+  "FirstSinglePageListRuleSegment": {
+    "Name": "采集地址",
+    "Segments": "[Attr::class=list]$$[Index::10]$$[Tag::li]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Link]"
+  },
+  "ListRuleSegment": {
+    "Name": "",
+    "Segments": "[Attr::class=Po_topic]"
+  },
+  "ListPageRuleSegments": [
+    {
+      "Name": "列表标题",
+      "Segments": "[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Text]"
+    },
+    {
+      "Name": "列表链接",
+      "Segments": "[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]"
+    },
+    {
+      "Name": "列表编号",
+      "Segments": "[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Clear::href=https://ww2464.com/content_censored/]$$[Clear::href=.htm]$$[GetAttr::href]"
+    },
+    {
+      "Name": "列表小图",
+      "Segments": "[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]"
+    },
+    {
+      "Name": "列表大图",
+      "Segments": "[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[Clear::onmouseover=showtrail(']$$[Clear::onmouseover=','',10,10)]$$[GetAttr::onmouseover]"
+    }
+  ]
+}
