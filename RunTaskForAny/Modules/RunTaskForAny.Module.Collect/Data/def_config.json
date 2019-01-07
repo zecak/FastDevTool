@@ -41,10 +41,6 @@
       "Segments": "[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]"
     },
     {
-      "Name": "列表编号",
-      "Segments": "[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Clear::href=https://ww2464.com/content_censored/]$$[Clear::href=.htm]$$[GetAttr::href]"
-    },
-    {
       "Name": "列表小图",
       "Segments": "[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]"
     },

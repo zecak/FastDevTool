@@ -68,6 +68,7 @@
     <Compile Include="PageRule\FunctionSegment\ParentFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\PrevFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\PrevTextFunction.cs" />
+    <Compile Include="PageRule\FunctionSegment\RemoveTagFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\RowIndexFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\TagFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\TextFunction.cs" />

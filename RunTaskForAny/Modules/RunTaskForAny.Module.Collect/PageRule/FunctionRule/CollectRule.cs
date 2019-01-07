@@ -22,7 +22,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
 
         }
 
- 
+
         /// <summary>
         /// 获取列表数据,为空是未获取到该页面
         /// </summary>
@@ -70,7 +70,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     var html_2 = HttpTool.AjaxGet(Config.FirstSinglePageListRuleSegmentUrl);
                     var doc_2 = NSoup.NSoupClient.Parse(html_2);
                     var duan_2 = doc_2.Body;
-                    
+
                     dataTable = new DataTable(EncryptHelper.MD5(Config.FirstSinglePageListRuleSegmentUrl));
                     foreach (var segment in Config.ListPageRuleSegments)
                     {
@@ -133,7 +133,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 var html = HttpTool.AjaxGet(Config.PagingRuleSegmentUrl);
                 var doc = NSoup.NSoupClient.Parse(html);
                 var duan = doc.Body;
-                
+
                 dataTable = new DataTable(EncryptHelper.MD5(Config.PagingRuleSegmentUrl));
                 foreach (var segment in Config.ListPageRuleSegments)
                 {
@@ -260,6 +260,14 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     find_element = find_elements.Last;
                 }
 
+                var model_RemoveTag = function as RemoveTagFunction;
+                if (model_RemoveTag != null)
+                {
+                    var es = find_element.GetElementsByTag(model_RemoveTag.TagName);
+                    find_element.Children.RemoveAll(es);
+                }
+
+
             }
 
             return find_elements;
@@ -358,6 +366,13 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 if (model_LIndex != null)
                 {
                     find_element = find_elements.Last;
+                }
+
+                var model_RemoveTag = function as RemoveTagFunction;
+                if (model_RemoveTag != null)
+                {
+                    var es = find_element.GetElementsByTag(model_RemoveTag.TagName);
+                    find_element.Children.RemoveAll(es);
                 }
 
             }
@@ -505,6 +520,13 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     find_element.Attr(model_Clear.AttrName, str);
                 }
 
+                var model_RemoveTag = function as RemoveTagFunction;
+                if (model_RemoveTag != null)
+                {
+                    var es = find_element.GetElementsByTag(model_RemoveTag.TagName);
+                    find_element.Children.RemoveAll(es);
+                }
+
             }
 
             return val;
@@ -514,6 +536,83 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
         {
             var url = GetValue(element, Config.PagingRuleSegment);
             return url;
+        }
+
+        public string DataTableToMySql(DataTable dataTable)
+        {
+            string dbName = "Collect_v1";
+            string tablename = Config.Name;
+            string fieldKey = "ContentMD5";
+            string fieldnames = "ContentMD5,CreateTime,UpdateTime,Status,";
+            string fieldvalues = "'{0}',NOW(),NOW(),0,";
+            string fields = "";
+
+            for (int i = 0; i < dataTable.Columns.Count; i++)
+            {
+                if ((i + 1) == dataTable.Columns.Count)
+                {
+                    fields += dataTable.Columns[i].ColumnName + " VARCHAR(4000) ";
+                    fieldnames += dataTable.Columns[i].ColumnName;
+                }
+                else
+                {
+                    fields += dataTable.Columns[i].ColumnName + " VARCHAR(4000),";
+                    fieldnames += dataTable.Columns[i].ColumnName + ",";
+                }
+            }
+
+
+            var sql = "";
+            var mysql = @"
+Create Database If Not Exists {0} Character Set utf8mb4;
+Create Table If Not Exists {0}.{1}(
+	ID int Primary key Auto_Increment,
+	ContentMD5 VARCHAR(100),
+    CreateTime datetime,
+    UpdateTime datetime,
+    Status int,
+	{2}
+);
+{3}
+";
+
+            var mysql_insert_into = @"
+INSERT INTO {0}.{1}({4}) 
+SELECT {5}  
+FROM DUAL WHERE NOT EXISTS (
+    SELECT 1 FROM {0}.{1} WHERE {2}='{3}' LIMIT 1
+); 
+";
+            var sqlAll = ""; 
+
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                var str_arr = dataTable.Rows[i].ItemArray;
+                if (str_arr != null)
+                {
+                    var contentMD5 = EncryptHelper.MD5(str_arr.ToJson());
+                    var vals = string.Format(fieldvalues, contentMD5);
+                    for (int j = 0; j < str_arr.Length; j++)
+                    {
+                        if ((j + 1) == str_arr.Length)
+                        {
+                            vals += "'" + str_arr[j].ToString().Replace("'","''") + "'";
+                        }
+                        else
+                        {
+                            vals += "'" + str_arr[j].ToString().Replace("'", "''") + "',";
+                        }
+                    }
+
+                    var sqlrow = string.Format(mysql_insert_into, dbName, tablename, fieldKey, contentMD5, fieldnames, vals);
+
+                    sqlAll += sqlrow;
+                }
+            }
+
+            sql = string.Format(mysql, dbName, tablename, fields, sqlAll);
+
+            return sql;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             new RowIndexFunction(0),
             new TagFunction(""),
             new TextFunction(),
-
+            new RemoveTagFunction(""),
         };
 
         /// <summary>
