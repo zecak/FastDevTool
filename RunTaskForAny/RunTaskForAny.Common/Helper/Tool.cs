@@ -385,5 +385,54 @@ namespace RunTaskForAny.Common.Helper
                 return "";
             }
         }
+
+        string DownFile(Uri uri, string filepath)
+        {
+            System.IO.Directory.CreateDirectory(filepath);
+            var name = uri.Segments[uri.Segments.Length - 1];
+            var filename = System.IO.Path.Combine(filepath, name);
+            if (!System.IO.File.Exists(filename))
+            {
+                try
+                {
+                    System.Net.WebClient myWebClient = new System.Net.WebClient();
+                    myWebClient.DownloadFile(uri, filename);
+                }
+                catch (Exception ex)
+                {
+                    Common.Helper.Tool.Log.Error(ex);
+                    return null;
+                }
+            }
+            return name;
+        }
+
+        List<string> DownFiles(List<Uri> uris, string filepath)
+        {
+            List<string> list = new List<string>();
+            System.IO.Directory.CreateDirectory(filepath);
+            System.Net.WebClient myWebClient = new System.Net.WebClient();
+            foreach (var uri in uris)
+            {
+                var name = uri.Segments[uri.Segments.Length - 1];
+                var filename = System.IO.Path.Combine(filepath, name);
+                if (!System.IO.File.Exists(filename))
+                {
+                    try
+                    {
+                        myWebClient.DownloadFile(uri, filename);
+                        list.Add(name);
+                    }
+                    catch (Exception ex)
+                    {
+                        list.Add(null);
+                        Common.Helper.Tool.Log.Error(ex);
+                    }
+                }
+
+            }
+            return list;
+        }
+
     }
 }

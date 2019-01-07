@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.8.11.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\HtmlAgilityPack.1.8.11\lib\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -52,7 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
-    <Compile Include="PageRule\AcquisitionRule.cs" />
     <Compile Include="PageRule\FunctionRule\FactoryFunction.cs" />
     <Compile Include="PageRule\FunctionRule\FunctionRuleSegment.cs" />
     <Compile Include="PageRule\FunctionSegment\AttrFunction.cs" />
@@ -76,8 +72,6 @@
     <Compile Include="PageRule\FunctionSegment\RowIndexFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\TagFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\TextFunction.cs" />
-    <Compile Include="PageRule\Rule.cs" />
-    <Compile Include="PageRule\RuleHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -90,18 +84,7 @@
     <None Include="Data\def_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Data\def_v1.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\def.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Data\说明文档.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\新说明文档.txt">

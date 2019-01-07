@@ -3,7 +3,7 @@
   "Url": "https://qqjj18.com",
   "FirstSinglePageRuleSegment": {
     "Name": "",
-    "Segments": "[Attr::id=PoShow_Box]"
+    "Segments": "[Attr::class=categorythr]$$[FIndex]"
   },
   "FirstSinglePageRuleSegments": [
     {
