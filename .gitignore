@@ -2,15 +2,12 @@
 # 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
 ################################################################################
 
-/.vs/FastDevTool/v15/Server/sqlite3
-/.vs/FastDevTool/v15
 /FastDevTool/obj/Debug
 /packages
 /FastDevTool/bin/Debug
-/RunTaskForAny/.vs/RunTaskForAny/v15/Server/sqlite3
 /RunTaskForAny/Modules/RunTaskForAny.Module.Test/obj/Debug
 /RunTaskForAny/packages
-/RunTaskForAny/.vs/RunTaskForAny/v15
+/RunTaskForAny/.vs
 /RunTaskForAny/RunTaskForAny/bin/Debug
 /RunTaskForAny/RunTaskForAny/obj/Debug
 /RunTaskForAny/RunTaskForAny.Common/bin/Debug
@@ -19,5 +16,5 @@
 /RunTaskForAny/RunTaskForAny.DataBase/obj/Debug
 /RunTaskForAny/WpfApp1/bin/Debug
 /RunTaskForAny/WpfApp1/obj/Debug
-/.gitattributes
-/RunTaskForAny/.vs/config
+/.vs/config
+/.vs/FastDevTool/v15/Server/sqlite3
