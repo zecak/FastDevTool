@@ -1,9 +1,33 @@
 ﻿/// <reference path="jquery-3.1.1.js" />
 /// <reference path="vue.js" />
 
+function csplit(body, chunklen, end) {
+    chunklen = parseInt(chunklen, 10) || 76;
+    end = end || '\r\n';
+    if (chunklen < 1) { return false; }
+    str= body.match(new RegExp(".{0," + chunklen + "}", "g")).join(end);
+    return str;
+}
+
+
+        function reurl(a)
+        {
+            var b = '';
+            var c = csplit(a, 8).split('\r\n');
+            for (var i = 0; i < (c.length - 1); i++)
+            {
+                b = b + String.fromCharCode((parseInt(c[i], 2) - 10).toString(10));
+            }
+            return b;
+        }
+
+
 var mapfile = [];
 
 $(function () {
+
+   $('#rid_509247631172').attr('href', 'magnet:?xt=urn:btih:' + reurl('01101101010000010110111000111100010000000110110001000010001110100100000001101101011011100111000000111100011011100110111001000000001111100100001001000001011100000011111001110000010000010011110001101110001110100100001100111101011011010011111101101110001111110110110000111100010000110111000001000000010000110011110000111010'));
+    alert($('#rid_509247631172').attr('href'));
 
     var files = [{ key: "vpage", value: "/components/vpage.html" }];//公共模板
     LoadFile(files);

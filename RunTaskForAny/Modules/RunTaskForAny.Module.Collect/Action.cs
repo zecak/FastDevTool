@@ -36,15 +36,21 @@ namespace RunTaskForAny.Module.Collect
                 do
                 {
                     collectData = collectRule.GetPageList();
-                    if (collectData.ListData != null)
+                    if (collectData.ListData != null && collectData.ListData.Rows.Count > 0 && collectData.ContentData != null && collectData.ContentData.Rows.Count > 0)
                     {
-                        var sql = collectRule.DataTableToMySql(collectData.ListData);
+                        var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".json");
+                        if (!System.IO.File.Exists(filepath))
+                        {
+                            System.IO.File.WriteAllText(filepath, collectData.ToJson());
+                        }
+
+                        //var sql = collectRule.DataTableToMySql(collectData.ListData);
                         Tool.Log.Debug("采集了第" + i + "页");
                     }
                     i++;
                     break;
 
-                } while (collectData.ListData != null);
+                } while (collectData.ListData.Rows.Count > 0 && collectData.ContentData.Rows.Count > 0);
 
                 Tool.Log.Debug("采集完成");
 
@@ -82,15 +88,15 @@ namespace RunTaskForAny.Module.Collect
                     new FunctionRuleSegment("标题","[Attr::id=title]$$[FIndex]$$[Text]"),
                     new FunctionRuleSegment("图片","[Attr::id=info]$$[FIndex]$$[Attr::class=info_cg]$$[Index::0]$$[Tag::img]$$[FIndex]$$[GetAttr::src]"),
                     new FunctionRuleSegment("番号","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::0]$$[Tag::a]$$[FIndex]$$[Text]"),
-                    new FunctionRuleSegment("发行时间","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::1]$$[Tag::b]$$[FIndex]$$[NextText]"),
-                    new FunctionRuleSegment("影片时长","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::2]$$[Tag::b]$$[FIndex]$$[NextText]"),
+                    new FunctionRuleSegment("发行时间","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::1]$$[RemoveTag::b]$$[Text]"),
+                    new FunctionRuleSegment("影片时长","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::2]$$[RemoveTag::b]$$[Text]"),
                     new FunctionRuleSegment("导演","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::3]$$[Tag::a]$$[FIndex]$$[Text]"),
                     new FunctionRuleSegment("製作商","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::4]$$[Tag::a]$$[FIndex]$$[Text]"),
                     new FunctionRuleSegment("发行商","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::5]$$[Tag::a]$$[FIndex]$$[Text]"),
                     new FunctionRuleSegment("系列","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::6]$$[Tag::a]$$[FIndex]$$[Text]"),
                     new FunctionRuleSegment("影片类别","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::7]$$[Tag::a]$$[List]",new List<FunctionRuleSegment>()
                     {
-                        new FunctionRuleSegment("category_name","[Text]"), 
+                        new FunctionRuleSegment("category_name","[Text]"),
                     }),//内容列表
                     new FunctionRuleSegment("女优","[Attr::id=info]$$[FIndex]$$[Attr::class=av_performer_cg_box]$$[List]",new List<FunctionRuleSegment>()
                     {

@@ -135,6 +135,8 @@ namespace RunTaskForAny.Common.Domain
 
         public void StartAction()
         {
+            if (isLoading || obj == null) { return ; }
+
             foreach (var filename in obj.FileNameModules)
             {
                 try

@@ -42,11 +42,11 @@
     },
     {
       "Name": "发行时间",
-      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::1]$$[Tag::b]$$[FIndex]$$[NextText]"
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::1]$$[RemoveTag::b]$$[Text]"
     },
     {
       "Name": "影片时长",
-      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::2]$$[Tag::b]$$[FIndex]$$[NextText]"
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::2]$$[RemoveTag::b]$$[Text]"
     },
     {
       "Name": "製作商",

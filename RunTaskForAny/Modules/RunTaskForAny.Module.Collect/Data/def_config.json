@@ -53,6 +53,10 @@
     "Name": "下一页",
     "Segments": "[Attr::class=pageback]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]"
   },
+  "ListContentPageRuleSegment": {
+    "Name": "列表内容链接",
+    "Segments": "[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]"
+  },
   "ContentPageRuleSegments": [
     {
       "Name": "标题",
@@ -68,11 +72,11 @@
     },
     {
       "Name": "发行时间",
-      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::1]$$[Tag::b]$$[FIndex]$$[NextText]"
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::1]$$[RemoveTag::b]$$[Text]"
     },
     {
       "Name": "影片时长",
-      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::2]$$[Tag::b]$$[FIndex]$$[NextText]"
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::2]$$[RemoveTag::b]$$[Text]"
     },
     {
       "Name": "导演",
@@ -116,7 +120,7 @@
         },
         {
           "Name": "cg_title",
-          "Segments": "[Tag::a]$$[FIndex]$$[Text]"
+          "Segments": "[Attr::class=av_performer_name_box]$$[FIndex]$$[Text]"
         }
       ]
     },

@@ -30,11 +30,15 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
         public CollectData GetPageList()
         {
             CollectData collectData = new CollectData();
-            DataTable dataTable = null;
+            collectData.FirstData = new DataTable();
+            collectData.ListData = new DataTable();
+            collectData.ContentData = new DataTable();
 
             //确定单页=>确定列表地址:如果有则直接(处理列表),没有则进入(确定列表)
             if (string.IsNullOrWhiteSpace(Config.PagingRuleSegmentUrl))
             {
+                Tool.Log.Debug("采集地址:" + Config.Url);
+
                 var html = HttpTool.AjaxGet(Config.Url);
                 var doc = NSoup.NSoupClient.Parse(html);
                 var duan = doc.Body;
@@ -44,14 +48,18 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     if (first_find_element != null)
                     {
                         Config.FirstSinglePageListRuleSegmentUrl = GetValue(first_find_element, Config.FirstSinglePageListRuleSegment);
-                        Tool.Log.Debug(Config.FirstSinglePageListRuleSegmentUrl);
 
-                        DataTable firstDataTable = new DataTable();
-                        foreach (var segment in Config.FirstSinglePageRuleSegments)
+                        Tool.Log.Debug("单页地址:" + Config.FirstSinglePageListRuleSegmentUrl);
+
+                        if (collectData.FirstData.Columns.Count <= 0)
                         {
-                            firstDataTable.Columns.Add(segment.Name);
+                            foreach (var segment in Config.FirstSinglePageRuleSegments)
+                            {
+                                collectData.FirstData.Columns.Add(segment.Name);
+                            }
                         }
-                        DataRow dataRow = firstDataTable.NewRow();//保存采集的数据
+
+                        DataRow dataRow = collectData.FirstData.NewRow();//保存采集的数据
                         List<string> lst = new List<string>();
 
                         foreach (var segment in Config.FirstSinglePageRuleSegments)
@@ -60,25 +68,27 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                         }
 
                         dataRow.ItemArray = lst.ToArray();
-                        firstDataTable.Rows.Add(dataRow);
+                        collectData.FirstData.Rows.Add(dataRow);
 
-                        collectData.FirstData = firstDataTable;
-
-                        Tool.Log.Debug(firstDataTable.ToJson());
+                        Tool.Log.Debug("单页内容:" + collectData.FirstData.ToJson());
                     }
 
                 }
 
                 if (!string.IsNullOrWhiteSpace(Config.FirstSinglePageListRuleSegmentUrl))//处理采集到的地址
                 {
+                    Tool.Log.Debug("列表地址:" + Config.FirstSinglePageListRuleSegmentUrl);
+
                     var html_2 = HttpTool.AjaxGet(Config.FirstSinglePageListRuleSegmentUrl);
                     var doc_2 = NSoup.NSoupClient.Parse(html_2);
                     var duan_2 = doc_2.Body;
 
-                    dataTable = new DataTable();
-                    foreach (var segment in Config.ListPageRuleSegments)
+                    if (collectData.ListData.Columns.Count <= 0)
                     {
-                        dataTable.Columns.Add(segment.Name);
+                        foreach (var segment in Config.ListPageRuleSegments)
+                        {
+                            collectData.ListData.Columns.Add(segment.Name);
+                        }
                     }
 
                     NSoup.Select.Elements find_elements = GetElements(duan_2, Config.ListRuleSegment);
@@ -86,7 +96,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     {
                         foreach (var element in find_elements)
                         {
-                            DataRow dataRow = dataTable.NewRow();//保存采集的数据
+                            DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
                             List<string> lst = new List<string>();
 
                             foreach (var segment in Config.ListPageRuleSegments)
@@ -95,7 +105,45 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             }
 
                             dataRow.ItemArray = lst.ToArray();
-                            dataTable.Rows.Add(dataRow);
+                            collectData.ListData.Rows.Add(dataRow);
+
+                            Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
+
+                            //处理内容
+                            if (Config.ListContentPageRuleSegment != null)
+                            {
+                                var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
+                                if (!string.IsNullOrWhiteSpace(contentUrl))
+                                {
+                                    Tool.Log.Debug("内容地址:" + contentUrl);
+
+                                    var html_content = HttpTool.AjaxGet(contentUrl);
+                                    var doc_content = NSoup.NSoupClient.Parse(html_content);
+                                    var duan_content = doc_content.Body;
+
+                                    if (collectData.ContentData.Columns.Count <= 0)
+                                    {
+                                        foreach (var segment in Config.ContentPageRuleSegments)
+                                        {
+                                            collectData.ContentData.Columns.Add(segment.Name);
+                                        }
+                                    }
+
+                                    DataRow dataRow_content = collectData.ContentData.NewRow();//保存采集的数据
+                                    List<string> lst_content = new List<string>();
+
+                                    foreach (var segment in Config.ContentPageRuleSegments)
+                                    {
+                                        lst_content.Add(GetValue(duan_content, segment));
+                                    }
+
+                                    dataRow_content.ItemArray = lst_content.ToArray();
+                                    collectData.ContentData.Rows.Add(dataRow_content);
+
+                                    Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
+                                }
+                            }
+
                         }
                     }
 
@@ -104,10 +152,12 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 }
                 else//确定列表
                 {
-                    dataTable = new DataTable();
-                    foreach (var segment in Config.ListPageRuleSegments)
+                    if (collectData.ListData.Columns.Count <= 0)
                     {
-                        dataTable.Columns.Add(segment.Name);
+                        foreach (var segment in Config.ListPageRuleSegments)
+                        {
+                            collectData.ListData.Columns.Add(segment.Name);
+                        }
                     }
 
                     NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
@@ -115,7 +165,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     {
                         foreach (var element in find_elements)
                         {
-                            DataRow dataRow = dataTable.NewRow();//保存采集的数据
+                            DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
                             List<string> lst = new List<string>();
 
                             foreach (var segment in Config.ListPageRuleSegments)
@@ -124,24 +174,66 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             }
 
                             dataRow.ItemArray = lst.ToArray();
-                            dataTable.Rows.Add(dataRow);
+                            collectData.ListData.Rows.Add(dataRow);
+
+                            Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
+
+                            //处理内容
+                            if (Config.ListContentPageRuleSegment != null)
+                            {
+                                var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
+                                if (!string.IsNullOrWhiteSpace(contentUrl))
+                                {
+                                    Tool.Log.Debug("内容地址:" + contentUrl);
+
+                                    var html_content = HttpTool.AjaxGet(contentUrl);
+                                    var doc_content = NSoup.NSoupClient.Parse(html_content);
+                                    var duan_content = doc_content.Body;
+
+                                    if (collectData.ContentData.Columns.Count <= 0)
+                                    {
+                                        foreach (var segment in Config.ContentPageRuleSegments)
+                                        {
+                                            collectData.ContentData.Columns.Add(segment.Name);
+                                        }
+                                    }
+
+                                    DataRow dataRow_content = collectData.ContentData.NewRow();//保存采集的数据
+                                    List<string> lst_content = new List<string>();
+
+                                    foreach (var segment in Config.ContentPageRuleSegments)
+                                    {
+                                        lst_content.Add(GetValue(duan_content, segment));
+                                    }
+
+                                    dataRow_content.ItemArray = lst_content.ToArray();
+                                    collectData.ContentData.Rows.Add(dataRow_content);
+
+                                    Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
+                                }
+                            }
                         }
                     }
 
                     Config.PagingRuleSegmentUrl = GetNextUrl(duan);
+
                 }
 
             }
             else
             {
+                Tool.Log.Debug("列表下一页地址:" + Config.PagingRuleSegmentUrl);
+
                 var html = HttpTool.AjaxGet(Config.PagingRuleSegmentUrl);
                 var doc = NSoup.NSoupClient.Parse(html);
                 var duan = doc.Body;
 
-                dataTable = new DataTable();
-                foreach (var segment in Config.ListPageRuleSegments)
+                if (collectData.ListData.Columns.Count <= 0)
                 {
-                    dataTable.Columns.Add(segment.Name);
+                    foreach (var segment in Config.ListPageRuleSegments)
+                    {
+                        collectData.ListData.Columns.Add(segment.Name);
+                    }
                 }
 
                 NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
@@ -149,7 +241,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 {
                     foreach (var element in find_elements)
                     {
-                        DataRow dataRow = dataTable.NewRow();//保存采集的数据
+                        DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
                         List<string> lst = new List<string>();
 
                         foreach (var segment in Config.ListPageRuleSegments)
@@ -158,13 +250,50 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                         }
 
                         dataRow.ItemArray = lst.ToArray();
-                        dataTable.Rows.Add(dataRow);
+                        collectData.ListData.Rows.Add(dataRow);
+
+                        Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
+
+                        //处理内容
+                        if (Config.ListContentPageRuleSegment != null)
+                        {
+                            var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
+                            if (!string.IsNullOrWhiteSpace(contentUrl))
+                            {
+                                Tool.Log.Debug("内容地址:" + contentUrl);
+
+                                var html_content = HttpTool.AjaxGet(contentUrl);
+                                var doc_content = NSoup.NSoupClient.Parse(html_content);
+                                var duan_content = doc_content.Body;
+
+                                if (collectData.ContentData.Columns.Count <= 0)
+                                {
+                                    foreach (var segment in Config.ContentPageRuleSegments)
+                                    {
+                                        collectData.ContentData.Columns.Add(segment.Name);
+                                    }
+                                }
+
+                                DataRow dataRow_content = collectData.ContentData.NewRow();//保存采集的数据
+                                List<string> lst_content = new List<string>();
+
+                                foreach (var segment in Config.ContentPageRuleSegments)
+                                {
+                                    lst_content.Add(GetValue(duan_content, segment));
+                                }
+
+                                dataRow_content.ItemArray = lst_content.ToArray();
+                                collectData.ContentData.Rows.Add(dataRow_content);
+
+                                Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
+                            }
+                        }
                     }
                 }
 
                 Config.PagingRuleSegmentUrl = GetNextUrl(duan);
             }
-            collectData.ListData = dataTable;
+
             return collectData;
         }
 
@@ -177,7 +306,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
         NSoup.Select.Elements GetElements(NSoup.Nodes.Element duan, FunctionRuleSegment ruleSegment)
         {
             NSoup.Select.Elements find_elements = null;
-            NSoup.Nodes.Element find_element = null;
+            NSoup.Nodes.Element find_element = duan;
             //查找列表
             for (int i = 0; i < ruleSegment.GetFunctions().Count; i++)
             {
@@ -186,38 +315,17 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 var model_Attr = function as AttrFunction;
                 if (model_Attr != null)
                 {
-                    if (find_element == null)
-                    {
-                        find_elements = duan.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
-                    }
-                    else
-                    {
-                        find_elements = find_element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
-                    }
+                    find_elements = find_element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
                 }
                 var model_Tag = function as TagFunction;
                 if (model_Tag != null)
                 {
-                    if (find_element == null)
-                    {
-                        find_elements = duan.GetElementsByTag(model_Tag.TagName);
-                    }
-                    else
-                    {
-                        find_elements = find_element.GetElementsByTag(model_Tag.TagName);
-                    }
+                    find_elements = find_element.GetElementsByTag(model_Tag.TagName);
                 }
                 var model_Child = function as ChildFunction;
                 if (model_Child != null)
                 {
-                    if (find_element == null)
-                    {
-                        find_elements = duan.Children;
-                    }
-                    else
-                    {
-                        find_elements = find_element.Children;
-                    }
+                    find_elements = find_element.Children;
                 }
 
                 var model_Prev = function as PrevFunction;
@@ -286,7 +394,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
         NSoup.Nodes.Element GetElement(NSoup.Nodes.Element duan, FunctionRuleSegment ruleSegment)
         {
             NSoup.Select.Elements find_elements = null;
-            NSoup.Nodes.Element find_element = null;
+            NSoup.Nodes.Element find_element = duan;
             //查找列表
             for (int i = 0; i < ruleSegment.GetFunctions().Count; i++)
             {
@@ -295,38 +403,17 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 var model_Attr = function as AttrFunction;
                 if (model_Attr != null)
                 {
-                    if (find_element == null)
-                    {
-                        find_elements = duan.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
-                    }
-                    else
-                    {
-                        find_elements = find_element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
-                    }
+                    find_elements = find_element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
                 }
                 var model_Tag = function as TagFunction;
                 if (model_Tag != null)
                 {
-                    if (find_element == null)
-                    {
-                        find_elements = duan.GetElementsByTag(model_Tag.TagName);
-                    }
-                    else
-                    {
-                        find_elements = find_element.GetElementsByTag(model_Tag.TagName);
-                    }
+                    find_elements = find_element.GetElementsByTag(model_Tag.TagName);
                 }
                 var model_Child = function as ChildFunction;
                 if (model_Child != null)
                 {
-                    if (find_element == null)
-                    {
-                        find_elements = duan.Children;
-                    }
-                    else
-                    {
-                        find_elements = find_element.Children;
-                    }
+                    find_elements = find_element.Children;
                 }
 
                 var model_Prev = function as PrevFunction;
@@ -392,46 +479,27 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
 
             string val = "";
             NSoup.Select.Elements find_elements = null;
-            NSoup.Nodes.Element find_element = null;
+            NSoup.Nodes.Element find_element = element;
             for (int i = 0; i < ruleSegment.GetFunctions().Count; i++)
             {
+                if (find_element == null) { return null; }
+
                 var function = ruleSegment[i];
 
                 var model_Attr = function as AttrFunction;
                 if (model_Attr != null)
                 {
-                    if (find_element == null)
-                    {
-                        find_elements = element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
-                    }
-                    else
-                    {
-                        find_elements = find_element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
-                    }
+                    find_elements = find_element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
                 }
                 var model_Tag = function as TagFunction;
                 if (model_Tag != null)
                 {
-                    if (find_element == null)
-                    {
-                        find_elements = element.GetElementsByTag(model_Tag.TagName);
-                    }
-                    else
-                    {
-                        find_elements = find_element.GetElementsByTag(model_Tag.TagName);
-                    }
+                    find_elements = find_element.GetElementsByTag(model_Tag.TagName);
                 }
                 var model_Child = function as ChildFunction;
                 if (model_Child != null)
                 {
-                    if (find_element == null)
-                    {
-                        find_elements = element.Children;
-                    }
-                    else
-                    {
-                        find_elements = find_element.Children;
-                    }
+                    find_elements = find_element.Children;
                 }
 
                 var model_Prev = function as PrevFunction;

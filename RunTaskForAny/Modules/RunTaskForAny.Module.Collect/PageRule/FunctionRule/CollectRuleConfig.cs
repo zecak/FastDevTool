@@ -65,6 +65,10 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
         public string PagingRuleSegmentUrl { get; set; }
 
         /// <summary>
+        /// 确认列表内容链接
+        /// </summary>
+        public FunctionRuleSegment ListContentPageRuleSegment { get; set; }
+        /// <summary>
         /// 内容页功能段列表
         /// </summary>
         public List<FunctionRuleSegment> ContentPageRuleSegments { get; set; }

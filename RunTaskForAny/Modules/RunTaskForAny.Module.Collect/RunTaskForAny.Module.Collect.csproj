@@ -83,6 +83,7 @@
     <None Include="Data\def_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Data\tsconfig1.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
