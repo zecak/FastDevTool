@@ -1,0 +1,108 @@
+{
+  "Name": "默认采集规则2",
+  "Url": "https://ww2464.com/serchinfo_uncensored/topicsbt/topicsbt_1.htm",
+  "ListRuleSegment": {
+    "Name": "确定列表",
+    "Segments": "[Attr::class=Po_u_topic]"
+  },
+  "ListPageRuleSegments": [
+    {
+      "Name": "列表标题",
+      "Segments": "[Attr::class=Po_u_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Text]"
+    },
+    {
+      "Name": "列表链接",
+      "Segments": "[Attr::class=Po_u_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]"
+    },
+    {
+      "Name": "列表小图",
+      "Segments": "[Attr::class=Po_u_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]"
+    },
+    {
+      "Name": "列表大图",
+      "Segments": "[Attr::class=Po_u_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[Clear::onmouseover=showtrail(']$$[Clear::onmouseover=','',10,10)]$$[GetAttr::onmouseover]"
+    }
+  ],
+  "PagingRuleSegment": {
+    "Name": "下一页",
+    "Segments": "[Attr::class=pageback]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]"
+  },
+  "ContentPageRuleSegments": [
+    {
+      "Name": "标题",
+      "Segments": "[Attr::id=title]$$[FIndex]$$[Text]"
+    },
+    {
+      "Name": "图片",
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=info_cg]$$[Index::0]$$[Tag::img]$$[FIndex]$$[GetAttr::src]"
+    },
+    {
+      "Name": "番号",
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::0]$$[Tag::font]$$[FIndex]$$[Text]"
+    },
+    {
+      "Name": "发行时间",
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::1]$$[Tag::b]$$[FIndex]$$[NextText]"
+    },
+    {
+      "Name": "影片时长",
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::2]$$[Tag::b]$$[FIndex]$$[NextText]"
+    },
+    {
+      "Name": "製作商",
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::3]$$[Tag::a]$$[FIndex]$$[Text]"
+    },
+    {
+      "Name": "系列",
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::4]$$[Tag::a]$$[List]",
+      "ListSegments": [
+        {
+          "Name": "name",
+          "Segments": "[Text]"
+        }
+      ]
+    },
+    {
+      "Name": "影片类别",
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::5]$$[Tag::a]$$[List]",
+      "ListSegments": [
+        {
+          "Name": "category_name",
+          "Segments": "[Text]"
+        }
+      ]
+    },
+    {
+      "Name": "女优",
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::6]$$[Tag::a]$$[List]",
+      "ListSegments": [
+        {
+          "Name": "cg_title",
+          "Segments": "[Text]"
+        }
+      ]
+    },
+    {
+      "Name": "磁力集合",
+      "Segments": "[Attr::class=dht_dl_area]$$[FIndex]$$[Attr::class=dht_dl_title_content]$$[List]",
+      "ListSegments": [
+        {
+          "Name": "title",
+          "Segments": "[Tag::a]$$[FIndex]$$[Text]"
+        },
+        {
+          "Name": "link",
+          "Segments": "[Tag::a]$$[FIndex]$$[Link]"
+        },
+        {
+          "Name": "size",
+          "Segments": "[Next]$$[Text]"
+        },
+        {
+          "Name": "date",
+          "Segments": "[Next]$$[Next]$$[Text]"
+        }
+      ]
+    }
+  ]
+}

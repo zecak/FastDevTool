@@ -27,8 +27,9 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
         /// 获取列表数据,为空是未获取到该页面
         /// </summary>
         /// <returns></returns>
-        public DataTable GetPageList()
+        public CollectData GetPageList()
         {
+            CollectData collectData = new CollectData();
             DataTable dataTable = null;
 
             //确定单页=>确定列表地址:如果有则直接(处理列表),没有则进入(确定列表)
@@ -60,6 +61,9 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
 
                         dataRow.ItemArray = lst.ToArray();
                         firstDataTable.Rows.Add(dataRow);
+
+                        collectData.FirstData = firstDataTable;
+
                         Tool.Log.Debug(firstDataTable.ToJson());
                     }
 
@@ -71,7 +75,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     var doc_2 = NSoup.NSoupClient.Parse(html_2);
                     var duan_2 = doc_2.Body;
 
-                    dataTable = new DataTable(EncryptHelper.MD5(Config.FirstSinglePageListRuleSegmentUrl));
+                    dataTable = new DataTable();
                     foreach (var segment in Config.ListPageRuleSegments)
                     {
                         dataTable.Columns.Add(segment.Name);
@@ -100,7 +104,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 }
                 else//确定列表
                 {
-                    dataTable = new DataTable(EncryptHelper.MD5(Config.Url));
+                    dataTable = new DataTable();
                     foreach (var segment in Config.ListPageRuleSegments)
                     {
                         dataTable.Columns.Add(segment.Name);
@@ -134,7 +138,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 var doc = NSoup.NSoupClient.Parse(html);
                 var duan = doc.Body;
 
-                dataTable = new DataTable(EncryptHelper.MD5(Config.PagingRuleSegmentUrl));
+                dataTable = new DataTable();
                 foreach (var segment in Config.ListPageRuleSegments)
                 {
                     dataTable.Columns.Add(segment.Name);
@@ -160,8 +164,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
 
                 Config.PagingRuleSegmentUrl = GetNextUrl(duan);
             }
-
-            return dataTable;
+            collectData.ListData = dataTable;
+            return collectData;
         }
 
 
@@ -266,6 +270,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     var es = find_element.GetElementsByTag(model_RemoveTag.TagName);
                     find_element.Children.RemoveAll(es);
                 }
+
 
 
             }
@@ -527,6 +532,28 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     find_element.Children.RemoveAll(es);
                 }
 
+                var model_List = function as ListFunction;
+                if (model_List != null)
+                {
+                    DataTable data = new DataTable();
+                    foreach (var item in ruleSegment.ListSegments)
+                    {
+                        data.Columns.Add(item.Name);
+                    }
+                    foreach (var eles in find_elements)
+                    {
+                        DataRow dataRow = data.NewRow();//保存采集的数据
+                        List<string> lst = new List<string>();
+                        foreach (var item in ruleSegment.ListSegments)
+                        {
+                            lst.Add(GetValue(eles, item));
+                        }
+                        dataRow.ItemArray = lst.ToArray();
+                        data.Rows.Add(dataRow);
+                    }
+                    val = data.ToJson();
+                }
+
             }
 
             return val;
@@ -583,7 +610,7 @@ FROM DUAL WHERE NOT EXISTS (
     SELECT 1 FROM {0}.{1} WHERE {2}='{3}' LIMIT 1
 ); 
 ";
-            var sqlAll = ""; 
+            var sqlAll = "";
 
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
@@ -596,7 +623,7 @@ FROM DUAL WHERE NOT EXISTS (
                     {
                         if ((j + 1) == str_arr.Length)
                         {
-                            vals += "'" + str_arr[j].ToString().Replace("'","''") + "'";
+                            vals += "'" + str_arr[j].ToString().Replace("'", "''") + "'";
                         }
                         else
                         {

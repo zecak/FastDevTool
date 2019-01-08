@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="PageRule\FunctionRule\CollectData.cs" />
     <Compile Include="PageRule\FunctionRule\CollectRule.cs" />
     <Compile Include="PageRule\FunctionRule\CollectRuleConfig.cs" />
     <Compile Include="PageRule\FunctionRule\FactoryFunction.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="PageRule\FunctionSegment\IndexFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\LIndexFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\LinkFunction.cs" />
+    <Compile Include="PageRule\FunctionSegment\ListFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\NextFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\NextTextFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\ParentFunction.cs" />
@@ -75,6 +77,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\def_config_v2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Data\def_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -30,6 +30,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             new TagFunction(""),
             new TextFunction(),
             new RemoveTagFunction(""),
+            new ListFunction(),
         };
 
         /// <summary>

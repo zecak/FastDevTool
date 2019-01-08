@@ -31,20 +31,20 @@ namespace RunTaskForAny.Module.Collect
 
                 CollectRule collectRule = new CollectRule(config);
 
-                DataTable dataTable = null;
+                CollectData collectData = null;
                 int i = 1;
                 do
                 {
-                    dataTable = collectRule.GetPageList();
-                    if (dataTable != null)
+                    collectData = collectRule.GetPageList();
+                    if (collectData.ListData != null)
                     {
-                        var sql = collectRule.DataTableToMySql(dataTable);
+                        var sql = collectRule.DataTableToMySql(collectData.ListData);
                         Tool.Log.Debug("采集了第" + i + "页");
                     }
                     i++;
                     break;
 
-                } while (dataTable != null);
+                } while (collectData.ListData != null);
 
                 Tool.Log.Debug("采集完成");
 
@@ -88,10 +88,27 @@ namespace RunTaskForAny.Module.Collect
                     new FunctionRuleSegment("製作商","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::4]$$[Tag::a]$$[FIndex]$$[Text]"),
                     new FunctionRuleSegment("发行商","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::5]$$[Tag::a]$$[FIndex]$$[Text]"),
                     new FunctionRuleSegment("系列","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::6]$$[Tag::a]$$[FIndex]$$[Text]"),
-                    new FunctionRuleSegment("影片类别","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::7]$$[RemoveTag::b]$$[Text]"),//内容列表
-                    //new FunctionRuleSegment("女优","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::8]$$[RemoveTag::b]$$[Text]"),//内容列表
-                    //new FunctionRuleSegment("图集","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::9]$$[RemoveTag::b]$$[Text]"),//内容列表
-                    //new FunctionRuleSegment("磁力集合","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::9]$$[RemoveTag::b]$$[Text]"),//内容列表
+                    new FunctionRuleSegment("影片类别","[Attr::id=info]$$[FIndex]$$[Attr::class=infobox]$$[Index::7]$$[Tag::a]$$[List]",new List<FunctionRuleSegment>()
+                    {
+                        new FunctionRuleSegment("category_name","[Text]"), 
+                    }),//内容列表
+                    new FunctionRuleSegment("女优","[Attr::id=info]$$[FIndex]$$[Attr::class=av_performer_cg_box]$$[List]",new List<FunctionRuleSegment>()
+                    {
+                        new FunctionRuleSegment("cg_img","[Tag::img]$$[FIndex]$$[GetAttr::src]"),
+                        new FunctionRuleSegment("cg_title","[Tag::a]$$[FIndex]$$[Text]")
+                    }),//内容列表
+                    new FunctionRuleSegment("图集","[Attr::class=gallery]$$[FIndex]$$[Attr::class=hvr-grow]$$[List]",new List<FunctionRuleSegment>()
+                    {
+                        new FunctionRuleSegment("cg_img","[Tag::img]$$[FIndex]$$[GetAttr::src]"),
+                        new FunctionRuleSegment("cg_img_big","[Tag::a]$$[FIndex]$$[Link]")
+                    }),//内容列表
+                    new FunctionRuleSegment("磁力集合","[Attr::class=dht_dl_area]$$[FIndex]$$[Attr::class=dht_dl_title_content]$$[List]",new List<FunctionRuleSegment>()
+                    {
+                        new FunctionRuleSegment("title","[Tag::a]$$[FIndex]$$[Text]"),
+                        new FunctionRuleSegment("link","[Tag::a]$$[FIndex]$$[Link]"),
+                        new FunctionRuleSegment("size","[Next]$$[Text]"),
+                        new FunctionRuleSegment("date","[Next]$$[Next]$$[Text]")
+                    }),//内容列表
                 }
             };
             var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\def_config.json");

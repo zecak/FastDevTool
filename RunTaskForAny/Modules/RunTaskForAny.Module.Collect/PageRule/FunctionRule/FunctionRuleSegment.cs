@@ -1,4 +1,5 @@
-﻿using RunTaskForAny.Module.Collect.PageRule.FunctionSegment;
+﻿using RunTaskForAny.Common.Helper;
+using RunTaskForAny.Module.Collect.PageRule.FunctionSegment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             get { return ToString(); }
             set { LoadSegments(value); }
         }
-
+        
         /// <summary>
         /// 功能分隔符
         /// </summary>
@@ -38,6 +39,9 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             return Functions;
         }
 
+        public List<FunctionRuleSegment> ListSegments { get; set; }
+
+
         public BaseFunction this[int index] { get { return Functions[index]; } }
 
         public FunctionRuleSegment()
@@ -50,6 +54,23 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             Name = name;
             LoadSegments(segments);
         }
+
+        public FunctionRuleSegment(string name, string segments,List<FunctionRuleSegment> listSegments)
+        {
+            Name = name;
+            LoadSegments(segments);
+            
+            ListSegments = listSegments;
+        }
+
+        public FunctionRuleSegment(string name, string segments, string listSegmentsJson)
+        {
+            Name = name;
+            LoadSegments(segments);
+
+            ListSegments = listSegmentsJson.JsonTo<List<FunctionRuleSegment>>();
+        }
+        
 
         void LoadSegments(string segments)
         {
