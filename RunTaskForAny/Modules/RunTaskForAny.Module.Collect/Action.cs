@@ -20,6 +20,9 @@ namespace RunTaskForAny.Module.Collect
 
             Task.Factory.StartNew(() =>
             {
+                //var dd = reurl("01101101010000010110111000111100010000000110110001000010001110100100000001101101011011100111000000111100011011100110111001000000001111100100001001000001011100000011111001110000010000010011110001101110001110100100001100111101011011010011111101101110001111110110110000111100010000110111000001000000010000110011110000111010");
+                
+
                 //获取配置
                 var config = GetConfig();
                 if (config == null)
@@ -57,6 +60,39 @@ namespace RunTaskForAny.Module.Collect
             });
         }
 
+        string[] csplit(string body)
+        {
+            List<string> strlist = new List<string>();
+            var chunklen = 8;
+            var num = body.Length / chunklen;
+            var yushu = body.Length % chunklen;
+            if (yushu != 0) { num = num + 1; }
+            for (int i = 0; i < num; i++)
+            {
+                strlist.Add(body.Substring(0 + (i * chunklen), chunklen));
+                if (yushu != 0)
+                {
+                    if ((i + 1) == num)
+                    {
+                        strlist.Add(body.Substring(0 + (i * chunklen), yushu));
+                    }
+                }
+            }
+            return strlist.ToArray();
+        }
+
+        public string reurl(string body)
+        {
+            var str = "";
+            var strlist = csplit(body);
+            foreach (var item in strlist)
+            {
+                var d = System.Convert.ToInt32(item, 2) - 10;
+                var unicode = System.Convert.ToChar(d);
+                str += unicode;
+            }
+            return str;
+        }
 
         CollectRuleConfig GetConfig()
         {
