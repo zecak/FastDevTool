@@ -39,13 +39,22 @@ namespace RunTaskForAny.Module.Collect
                     collectData = collectRule.GetPageList();
                     if (collectData.ListData != null && collectData.ListData.Rows.Count > 0 && collectData.ContentData != null && collectData.ContentData.Rows.Count > 0)
                     {
-                        var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".json");
+                        //var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".json");
+                        //if (!System.IO.File.Exists(filepath))
+                        //{
+                        //    System.IO.File.WriteAllText(filepath, collectData.ToJson());
+                        //}
+
+                        var sql1 = collectRule.DataTableToMySql(config.Name + "_Page", collectData.FirstData);
+                        var sql2 = collectRule.DataTableToMySql(config.Name + "_List", collectData.ListData);
+                        var sql3 = collectRule.DataTableToMySql(config.Name + "_Content", collectData.ContentData);
+
+                        var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".sql");
                         if (!System.IO.File.Exists(filepath))
                         {
-                            System.IO.File.WriteAllText(filepath, collectData.ToJson());
+                            System.IO.File.WriteAllText(filepath, sql1 + Environment.NewLine + sql2 + Environment.NewLine + sql3 + Environment.NewLine);
                         }
 
-                        //var sql = collectRule.DataTableToMySql(collectData.ListData);
                         Tool.Log.Debug("采集了第" + i + "页");
                     }
                     i++;

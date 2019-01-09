@@ -597,7 +597,10 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 if (model_RemoveTag != null)
                 {
                     var es = find_element.GetElementsByTag(model_RemoveTag.TagName);
-                    find_element.Children.RemoveAll(es);
+                    foreach (var item in es)
+                    {
+                        item.Remove();
+                    }
                 }
 
                 var model_List = function as ListFunction;
@@ -663,10 +666,10 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             return url;
         }
 
-        public string DataTableToMySql(DataTable dataTable)
+        public string DataTableToMySql(string tablename,DataTable dataTable)
         {
             string dbName = "Collect_v1";
-            string tablename = Config.Name;
+            //string tablename = Config.Name;
             string fieldKey = "ContentMD5";
             string fieldnames = "ContentMD5,CreateTime,UpdateTime,Status,";
             string fieldvalues = "'{0}',NOW(),NOW(),0,";
@@ -762,6 +765,11 @@ FROM DUAL WHERE NOT EXISTS (
             return strlist;
         }
 
+        /// <summary>
+        /// 解密magnet:?xt=urn:btih:后的加密串(..0100101010010...)
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
         string reurl(string body)
         {
             var str = "";
