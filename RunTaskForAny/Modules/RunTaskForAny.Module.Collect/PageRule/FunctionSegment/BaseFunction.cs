@@ -20,7 +20,11 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionSegment
         public bool StartsWithPartSegment(string segment)
         {
             var str = LeftSeparator + Name;
-            return segment.StartsWith(str);
+            if (segment.Length <= str.Length) { return false; }
+            var ok = segment.StartsWith(str);
+            var nextstr = segment.Substring(str.Length, 1);
+            var ok2 = (nextstr == RightSeparator || nextstr == KeySeparator.Substring(0, 1));
+            return ok && ok2;
         }
 
         public string KeySeparator { get { return "::"; } }

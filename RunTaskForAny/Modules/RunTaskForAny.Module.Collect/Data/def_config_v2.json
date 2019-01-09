@@ -92,7 +92,7 @@
         },
         {
           "Name": "link",
-          "Segments": "[Tag::a]$$[FIndex]$$[Link]"
+          "Segments": "[Next]$$[Next]$$[Next]$$[Html]$$[RegexAndDecodeMagnet::\\.attr\\('href','(.+)'\\+reurl\\('(.+)'\\)\\);]"
         },
         {
           "Name": "size",

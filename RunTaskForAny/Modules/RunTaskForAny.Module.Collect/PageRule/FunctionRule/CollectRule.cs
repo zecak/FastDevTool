@@ -622,6 +622,36 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     val = data.ToJson();
                 }
 
+                var model_Regex = function as RegexFunction;
+                if (model_Regex != null)
+                {
+                    var reg = new System.Text.RegularExpressions.Regex(model_Regex.Pattern);
+                    var match = reg.Match(val);
+                    if (match.Success)
+                    {
+                        var str = "";
+                        for (int k = 1; k < match.Groups.Count; k++)
+                        {
+                            str += match.Groups[k].Value;
+                        }
+                        val = str;
+                    }
+                }
+
+                var model_RegexAndDecodeMagnet = function as RegexAndDecodeMagnetFunction;
+                if (model_RegexAndDecodeMagnet != null)
+                {
+                    var reg = new System.Text.RegularExpressions.Regex(model_RegexAndDecodeMagnet.Pattern);
+                    var match = reg.Match(val);
+                    if (match.Success)
+                    {
+                        if (match.Groups.Count == 3)
+                        {
+                            val = match.Groups[1].Value + reurl(match.Groups[2].Value);
+                        }
+                    }
+                }
+
             }
 
             return val;
@@ -708,6 +738,41 @@ FROM DUAL WHERE NOT EXISTS (
             sql = string.Format(mysql, dbName, tablename, fields, sqlAll);
 
             return sql;
+        }
+
+
+        List<string> csplit(string body)
+        {
+            List<string> strlist = new List<string>();
+            var chunklen = 8;
+            var num = body.Length / chunklen;
+            var yushu = body.Length % chunklen;
+            if (yushu != 0) { num = num + 1; }
+            for (int i = 0; i < num; i++)
+            {
+                strlist.Add(body.Substring(0 + (i * chunklen), chunklen));
+                if (yushu != 0)
+                {
+                    if ((i + 1) == num)
+                    {
+                        strlist.Add(body.Substring(0 + (i * chunklen), yushu));
+                    }
+                }
+            }
+            return strlist;
+        }
+
+        string reurl(string body)
+        {
+            var str = "";
+            var strlist = csplit(body);
+            foreach (var item in strlist)
+            {
+                var d = System.Convert.ToInt32(item, 2) - 10;
+                var unicode = System.Convert.ToChar(d);
+                str += unicode;
+            }
+            return str;
         }
     }
 }

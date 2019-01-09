@@ -31,6 +31,9 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             new TextFunction(),
             new RemoveTagFunction(""),
             new ListFunction(),
+            new RegexFunction(""),
+            new RegexAndDecodeMagnetFunction(""),
+
         };
 
         /// <summary>

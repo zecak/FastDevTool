@@ -38,7 +38,7 @@
 	[Parent](父元素)
 
 取值功能:
-	[Text],
+	[Text](获取不了script标签的内容),
 	[Html],
 	[IHtml](内源码),
 	[Link],
@@ -46,11 +46,15 @@
 	[NextText](下节点内容),
 	[GetAttr::class],
 
-取内容集合值功能(返回json数据)(取元素集合的值,集合特有功能):
-	[List]
+值处理功能(取值后的操作):
+	[Regex::\.attr\('href','(.+)'\+reurl\('(.+)'\)\);],(正则取值,多个值则合并成一个字符串)
+	[RegexAndDecodeMagnet::\.attr\('href','(.+)'\+reurl\('(.+)'\)\);],(特殊处理magnet:?xt=urn:btih:后的加密字符,即处理第二个值)(正则取值,多个值则合并成一个字符串)
 
 清除字符串功能:
-	[Clear::src=http://img.xxxx.com]
+	[Clear::src=http://img.xxxx.com],(删除属性src的值字符串"http://img.xxxx.com")
+
+取内容集合值功能(返回json数据)(取元素集合的值,集合特有功能):
+	[List]
 
 移除标签功能:
 	[RemoveTag::a]

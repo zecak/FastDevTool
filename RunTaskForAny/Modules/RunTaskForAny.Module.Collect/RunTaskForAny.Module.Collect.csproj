@@ -70,6 +70,8 @@
     <Compile Include="PageRule\FunctionSegment\ParentFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\PrevFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\PrevTextFunction.cs" />
+    <Compile Include="PageRule\FunctionSegment\RegexAndDecodeMagnetFunction.cs" />
+    <Compile Include="PageRule\FunctionSegment\RegexFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\RemoveTagFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\RowIndexFunction.cs" />
     <Compile Include="PageRule\FunctionSegment\TagFunction.cs" />
@@ -83,7 +85,6 @@
     <None Include="Data\def_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Data\tsconfig1.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
