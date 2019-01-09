@@ -93,7 +93,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                         dataRow.ItemArray = lst.ToArray();
                         collectData.FirstData.Rows.Add(dataRow);
 
-                        Tool.Log.Debug("单页内容:" + collectData.FirstData.ToJson());
+                        //Tool.Log.Debug("单页内容:" + collectData.FirstData.ToJson());
+                        Tool.Log.Debug("采集了单页内容");
                     }
 
                 }
@@ -155,7 +156,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             dataRow.ItemArray = lst.ToArray();
                             collectData.ListData.Rows.Add(dataRow);
 
-                            Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
+                            //Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
+                            Tool.Log.Debug("采集了列表");
 
                             //处理内容
                             if (Config.ListContentPageRuleSegment != null)
@@ -213,7 +215,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                     dataRow_content.ItemArray = lst_content.ToArray();
                                     collectData.ContentData.Rows.Add(dataRow_content);
 
-                                    Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
+                                    //Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
+                                    Tool.Log.Debug("采集了详细内容");
                                 }
                             }
 
@@ -249,7 +252,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             dataRow.ItemArray = lst.ToArray();
                             collectData.ListData.Rows.Add(dataRow);
 
-                            Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
+                            //Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
+                            Tool.Log.Debug("采集了列表");
 
                             //处理内容
                             if (Config.ListContentPageRuleSegment != null)
@@ -307,7 +311,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                     dataRow_content.ItemArray = lst_content.ToArray();
                                     collectData.ContentData.Rows.Add(dataRow_content);
 
-                                    Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
+                                    //Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
+                                    Tool.Log.Debug("采集了详细内容");
                                 }
                             }
                         }
@@ -375,7 +380,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                         dataRow.ItemArray = lst.ToArray();
                         collectData.ListData.Rows.Add(dataRow);
 
-                        Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
+                        //Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
+                        Tool.Log.Debug("采集了列表");
 
                         //处理内容
                         if (Config.ListContentPageRuleSegment != null)
@@ -433,7 +439,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                 dataRow_content.ItemArray = lst_content.ToArray();
                                 collectData.ContentData.Rows.Add(dataRow_content);
 
-                                Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
+                                //Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
+                                Tool.Log.Debug("采集了详细内容");
                             }
                         }
                     }

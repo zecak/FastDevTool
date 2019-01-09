@@ -45,14 +45,14 @@ namespace RunTaskForAny.Module.Collect
                         //    System.IO.File.WriteAllText(filepath, collectData.ToJson());
                         //}
 
-                        var sql1 = collectRule.DataTableToMySql(config.Name + "_Page", collectData.FirstData);
+                        //var sql1 = collectRule.DataTableToMySql(config.Name + "_Page", collectData.FirstData);
                         var sql2 = collectRule.DataTableToMySql(config.Name + "_List", collectData.ListData);
                         var sql3 = collectRule.DataTableToMySql(config.Name + "_Content", collectData.ContentData);
 
                         var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".sql");
                         if (!System.IO.File.Exists(filepath))
                         {
-                            System.IO.File.WriteAllText(filepath, sql1 + Environment.NewLine + sql2 + Environment.NewLine + sql3 + Environment.NewLine);
+                            System.IO.File.WriteAllText(filepath, Environment.NewLine + sql2 + Environment.NewLine + sql3 + Environment.NewLine);
                         }
 
                         Tool.Log.Debug("采集了第" + i + "页");
