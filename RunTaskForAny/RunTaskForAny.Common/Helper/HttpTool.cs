@@ -26,7 +26,7 @@ namespace RunTaskForAny.Common.Helper
             }
             catch (System.Exception ex)
             {
-                Tool.Log.Error(ex);
+                Tool.Log.Warn(ex);
                 return ex.Message;
             }
         }
@@ -51,7 +51,7 @@ namespace RunTaskForAny.Common.Helper
             }
             catch (System.Exception ex)
             {
-                Tool.Log.Error(ex);
+                Tool.Log.Warn(ex);
                 return ex.Message;
             }
         }

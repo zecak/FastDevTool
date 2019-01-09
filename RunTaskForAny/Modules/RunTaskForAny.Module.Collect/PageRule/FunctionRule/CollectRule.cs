@@ -39,7 +39,30 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             {
                 Tool.Log.Debug("采集地址:" + Config.Url);
 
-                var html = HttpTool.AjaxGet(Config.Url);
+                var html = "";
+                {
+                    var stoptime = 5;
+                    while (true)
+                    {
+                        html = HttpTool.AjaxGet(Config.Url);
+                        if (html.StartsWith("未能解析此远程名称:"))
+                        {
+                            Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
+                            System.Threading.Thread.Sleep(stoptime * 1000);
+
+                            if (stoptime < 3600000)//最多暂停一个小时
+                            {
+                                stoptime++;
+                            }
+                            continue;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
                 var doc = NSoup.NSoupClient.Parse(html);
                 var duan = doc.Body;
                 if (Config.FirstSinglePageRuleSegment != null)
@@ -79,7 +102,32 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 {
                     Tool.Log.Debug("列表地址:" + Config.FirstSinglePageListRuleSegmentUrl);
 
-                    var html_2 = HttpTool.AjaxGet(Config.FirstSinglePageListRuleSegmentUrl);
+                    //var html_2 = HttpTool.AjaxGet(Config.FirstSinglePageListRuleSegmentUrl);
+
+                    var html_2 = "";
+                    {
+                        var stoptime = 5;
+                        while (true)
+                        {
+                            html_2 = HttpTool.AjaxGet(Config.FirstSinglePageListRuleSegmentUrl);
+                            if (html_2.StartsWith("未能解析此远程名称:"))
+                            {
+                                Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
+                                System.Threading.Thread.Sleep(stoptime * 1000);
+
+                                if (stoptime < 3600000)//最多暂停一个小时
+                                {
+                                    stoptime++;
+                                }
+                                continue;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+
                     var doc_2 = NSoup.NSoupClient.Parse(html_2);
                     var duan_2 = doc_2.Body;
 
@@ -117,7 +165,32 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                 {
                                     Tool.Log.Debug("内容地址:" + contentUrl);
 
-                                    var html_content = HttpTool.AjaxGet(contentUrl);
+                                    //var html_content = HttpTool.AjaxGet(contentUrl);
+
+                                    var html_content = "";
+                                    {
+                                        var stoptime = 5;
+                                        while (true)
+                                        {
+                                            html_content = HttpTool.AjaxGet(contentUrl);
+                                            if (html_content.StartsWith("未能解析此远程名称:"))
+                                            {
+                                                Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
+                                                System.Threading.Thread.Sleep(stoptime * 1000);
+
+                                                if (stoptime < 3600000)//最多暂停一个小时
+                                                {
+                                                    stoptime++;
+                                                }
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+
                                     var doc_content = NSoup.NSoupClient.Parse(html_content);
                                     var duan_content = doc_content.Body;
 
@@ -186,7 +259,32 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                 {
                                     Tool.Log.Debug("内容地址:" + contentUrl);
 
-                                    var html_content = HttpTool.AjaxGet(contentUrl);
+                                   // var html_content = HttpTool.AjaxGet(contentUrl);
+
+                                    var html_content = "";
+                                    {
+                                        var stoptime = 5;
+                                        while (true)
+                                        {
+                                            html_content = HttpTool.AjaxGet(contentUrl);
+                                            if (html_content.StartsWith("未能解析此远程名称:"))
+                                            {
+                                                Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
+                                                System.Threading.Thread.Sleep(stoptime * 1000);
+
+                                                if (stoptime < 3600000)//最多暂停一个小时
+                                                {
+                                                    stoptime++;
+                                                }
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+
                                     var doc_content = NSoup.NSoupClient.Parse(html_content);
                                     var duan_content = doc_content.Body;
 
@@ -224,7 +322,32 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             {
                 Tool.Log.Debug("列表下一页地址:" + Config.PagingRuleSegmentUrl);
 
-                var html = HttpTool.AjaxGet(Config.PagingRuleSegmentUrl);
+                //var html = HttpTool.AjaxGet(Config.PagingRuleSegmentUrl);
+
+                var html = "";
+                {
+                    var stoptime = 5;
+                    while (true)
+                    {
+                        html = HttpTool.AjaxGet(Config.PagingRuleSegmentUrl);
+                        if (html.StartsWith("未能解析此远程名称:"))
+                        {
+                            Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
+                            System.Threading.Thread.Sleep(stoptime * 1000);
+
+                            if (stoptime < 3600000)//最多暂停一个小时
+                            {
+                                stoptime++;
+                            }
+                            continue;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
                 var doc = NSoup.NSoupClient.Parse(html);
                 var duan = doc.Body;
 
@@ -262,7 +385,32 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             {
                                 Tool.Log.Debug("内容地址:" + contentUrl);
 
-                                var html_content = HttpTool.AjaxGet(contentUrl);
+                                //var html_content = HttpTool.AjaxGet(contentUrl);
+
+                                var html_content = "";
+                                {
+                                    var stoptime = 5;
+                                    while (true)
+                                    {
+                                        html_content = HttpTool.AjaxGet(contentUrl);
+                                        if (html_content.StartsWith("未能解析此远程名称:"))
+                                        {
+                                            Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
+                                            System.Threading.Thread.Sleep(stoptime * 1000);
+
+                                            if (stoptime < 3600000)//最多暂停一个小时
+                                            {
+                                                stoptime++;
+                                            }
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+
                                 var doc_content = NSoup.NSoupClient.Parse(html_content);
                                 var duan_content = doc_content.Body;
 
@@ -666,7 +814,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             return url;
         }
 
-        public string DataTableToMySql(string tablename,DataTable dataTable)
+        public string DataTableToMySql(string tablename, DataTable dataTable)
         {
             string dbName = "Collect_v1";
             //string tablename = Config.Name;
