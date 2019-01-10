@@ -24,6 +24,31 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
 
         }
 
+        string GetUrl(string url)
+        {
+            var html = "";
+            var stoptime = 5;
+            while (true)
+            {
+                html = HttpTool.AjaxGet(url);
+                if (html.StartsWith("未能解析此远程名称:") || html.Contains("无法连接到远程服务器"))
+                {
+                    Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
+                    System.Threading.Thread.Sleep(stoptime * 1000);
+
+                    if (stoptime < SleepSeconds * 1000)
+                    {
+                        stoptime++;
+                    }
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return html;
+        }
 
         /// <summary>
         /// 获取列表数据,为空是未获取到该页面
@@ -43,29 +68,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             {
                 Tool.Log.Debug("采集地址:" + Config.Url);
 
-                var html = "";
-                {
-                    var stoptime = 5;
-                    while (true)
-                    {
-                        html = HttpTool.AjaxGet(Config.Url);
-                        if (html.StartsWith("未能解析此远程名称:"))
-                        {
-                            Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
-                            System.Threading.Thread.Sleep(stoptime * 1000);
-
-                            if (stoptime < SleepSeconds * 1000)
-                            {
-                                stoptime++;
-                            }
-                            continue;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
+                var html = GetUrl(Config.Url);
 
                 var doc = NSoup.NSoupClient.Parse(html);
                 var duan = doc.Body;
@@ -111,29 +114,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                         collectData.NextPageData.Rows.Add(row);
                     }
 
-                    var html_2 = "";
-                    {
-                        var stoptime = 5;
-                        while (true)
-                        {
-                            html_2 = HttpTool.AjaxGet(Config.FirstSinglePageListRuleSegmentUrl);
-                            if (html_2.StartsWith("未能解析此远程名称:"))
-                            {
-                                Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
-                                System.Threading.Thread.Sleep(stoptime * 1000);
-
-                                if (stoptime < SleepSeconds * 1000)
-                                {
-                                    stoptime++;
-                                }
-                                continue;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                    }
+                    var html_2 = GetUrl(Config.FirstSinglePageListRuleSegmentUrl);
 
                     var doc_2 = NSoup.NSoupClient.Parse(html_2);
                     var duan_2 = doc_2.Body;
@@ -170,32 +151,10 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                 var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
                                 if (!string.IsNullOrWhiteSpace(contentUrl))
                                 {
-                                    Tool.Log.Debug("[总页"+ find_elements.Count + "]"+"[第" + number + "页] " + "内容地址:" + contentUrl);
+                                    Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
                                     number++;
 
-                                    var html_content = "";
-                                    {
-                                        var stoptime = 5;
-                                        while (true)
-                                        {
-                                            html_content = HttpTool.AjaxGet(contentUrl);
-                                            if (html_content.StartsWith("未能解析此远程名称:"))
-                                            {
-                                                Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
-                                                System.Threading.Thread.Sleep(stoptime * 1000);
-
-                                                if (stoptime < SleepSeconds * 1000)
-                                                {
-                                                    stoptime++;
-                                                }
-                                                continue;
-                                            }
-                                            else
-                                            {
-                                                break;
-                                            }
-                                        }
-                                    }
+                                    var html_content = GetUrl(contentUrl);
 
                                     var doc_content = NSoup.NSoupClient.Parse(html_content);
                                     var duan_content = doc_content.Body;
@@ -247,7 +206,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
                     if (find_elements != null && find_elements.Count > 0)
                     {
-                        var number=1;
+                        var number = 1;
                         foreach (var element in find_elements)
                         {
                             DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
@@ -271,29 +230,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                     Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
                                     number++;
 
-                                    var html_content = "";
-                                    {
-                                        var stoptime = 5;
-                                        while (true)
-                                        {
-                                            html_content = HttpTool.AjaxGet(contentUrl);
-                                            if (html_content.StartsWith("未能解析此远程名称:"))
-                                            {
-                                                Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
-                                                System.Threading.Thread.Sleep(stoptime * 1000);
-
-                                                if (stoptime < SleepSeconds * 1000)
-                                                {
-                                                    stoptime++;
-                                                }
-                                                continue;
-                                            }
-                                            else
-                                            {
-                                                break;
-                                            }
-                                        }
-                                    }
+                                    var html_content = GetUrl(contentUrl);
 
                                     var doc_content = NSoup.NSoupClient.Parse(html_content);
                                     var duan_content = doc_content.Body;
@@ -341,29 +278,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     collectData.NextPageData.Rows.Add(row);
                 }
 
-                var html = "";
-                {
-                    var stoptime = 5;
-                    while (true)
-                    {
-                        html = HttpTool.AjaxGet(Config.PagingRuleSegmentUrl);
-                        if (html.StartsWith("未能解析此远程名称:"))
-                        {
-                            Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
-                            System.Threading.Thread.Sleep(stoptime * 1000);
-
-                            if (stoptime < SleepSeconds * 1000)
-                            {
-                                stoptime++;
-                            }
-                            continue;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
+                var html = GetUrl(Config.PagingRuleSegmentUrl);
 
                 var doc = NSoup.NSoupClient.Parse(html);
                 var duan = doc.Body;
@@ -403,29 +318,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                 Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
                                 number++;
 
-                                var html_content = "";
-                                {
-                                    var stoptime = 5;
-                                    while (true)
-                                    {
-                                        html_content = HttpTool.AjaxGet(contentUrl);
-                                        if (html_content.StartsWith("未能解析此远程名称:"))
-                                        {
-                                            Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
-                                            System.Threading.Thread.Sleep(stoptime * 1000);
-
-                                            if (stoptime < SleepSeconds * 1000)
-                                            {
-                                                stoptime++;
-                                            }
-                                            continue;
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
+                                var html_content = GetUrl(contentUrl);
 
                                 var doc_content = NSoup.NSoupClient.Parse(html_content);
                                 var duan_content = doc_content.Body;
@@ -829,7 +722,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             return url;
         }
 
-        public string DataTableToMySql(string tablename, DataTable dataTable,int listPageNumber=0)
+        public string DataTableToMySql(string tablename, DataTable dataTable, int listPageNumber = 0)
         {
             string fieldKey = "ContentMD5";
             string fieldnames = "ContentMD5,CollectListPageNumber,CollectPageTotal,CollectPageNumber,CreateTime,UpdateTime,Status,";
@@ -882,7 +775,7 @@ FROM DUAL WHERE NOT EXISTS (
                 if (str_arr != null)
                 {
                     var contentMD5 = EncryptHelper.MD5(str_arr.ToJson());
-                    var vals = string.Format(fieldvalues, contentMD5, dataTable.Rows.Count, (i + 1),listPageNumber);
+                    var vals = string.Format(fieldvalues, contentMD5, dataTable.Rows.Count, (i + 1), listPageNumber);
                     for (int j = 0; j < str_arr.Length; j++)
                     {
                         if ((j + 1) == str_arr.Length)
@@ -906,9 +799,9 @@ FROM DUAL WHERE NOT EXISTS (
             return sql;
         }
 
-        public string DataTableToMySql(string dbName,string tablename, DataTable dataTable, int listPageNumber = 0)
+        public string DataTableToMySql(string dbName, string tablename, DataTable dataTable, int listPageNumber = 0)
         {
-            if(string.IsNullOrWhiteSpace(dbName))
+            if (string.IsNullOrWhiteSpace(dbName))
             {
                 dbName = Config.Name;
             }
