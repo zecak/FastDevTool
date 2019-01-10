@@ -15,6 +15,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
     /// </summary>
     public class CollectRule
     {
+        int SleepSeconds = 3600;//获取页面时,最多暂停多少秒
+
         CollectRuleConfig Config;
         public CollectRule(CollectRuleConfig config)
         {
@@ -27,15 +29,17 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
         /// 获取列表数据,为空是未获取到该页面
         /// </summary>
         /// <returns></returns>
-        public CollectData GetPageList()
+        public CollectData GetPageList(string page_url = "")
         {
             CollectData collectData = new CollectData();
             collectData.FirstData = new DataTable();
             collectData.ListData = new DataTable();
             collectData.ContentData = new DataTable();
+            collectData.NextPageData = new DataTable();
+            collectData.NextPageData.Columns.Add("PageUrl");
 
             //确定单页=>确定列表地址:如果有则直接(处理列表),没有则进入(确定列表)
-            if (string.IsNullOrWhiteSpace(Config.PagingRuleSegmentUrl))
+            if (string.IsNullOrWhiteSpace(page_url) && string.IsNullOrWhiteSpace(Config.PagingRuleSegmentUrl))
             {
                 Tool.Log.Debug("采集地址:" + Config.Url);
 
@@ -50,7 +54,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
                             System.Threading.Thread.Sleep(stoptime * 1000);
 
-                            if (stoptime < 3600000)//最多暂停一个小时
+                            if (stoptime < SleepSeconds * 1000)
                             {
                                 stoptime++;
                             }
@@ -93,8 +97,6 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                         dataRow.ItemArray = lst.ToArray();
                         collectData.FirstData.Rows.Add(dataRow);
 
-                        //Tool.Log.Debug("单页内容:" + collectData.FirstData.ToJson());
-                        Tool.Log.Debug("采集了单页内容");
                     }
 
                 }
@@ -103,7 +105,11 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 {
                     Tool.Log.Debug("列表地址:" + Config.FirstSinglePageListRuleSegmentUrl);
 
-                    //var html_2 = HttpTool.AjaxGet(Config.FirstSinglePageListRuleSegmentUrl);
+                    {
+                        var row = collectData.NextPageData.NewRow();
+                        row.ItemArray = new string[] { Config.FirstSinglePageListRuleSegmentUrl };
+                        collectData.NextPageData.Rows.Add(row);
+                    }
 
                     var html_2 = "";
                     {
@@ -116,7 +122,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                 Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
                                 System.Threading.Thread.Sleep(stoptime * 1000);
 
-                                if (stoptime < 3600000)//最多暂停一个小时
+                                if (stoptime < SleepSeconds * 1000)
                                 {
                                     stoptime++;
                                 }
@@ -143,6 +149,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     NSoup.Select.Elements find_elements = GetElements(duan_2, Config.ListRuleSegment);
                     if (find_elements != null && find_elements.Count > 0)
                     {
+                        var number = 1;
                         foreach (var element in find_elements)
                         {
                             DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
@@ -156,8 +163,6 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             dataRow.ItemArray = lst.ToArray();
                             collectData.ListData.Rows.Add(dataRow);
 
-                            //Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
-                            Tool.Log.Debug("采集了列表");
 
                             //处理内容
                             if (Config.ListContentPageRuleSegment != null)
@@ -165,9 +170,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                 var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
                                 if (!string.IsNullOrWhiteSpace(contentUrl))
                                 {
-                                    Tool.Log.Debug("内容地址:" + contentUrl);
-
-                                    //var html_content = HttpTool.AjaxGet(contentUrl);
+                                    Tool.Log.Debug("[总页"+ find_elements.Count + "]"+"[第" + number + "页] " + "内容地址:" + contentUrl);
+                                    number++;
 
                                     var html_content = "";
                                     {
@@ -180,7 +184,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                                 Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
                                                 System.Threading.Thread.Sleep(stoptime * 1000);
 
-                                                if (stoptime < 3600000)//最多暂停一个小时
+                                                if (stoptime < SleepSeconds * 1000)
                                                 {
                                                     stoptime++;
                                                 }
@@ -215,8 +219,6 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                     dataRow_content.ItemArray = lst_content.ToArray();
                                     collectData.ContentData.Rows.Add(dataRow_content);
 
-                                    //Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
-                                    Tool.Log.Debug("采集了详细内容");
                                 }
                             }
 
@@ -228,6 +230,12 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 }
                 else//确定列表
                 {
+                    {
+                        var row = collectData.NextPageData.NewRow();
+                        row.ItemArray = new string[] { Config.Url };
+                        collectData.NextPageData.Rows.Add(row);
+                    }
+
                     if (collectData.ListData.Columns.Count <= 0)
                     {
                         foreach (var segment in Config.ListPageRuleSegments)
@@ -239,6 +247,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                     NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
                     if (find_elements != null && find_elements.Count > 0)
                     {
+                        var number=1;
                         foreach (var element in find_elements)
                         {
                             DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
@@ -252,8 +261,6 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             dataRow.ItemArray = lst.ToArray();
                             collectData.ListData.Rows.Add(dataRow);
 
-                            //Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
-                            Tool.Log.Debug("采集了列表");
 
                             //处理内容
                             if (Config.ListContentPageRuleSegment != null)
@@ -261,9 +268,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                 var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
                                 if (!string.IsNullOrWhiteSpace(contentUrl))
                                 {
-                                    Tool.Log.Debug("内容地址:" + contentUrl);
-
-                                   // var html_content = HttpTool.AjaxGet(contentUrl);
+                                    Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
+                                    number++;
 
                                     var html_content = "";
                                     {
@@ -276,7 +282,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                                 Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
                                                 System.Threading.Thread.Sleep(stoptime * 1000);
 
-                                                if (stoptime < 3600000)//最多暂停一个小时
+                                                if (stoptime < SleepSeconds * 1000)
                                                 {
                                                     stoptime++;
                                                 }
@@ -311,8 +317,6 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                     dataRow_content.ItemArray = lst_content.ToArray();
                                     collectData.ContentData.Rows.Add(dataRow_content);
 
-                                    //Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
-                                    Tool.Log.Debug("采集了详细内容");
                                 }
                             }
                         }
@@ -325,9 +329,17 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             }
             else
             {
+                if (!string.IsNullOrWhiteSpace(page_url))
+                {
+                    Config.PagingRuleSegmentUrl = page_url;//重新继续处理之前的URL
+                }
                 Tool.Log.Debug("列表下一页地址:" + Config.PagingRuleSegmentUrl);
 
-                //var html = HttpTool.AjaxGet(Config.PagingRuleSegmentUrl);
+                {
+                    var row = collectData.NextPageData.NewRow();
+                    row.ItemArray = new string[] { Config.PagingRuleSegmentUrl };
+                    collectData.NextPageData.Rows.Add(row);
+                }
 
                 var html = "";
                 {
@@ -340,7 +352,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
                             System.Threading.Thread.Sleep(stoptime * 1000);
 
-                            if (stoptime < 3600000)//最多暂停一个小时
+                            if (stoptime < SleepSeconds * 1000)
                             {
                                 stoptime++;
                             }
@@ -367,6 +379,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                 NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
                 if (find_elements != null && find_elements.Count > 0)
                 {
+                    var number = 1;
                     foreach (var element in find_elements)
                     {
                         DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
@@ -380,8 +393,6 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                         dataRow.ItemArray = lst.ToArray();
                         collectData.ListData.Rows.Add(dataRow);
 
-                        //Tool.Log.Debug("列表:" + collectData.ListData.ToJson());
-                        Tool.Log.Debug("采集了列表");
 
                         //处理内容
                         if (Config.ListContentPageRuleSegment != null)
@@ -389,9 +400,8 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                             var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
                             if (!string.IsNullOrWhiteSpace(contentUrl))
                             {
-                                Tool.Log.Debug("内容地址:" + contentUrl);
-
-                                //var html_content = HttpTool.AjaxGet(contentUrl);
+                                Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
+                                number++;
 
                                 var html_content = "";
                                 {
@@ -404,7 +414,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                             Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
                                             System.Threading.Thread.Sleep(stoptime * 1000);
 
-                                            if (stoptime < 3600000)//最多暂停一个小时
+                                            if (stoptime < SleepSeconds * 1000)
                                             {
                                                 stoptime++;
                                             }
@@ -439,8 +449,6 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
                                 dataRow_content.ItemArray = lst_content.ToArray();
                                 collectData.ContentData.Rows.Add(dataRow_content);
 
-                                //Tool.Log.Debug("详细内容:" + collectData.ContentData.ToJson());
-                                Tool.Log.Debug("采集了详细内容");
                             }
                         }
                     }
@@ -821,25 +829,105 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             return url;
         }
 
-        public string DataTableToMySql(string tablename, DataTable dataTable)
+        public string DataTableToMySql(string tablename, DataTable dataTable,int listPageNumber=0)
         {
-            string dbName = "Collect_v1";
-            //string tablename = Config.Name;
             string fieldKey = "ContentMD5";
-            string fieldnames = "ContentMD5,CreateTime,UpdateTime,Status,";
-            string fieldvalues = "'{0}',NOW(),NOW(),0,";
+            string fieldnames = "ContentMD5,CollectListPageNumber,CollectPageTotal,CollectPageNumber,CreateTime,UpdateTime,Status,";
+            string fieldvalues = "'{0}','{3}','{1}','{2}',NOW(),NOW(),0,";
             string fields = "";
 
             for (int i = 0; i < dataTable.Columns.Count; i++)
             {
                 if ((i + 1) == dataTable.Columns.Count)
                 {
-                    fields += dataTable.Columns[i].ColumnName + " VARCHAR(4000) ";
+                    fields += dataTable.Columns[i].ColumnName + " text ";
                     fieldnames += dataTable.Columns[i].ColumnName;
                 }
                 else
                 {
-                    fields += dataTable.Columns[i].ColumnName + " VARCHAR(4000),";
+                    fields += dataTable.Columns[i].ColumnName + " text,";
+                    fieldnames += dataTable.Columns[i].ColumnName + ",";
+                }
+            }
+
+
+            var sql = "";
+            var mysql = @"
+Create Table If Not Exists {1}(
+	ID int Primary key Auto_Increment,
+	ContentMD5 VARCHAR(100),
+    CollectListPageNumber int,
+    CollectPageTotal int,
+    CollectPageNumber int,
+    CreateTime datetime,
+    UpdateTime datetime,
+    Status int,
+	{2}
+);
+{3}
+";
+
+            var mysql_insert_into = @"
+INSERT INTO {1}({4}) 
+SELECT {5}  
+FROM DUAL WHERE NOT EXISTS (
+    SELECT 1 FROM {1} WHERE {2}='{3}' LIMIT 1
+); 
+";
+            var sqlAll = "";
+
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                var str_arr = dataTable.Rows[i].ItemArray;
+                if (str_arr != null)
+                {
+                    var contentMD5 = EncryptHelper.MD5(str_arr.ToJson());
+                    var vals = string.Format(fieldvalues, contentMD5, dataTable.Rows.Count, (i + 1),listPageNumber);
+                    for (int j = 0; j < str_arr.Length; j++)
+                    {
+                        if ((j + 1) == str_arr.Length)
+                        {
+                            vals += "'" + str_arr[j].ToString().Replace("'", "''") + "'";
+                        }
+                        else
+                        {
+                            vals += "'" + str_arr[j].ToString().Replace("'", "''") + "',";
+                        }
+                    }
+
+                    var sqlrow = string.Format(mysql_insert_into, "", tablename, fieldKey, contentMD5, fieldnames, vals);
+
+                    sqlAll += sqlrow;
+                }
+            }
+
+            sql = string.Format(mysql, "", tablename, fields, sqlAll);
+
+            return sql;
+        }
+
+        public string DataTableToMySql(string dbName,string tablename, DataTable dataTable, int listPageNumber = 0)
+        {
+            if(string.IsNullOrWhiteSpace(dbName))
+            {
+                dbName = Config.Name;
+            }
+
+            string fieldKey = "ContentMD5";
+            string fieldnames = "ContentMD5,CollectListPageNumber,CollectPageTotal,CollectPageNumber,CreateTime,UpdateTime,Status,";
+            string fieldvalues = "'{0}','{3}','{1}','{2}',NOW(),NOW(),0,";
+            string fields = "";
+
+            for (int i = 0; i < dataTable.Columns.Count; i++)
+            {
+                if ((i + 1) == dataTable.Columns.Count)
+                {
+                    fields += dataTable.Columns[i].ColumnName + " text ";
+                    fieldnames += dataTable.Columns[i].ColumnName;
+                }
+                else
+                {
+                    fields += dataTable.Columns[i].ColumnName + " text,";
                     fieldnames += dataTable.Columns[i].ColumnName + ",";
                 }
             }
@@ -851,6 +939,9 @@ Create Database If Not Exists {0} Character Set utf8mb4;
 Create Table If Not Exists {0}.{1}(
 	ID int Primary key Auto_Increment,
 	ContentMD5 VARCHAR(100),
+    CollectListPageNumber int,
+    CollectPageTotal int,
+    CollectPageNumber int,
     CreateTime datetime,
     UpdateTime datetime,
     Status int,
@@ -874,7 +965,7 @@ FROM DUAL WHERE NOT EXISTS (
                 if (str_arr != null)
                 {
                     var contentMD5 = EncryptHelper.MD5(str_arr.ToJson());
-                    var vals = string.Format(fieldvalues, contentMD5);
+                    var vals = string.Format(fieldvalues, contentMD5, dataTable.Rows.Count, (i + 1), listPageNumber);
                     for (int j = 0; j < str_arr.Length; j++)
                     {
                         if ((j + 1) == str_arr.Length)
@@ -897,7 +988,6 @@ FROM DUAL WHERE NOT EXISTS (
 
             return sql;
         }
-
 
         List<string> csplit(string body)
         {

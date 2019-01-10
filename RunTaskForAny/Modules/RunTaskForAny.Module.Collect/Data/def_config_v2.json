@@ -1,5 +1,5 @@
 {
-  "Name": "默认采集规则2",
+  "Name": "uncensored",
   "Url": "https://ww2464.com/serchinfo_uncensored/topicsbt/topicsbt_1.htm",
   "ListRuleSegment": {
     "Name": "确定列表",
@@ -7,19 +7,19 @@
   },
   "ListPageRuleSegments": [
     {
-      "Name": "列表标题",
+      "Name": "标题",
       "Segments": "[Attr::class=Po_u_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Text]"
     },
     {
-      "Name": "列表链接",
+      "Name": "链接",
       "Segments": "[Attr::class=Po_u_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]"
     },
     {
-      "Name": "列表小图",
+      "Name": "小图",
       "Segments": "[Attr::class=Po_u_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]"
     },
     {
-      "Name": "列表大图",
+      "Name": "大图",
       "Segments": "[Attr::class=Po_u_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[Clear::onmouseover=showtrail(']$$[Clear::onmouseover=','',10,10)]$$[GetAttr::onmouseover]"
     }
   ],

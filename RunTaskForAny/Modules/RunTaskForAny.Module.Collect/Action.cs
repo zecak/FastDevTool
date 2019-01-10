@@ -1,5 +1,6 @@
 ﻿using RunTaskForAny.Common.Domain;
 using RunTaskForAny.Common.Helper;
+using RunTaskForAny.DataBase;
 using RunTaskForAny.Module.Collect.PageRule;
 using RunTaskForAny.Module.Collect.PageRule.FunctionRule;
 using System;
@@ -15,6 +16,7 @@ namespace RunTaskForAny.Module.Collect
     {
         public Action(InfoModel infomodel) : base(infomodel) { }
 
+
         public void Start()
         {
 
@@ -28,37 +30,107 @@ namespace RunTaskForAny.Module.Collect
                     Tool.Log.Error("配置文件错误");
                     return;
                 }
-                Tool.Log.Debug("获取html");
+
+                //获取上次采集的地址
+                List<string> save_page_url = new List<string>() { "", "1" };
+                var filepath_url = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\Cur_Page_Url.json");
+                if (System.IO.File.Exists(filepath_url))
+                {
+                    save_page_url = System.IO.File.ReadAllText(filepath_url).JsonTo<List<string>>();
+                }
+                Tool.Log.Debug("上次采集的地址:" + save_page_url[0]);
+
+
+                Tool.Log.Debug("开始采集..");
 
                 CollectRule collectRule = new CollectRule(config);
 
                 CollectData collectData = null;
-                int i = 1;
+                int i = int.Parse(save_page_url[1]);
                 do
                 {
-                    collectData = collectRule.GetPageList();
-                    if (collectData.ListData != null && collectData.ListData.Rows.Count > 0 && collectData.ContentData != null && collectData.ContentData.Rows.Count > 0)
+                    try
                     {
-                        //var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".json");
-                        //if (!System.IO.File.Exists(filepath))
-                        //{
-                        //    System.IO.File.WriteAllText(filepath, collectData.ToJson());
-                        //}
-
-                        //var sql1 = collectRule.DataTableToMySql(config.Name + "_Page", collectData.FirstData);
-                        var sql2 = collectRule.DataTableToMySql(config.Name + "_List", collectData.ListData);
-                        var sql3 = collectRule.DataTableToMySql(config.Name + "_Content", collectData.ContentData);
-
-                        var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".sql");
-                        if (!System.IO.File.Exists(filepath))
+                        collectData = collectRule.GetPageList(save_page_url[0]);
+                        if (collectData.ListData != null && collectData.ListData.Rows.Count > 0 && collectData.ContentData != null && collectData.ContentData.Rows.Count > 0)
                         {
-                            System.IO.File.WriteAllText(filepath, Environment.NewLine + sql2 + Environment.NewLine + sql3 + Environment.NewLine);
+                            //var sql1 = collectRule.DataTableToMySql(config.Name + "_First", collectData.FirstData);
+                            var sql2 = collectRule.DataTableToMySql(config.Name + "_List", collectData.ListData, i);
+                            var sql3 = collectRule.DataTableToMySql(config.Name + "_Content", collectData.ContentData, i);
+
+                            var sql = Environment.NewLine + sql2 + Environment.NewLine + sql3 + Environment.NewLine;
+                            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".sql");
+                            if (!System.IO.File.Exists(filepath))
+                            {
+                                System.IO.File.WriteAllText(filepath, sql);
+                            }
+
+                            if (collectData.NextPageData.Rows.Count > 0)
+                            {
+                                save_page_url[0] = (string)collectData.NextPageData.Rows[0]["PageUrl"];
+                                save_page_url[1] = i.ToString();
+                            }
+                            if (!string.IsNullOrWhiteSpace(save_page_url[0]))
+                            {
+                                System.IO.File.WriteAllText(filepath_url, save_page_url.ToJson());
+                            }
+                            Tool.Log.Debug("采集了第" + i + "页 => " + save_page_url[0]);
+                            save_page_url[0] = "";
+
+
+                            while (true)
+                            {
+                                try
+                                {
+                                    using (var db = SQLHelper.GetDB("PWMIS.DataProvider.Data.MySQL,PWMIS.MySqlClient", "Server=localhost;Port=3306;database=Collect_v1;uid=root;password=123456;Convert Zero Datetime=True;Allow Zero Datetime=True;SslMode = none;CharSet=utf8mb4;"))
+                                    {
+
+                                        var rz = db.ExecuteNonQuery(sql);
+                                        if (rz != -1)
+                                        {
+                                            Tool.Log.Debug("已入库了:第" + i + "页 => " + save_page_url[0]);
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            System.Threading.Thread.Sleep(10000);//十秒后重试
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Tool.Log.Error("===========================");
+                                    Tool.Log.Error("===========================");
+                                    Tool.Log.Error(ex);
+                                    Tool.Log.Error("===========================");
+                                    Tool.Log.Error("===========================");
+
+                                    System.Threading.Thread.Sleep(30000);//暂停30秒
+                                }
+                            }
+
+
+                        }
+                        else
+                        {
+                            Tool.Log.Debug("采集数据为空");
                         }
 
-                        Tool.Log.Debug("采集了第" + i + "页");
+                        i++;
+
+                        if (i == 5)
+                        { break; }
                     }
-                    i++;
-                    break;
+                    catch (Exception ex)
+                    {
+                        Tool.Log.Error("===========================");
+                        Tool.Log.Error("===========================");
+                        Tool.Log.Error(ex);
+                        Tool.Log.Error("===========================");
+                        Tool.Log.Error("===========================");
+
+                        System.Threading.Thread.Sleep(30000);//暂停30秒
+                    }
 
                 } while (collectData.ListData.Rows.Count > 0 && collectData.ContentData.Rows.Count > 0);
 
