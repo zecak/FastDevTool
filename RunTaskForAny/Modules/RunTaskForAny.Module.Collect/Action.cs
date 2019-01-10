@@ -59,25 +59,7 @@ namespace RunTaskForAny.Module.Collect
                             var sql3 = collectRule.DataTableToMySql(config.Name + "_Content", collectData.ContentData, i);
 
                             var sql = Environment.NewLine + sql2 + Environment.NewLine + sql3 + Environment.NewLine;
-                            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".sql");
-                            if (!System.IO.File.Exists(filepath))
-                            {
-                                System.IO.File.WriteAllText(filepath, sql);
-                            }
-
-                            if (collectData.NextPageData.Rows.Count > 0)
-                            {
-                                save_page_url[0] = (string)collectData.NextPageData.Rows[0]["PageUrl"];
-                                save_page_url[1] = i.ToString();
-                            }
-                            if (!string.IsNullOrWhiteSpace(save_page_url[0]))
-                            {
-                                System.IO.File.WriteAllText(filepath_url, save_page_url.ToJson());
-                            }
-                            Tool.Log.Debug("采集了第" + i + "页 => " + save_page_url[0]);
-                            save_page_url[0] = "";
-
-
+                           
                             if(config.IsSaveToDataBase==1)
                             {
                                 while (true)
@@ -111,7 +93,28 @@ namespace RunTaskForAny.Module.Collect
                                     }
                                 }
                             }
-                           
+                            else
+                            {
+                                var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".sql");
+                                if (!System.IO.File.Exists(filepath))
+                                {
+                                    System.IO.File.WriteAllText(filepath, sql);
+                                }
+                            }
+
+                            if (collectData.NextPageData.Rows.Count > 0)
+                            {
+                                save_page_url[0] = (string)collectData.NextPageData.Rows[0]["PageUrl"];
+                                save_page_url[1] = i.ToString();
+                            }
+                            if (!string.IsNullOrWhiteSpace(save_page_url[0]))
+                            {
+                                System.IO.File.WriteAllText(filepath_url, save_page_url.ToJson());
+                            }
+                            Tool.Log.Debug("采集了第" + i + "页 => " + save_page_url[0]);
+                            save_page_url[0] = "";
+
+
                         }
                         else
                         {
