@@ -27,6 +27,10 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
         public string Url { get; set; }
 
         /// <summary>
+        /// 是否保存到数据库:1是,0否
+        /// </summary>
+        public int IsSaveToDataBase { get; set; }
+        /// <summary>
         /// 数据库连接:Server=localhost;Port=3306;database=Collect_v1;uid=root;password=123456;Convert Zero Datetime=True;Allow Zero Datetime=True;SslMode = none;CharSet=utf8mb4;||Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|Collect_v1.mdf;Integrated Security=True;
         /// </summary>
         public string ConnectionString { get; set; }

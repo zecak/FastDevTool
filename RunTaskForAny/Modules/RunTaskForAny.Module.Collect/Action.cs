@@ -78,38 +78,40 @@ namespace RunTaskForAny.Module.Collect
                             save_page_url[0] = "";
 
 
-                            while (true)
+                            if(config.IsSaveToDataBase==1)
                             {
-                                try
+                                while (true)
                                 {
-                                    using (var db = SQLHelper.GetDB("PWMIS.DataProvider.Data.MySQL,PWMIS.MySqlClient", "Server=localhost;Port=3306;database=Collect_v1;uid=root;password=123456;Convert Zero Datetime=True;Allow Zero Datetime=True;SslMode = none;CharSet=utf8mb4;"))
+                                    try
                                     {
+                                        using (var db = SQLHelper.GetDB(config.ProviderString, config.ConnectionString))
+                                        {
 
-                                        var rz = db.ExecuteNonQuery(sql);
-                                        if (rz != -1)
-                                        {
-                                            Tool.Log.Debug("已入库了:第" + i + "页 => " + save_page_url[0]);
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            System.Threading.Thread.Sleep(10000);//十秒后重试
+                                            var rz = db.ExecuteNonQuery(sql);
+                                            if (rz != -1)
+                                            {
+                                                Tool.Log.Debug("已入库了:第" + i + "页 => " + save_page_url[0]);
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                System.Threading.Thread.Sleep(10000);//十秒后重试
+                                            }
                                         }
                                     }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Tool.Log.Error("===========================");
-                                    Tool.Log.Error("===========================");
-                                    Tool.Log.Error(ex);
-                                    Tool.Log.Error("===========================");
-                                    Tool.Log.Error("===========================");
+                                    catch (Exception ex)
+                                    {
+                                        Tool.Log.Error("===========================");
+                                        Tool.Log.Error("===========================");
+                                        Tool.Log.Error(ex);
+                                        Tool.Log.Error("===========================");
+                                        Tool.Log.Error("===========================");
 
-                                    System.Threading.Thread.Sleep(30000);//暂停30秒
+                                        System.Threading.Thread.Sleep(30000);//暂停30秒
+                                    }
                                 }
                             }
-
-
+                           
                         }
                         else
                         {
@@ -117,9 +119,7 @@ namespace RunTaskForAny.Module.Collect
                         }
 
                         i++;
-
-                        if (i == 5)
-                        { break; }
+                        
                     }
                     catch (Exception ex)
                     {
@@ -196,7 +196,10 @@ namespace RunTaskForAny.Module.Collect
                         new FunctionRuleSegment("size","[Next]$$[Text]"),
                         new FunctionRuleSegment("date","[Next]$$[Next]$$[Text]")
                     }),//内容列表
-                }
+                },
+                IsSaveToDataBase=1,
+                ProviderString= "PWMIS.DataProvider.Data.MySQL,PWMIS.MySqlClient",
+                ConnectionString= "Server=localhost;Port=3306;database=Collect_v1;uid=root;password=123456;Convert Zero Datetime=True;Allow Zero Datetime=True;SslMode = none;CharSet=utf8mb4;"
             };
             var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\def_config.json");
             if (!System.IO.File.Exists(filepath))
