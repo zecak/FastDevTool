@@ -84,9 +84,9 @@ namespace RunTaskForAny.Module.Collect
                                     catch (Exception ex)
                                     {
                                         Tool.Log.Error("===========================");
-                                        Tool.Log.Error("===========================");
-                                        Tool.Log.Error(ex);
-                                        Tool.Log.Error("===========================");
+                                        Tool.Log.Error("---------------------------");
+                                        Tool.Log.Error(ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine);
+                                        Tool.Log.Error("---------------------------");
                                         Tool.Log.Error("===========================");
 
                                         System.Threading.Thread.Sleep(30000);//暂停30秒
@@ -122,13 +122,13 @@ namespace RunTaskForAny.Module.Collect
                         }
 
                         i++;
-                        
+                        break;
                     }
                     catch (Exception ex)
                     {
                         Tool.Log.Error("===========================");
                         Tool.Log.Error("===========================");
-                        Tool.Log.Error(ex);
+                        Tool.Log.Error(ex.Message+Environment.NewLine+ex.StackTrace+Environment.NewLine);
                         Tool.Log.Error("===========================");
                         Tool.Log.Error("===========================");
 

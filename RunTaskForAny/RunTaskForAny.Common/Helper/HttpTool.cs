@@ -8,12 +8,12 @@ namespace RunTaskForAny.Common.Helper
 {
     public class HttpTool
     {
-        public static string AjaxGet(string url, SortedList<string,string> keys)
+        public static string AjaxGet(string url, SortedList<string, string> keys)
         {
             try
             {
                 var urlParams = "";
-                if(keys!=null&&keys.Count>0)
+                if (keys != null && keys.Count > 0)
                 {
                     urlParams = keys.Aggregate("", (current, key) => current + (key.Key + "=" + key.Value + "&"));
                     if (urlParams.Length > 0) { urlParams = urlParams.Substring(0, urlParams.Length - 1); }
@@ -26,14 +26,14 @@ namespace RunTaskForAny.Common.Helper
             }
             catch (System.Exception ex)
             {
-                Tool.Log.Warn(ex);
+                Tool.Log.Warn(ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine);
                 return ex.Message;
             }
         }
 
         public static string AjaxGet(string url)
         {
-           return AjaxGet(url, null);
+            return AjaxGet(url, null);
         }
 
         public static string AjaxPost(string url, SortedList<string, string> keys)
@@ -51,7 +51,7 @@ namespace RunTaskForAny.Common.Helper
             }
             catch (System.Exception ex)
             {
-                Tool.Log.Warn(ex);
+                Tool.Log.Warn(ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine);
                 return ex.Message;
             }
         }
