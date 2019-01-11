@@ -26,7 +26,7 @@ namespace RunTaskForAny.Common.Helper
             }
             catch (System.Exception ex)
             {
-                Tool.Log.Warn(ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine);
+                Tool.Log.Warn(ex.Message);
                 return ex.Message;
             }
         }
@@ -51,7 +51,7 @@ namespace RunTaskForAny.Common.Helper
             }
             catch (System.Exception ex)
             {
-                Tool.Log.Warn(ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine);
+                Tool.Log.Warn(ex.Message);
                 return ex.Message;
             }
         }

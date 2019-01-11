@@ -31,7 +31,7 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             while (true)
             {
                 html = HttpTool.AjaxGet(url);
-                if (html.Contains("未能解析此远程名称:") || html.Contains("无法连接到远程服务器")||html.Contains("远程服务器返回错误"))
+                if (html.Contains("未能解析此远程名称:") || html.Contains("无法连接到远程服务器") || html.Contains("远程服务器返回错误") || html.Contains("请求被中止") || html.Contains("操作已超时"))
                 {
                     Tool.Log.Warn("获取页面内容:" + html);
                     Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
