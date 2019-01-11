@@ -31,10 +31,10 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             while (true)
             {
                 html = HttpTool.AjaxGet(url);
-                if (html.Contains("未能解析此远程名称:") || html.Contains("无法连接到远程服务器") || html.Contains("远程服务器返回错误") || html.Contains("请求被中止") || html.Contains("操作已超时"))
+                if (html.Contains("内容状态异常") || html.Contains("未能解析此远程名称:") || html.Contains("无法连接到远程服务器") || html.Contains("远程服务器返回错误") || html.Contains("请求被中止") || html.Contains("操作已超时"))
                 {
-                    Tool.Log.Warn("获取页面内容:" + html);
-                    Tool.Log.Debug("获取页面内容失败," + stoptime + "秒后继续");
+                    Tool.Log.Error("获取页面内容:" + html);
+                    Tool.Log.Warn("获取页面内容失败," + stoptime + "秒后继续");
                     System.Threading.Thread.Sleep(stoptime * 1000);
 
                     if (stoptime < SleepSeconds * 1000)
@@ -354,6 +354,42 @@ namespace RunTaskForAny.Module.Collect.PageRule.FunctionRule
             return collectData;
         }
 
+        public DataTable GetPageContent(string contentUrl)
+        {
+            var dataTable = new DataTable();
+
+            if (!string.IsNullOrWhiteSpace(contentUrl))
+            {
+                Tool.Log.Debug("[内容地址]:" + contentUrl);
+
+                var html_content = GetUrl(contentUrl);
+
+                var doc_content = NSoup.NSoupClient.Parse(html_content);
+                var duan_content = doc_content.Body;
+
+                if (dataTable.Columns.Count <= 0)
+                {
+                    foreach (var segment in Config.ContentPageRuleSegments)
+                    {
+                        dataTable.Columns.Add(segment.Name);
+                    }
+                }
+
+                DataRow dataRow_content = dataTable.NewRow();//保存采集的数据
+                List<string> lst_content = new List<string>();
+
+                foreach (var segment in Config.ContentPageRuleSegments)
+                {
+                    lst_content.Add(GetValue(duan_content, segment));
+                }
+
+                dataRow_content.ItemArray = lst_content.ToArray();
+                dataTable.Rows.Add(dataRow_content);
+
+            }
+
+            return dataTable;
+        }
 
         /// <summary>
         /// 查找列表

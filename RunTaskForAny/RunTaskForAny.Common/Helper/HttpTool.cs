@@ -22,7 +22,12 @@ namespace RunTaskForAny.Common.Helper
                 var http = new HttpClient();
                 http.Url = url + urlParams;
                 http.Verb = HttpVerb.GET;
-                return http.GetString();
+                var str= http.GetString();
+                if (http.HttpStatus!= System.Net.HttpStatusCode.OK)
+                {
+                    return "内容状态异常:"+ http.HttpStatus.ToString();
+                }
+                return str;
             }
             catch (System.Exception ex)
             {
@@ -47,7 +52,12 @@ namespace RunTaskForAny.Common.Helper
                 {
                     http.PostingData.Add(k.Key, k.Value);
                 }
-                return http.GetString();
+                var str = http.GetString();
+                if (http.HttpStatus != System.Net.HttpStatusCode.OK)
+                {
+                    return "内容状态异常:" + http.HttpStatus.ToString();
+                }
+                return str;
             }
             catch (System.Exception ex)
             {

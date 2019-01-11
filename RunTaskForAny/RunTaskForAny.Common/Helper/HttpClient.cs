@@ -25,7 +25,7 @@ namespace RunTaskForAny.Common.Helper
         private int startPoint;
         private int endPoint;
         private static HttpClient instance;
-        public static HttpClient Instance 
+        public static HttpClient Instance
         {
             get { return instance ?? (instance = new HttpClient()); }
         }
@@ -159,6 +159,8 @@ namespace RunTaskForAny.Common.Helper
             set { endPoint = value; }
         }
 
+        public HttpStatusCode? HttpStatus { get; set; }
+
         #endregion
 
         #region constructors
@@ -236,6 +238,7 @@ namespace RunTaskForAny.Common.Helper
         /// </summary>
         public void Reset()
         {
+            HttpStatus =  null;
             verb = HttpVerb.GET;
             files.Clear();
             postingData.Clear();
@@ -368,6 +371,8 @@ namespace RunTaskForAny.Common.Helper
         {
             var res = GetResponse();
             var length = (int)res.ContentLength;
+
+            HttpStatus = res.StatusCode;
 
             var memoryStream = new MemoryStream();
             var buffer = new byte[0x100];

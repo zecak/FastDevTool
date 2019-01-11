@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="PageRule\FunctionRule\CollectConfig.cs" />
     <Compile Include="PageRule\FunctionRule\CollectData.cs" />
     <Compile Include="PageRule\FunctionRule\CollectRule.cs" />
     <Compile Include="PageRule\FunctionRule\CollectRuleConfig.cs" />
@@ -106,6 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Data\collect.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Data\def_config_v2.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
