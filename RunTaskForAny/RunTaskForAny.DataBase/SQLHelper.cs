@@ -17,7 +17,9 @@ namespace RunTaskForAny.DataBase
         /// <returns></returns>
         public static AdoHelper GetDB(string providerString,string connectionString)
         {
-            return MyDB.GetDBHelperByProviderString(providerString, connectionString);
+            var db = MyDB.GetDBHelperByProviderString(providerString, connectionString);
+            db.CommandTimeOut = 60*3;
+            return db;
         }
 
     }

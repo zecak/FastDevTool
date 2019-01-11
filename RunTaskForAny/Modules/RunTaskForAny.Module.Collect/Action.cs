@@ -77,19 +77,17 @@ namespace RunTaskForAny.Module.Collect
                                             }
                                             else
                                             {
-                                                System.Threading.Thread.Sleep(10000);//十秒后重试
+                                                System.Threading.Thread.Sleep(3000);//3秒后重试
                                             }
                                         }
                                     }
                                     catch (Exception ex)
                                     {
-                                        Tool.Log.Error("===========================");
                                         Tool.Log.Error("---------------------------");
-                                        Tool.Log.Error(ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine);
-                                        Tool.Log.Error("---------------------------");
-                                        Tool.Log.Error("===========================");
+                                        Tool.Log.Error(ex.Message);
+                                        Tool.Log.Error(Environment.NewLine);
 
-                                        System.Threading.Thread.Sleep(30000);//暂停30秒
+                                        System.Threading.Thread.Sleep(3000);//暂停3秒
                                     }
                                 }
                             }
@@ -127,10 +125,8 @@ namespace RunTaskForAny.Module.Collect
                     catch (Exception ex)
                     {
                         Tool.Log.Error("===========================");
-                        Tool.Log.Error("===========================");
-                        Tool.Log.Error(ex.Message+Environment.NewLine+ex.StackTrace+Environment.NewLine);
-                        Tool.Log.Error("===========================");
-                        Tool.Log.Error("===========================");
+                        Tool.Log.Error(ex.Message);
+                        Tool.Log.Error(Environment.NewLine);
 
                         System.Threading.Thread.Sleep(30000);//暂停30秒
                     }
