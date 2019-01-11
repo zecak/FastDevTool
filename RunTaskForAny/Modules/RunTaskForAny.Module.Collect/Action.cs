@@ -122,7 +122,7 @@ namespace RunTaskForAny.Module.Collect
                         }
 
                         i++;
-                        break;
+                       
                     }
                     catch (Exception ex)
                     {
