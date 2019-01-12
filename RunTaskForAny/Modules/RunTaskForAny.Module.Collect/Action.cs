@@ -23,7 +23,7 @@ namespace RunTaskForAny.Module.Collect
             Task.Factory.StartNew(() =>
             {
                 var collect = GetCollect();
-                
+
                 //获取配置
                 var config = GetConfig(collect.CollectFileName);
                 if (config == null)
@@ -31,14 +31,14 @@ namespace RunTaskForAny.Module.Collect
                     Tool.Log.Error("配置文件错误");
                     return;
                 }
-                
+
                 Tool.Log.Debug("上次采集的地址:" + collect.LastCollectListDataUrl);
 
 
                 Tool.Log.Debug("开始采集..");
                 CollectRule collectRule = new CollectRule(config);
 
-                switch(collect.CollectMode)
+                switch (collect.CollectMode)
                 {
                     case 0:
                         {
@@ -98,6 +98,15 @@ namespace RunTaskForAny.Module.Collect
                                             }
                                         }
 
+                                        if (collectData.ListData.Rows.Count != collectData.ContentData.Rows.Count)
+                                        {
+                                            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\warn_data_" + i + ".sql");
+                                            if (!System.IO.File.Exists(filepath))
+                                            {
+                                                System.IO.File.WriteAllText(filepath, sql);
+                                            }
+                                        }
+
                                         if (collectData.NextPageData.Rows.Count > 0)
                                         {
                                             collect.LastCollectListDataUrl = (string)collectData.NextPageData.Rows[0]["PageUrl"];
@@ -142,7 +151,7 @@ namespace RunTaskForAny.Module.Collect
                                 try
                                 {
                                     dataTable = collectRule.GetPageContent(url);
-                                    if(dataTable.Rows.Count>0)
+                                    if (dataTable.Rows.Count > 0)
                                     {
                                         var sql3 = collectRule.DataTableToMySql(config.Name + "_Content", dataTable, i);
 
@@ -203,14 +212,14 @@ namespace RunTaskForAny.Module.Collect
                                 }
                                 i--;
                             }
-                            
+
                         }
                         break;
                     default:
                         break;
                 }
 
-               
+
 
                 Tool.Log.Debug("采集完成");
 
@@ -293,7 +302,7 @@ namespace RunTaskForAny.Module.Collect
             //    ConnectionString= "Server=localhost;Port=3306;database=Collect_v1;uid=root;password=123456;Convert Zero Datetime=True;Allow Zero Datetime=True;SslMode = none;CharSet=utf8mb4;"
             //}
             ;
-            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\"+ filename);
+            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\" + filename);
             if (!System.IO.File.Exists(filepath))
             {
                 System.IO.File.WriteAllText(filepath, config.ToJson());
