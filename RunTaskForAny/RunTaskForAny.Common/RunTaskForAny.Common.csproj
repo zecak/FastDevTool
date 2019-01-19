@@ -36,6 +36,9 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NSoup, Version=0.8.0.0, Culture=neutral, PublicKeyToken=6d44e53f0a65e802, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSoup.0.8.0\lib\net40\NSoup.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -51,6 +54,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collect\FunctionRule\CollectConfig.cs" />
+    <Compile Include="Collect\FunctionRule\CollectData.cs" />
+    <Compile Include="Collect\FunctionRule\CollectRule.cs" />
+    <Compile Include="Collect\FunctionRule\CollectRuleConfig.cs" />
+    <Compile Include="Collect\FunctionRule\FactoryFunction.cs" />
+    <Compile Include="Collect\FunctionRule\FunctionRuleSegment.cs" />
+    <Compile Include="Collect\FunctionSegment\AttrFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\BaseFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\ChildFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\ClearFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\FIndexFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\GetAttrFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\HtmlFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\IHtmlFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\IndexFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\LIndexFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\LinkFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\ListFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\NextFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\NextTextFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\ParentFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\PrevFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\PrevTextFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\RegexAndDecodeMagnetFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\RegexFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\RemoveTagFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\RowIndexFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\TagFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\TextFunction.cs" />
     <Compile Include="Domain\AssemblyKeyValue.cs" />
     <Compile Include="Domain\ClientInfo.cs" />
     <Compile Include="Domain\DirectoryMonitor.cs" />
@@ -81,6 +113,8 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Collect\collect_readme.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -74,35 +74,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
-    <Compile Include="PageRule\FunctionRule\CollectConfig.cs" />
-    <Compile Include="PageRule\FunctionRule\CollectData.cs" />
-    <Compile Include="PageRule\FunctionRule\CollectRule.cs" />
-    <Compile Include="PageRule\FunctionRule\CollectRuleConfig.cs" />
-    <Compile Include="PageRule\FunctionRule\FactoryFunction.cs" />
-    <Compile Include="PageRule\FunctionRule\FunctionRuleSegment.cs" />
-    <Compile Include="PageRule\FunctionSegment\AttrFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\BaseFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\ChildFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\ClearFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\FIndexFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\GetAttrFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\HtmlFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\IHtmlFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\IndexFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\LIndexFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\LinkFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\ListFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\NextFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\NextTextFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\ParentFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\PrevFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\PrevTextFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\RegexAndDecodeMagnetFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\RegexFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\RemoveTagFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\RowIndexFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\TagFunction.cs" />
-    <Compile Include="PageRule\FunctionSegment\TextFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -127,9 +98,6 @@
       <Project>{50341098-b315-48ce-a557-9fdc03737c9a}</Project>
       <Name>RunTaskForAny.DataBase</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Data\新说明文档.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

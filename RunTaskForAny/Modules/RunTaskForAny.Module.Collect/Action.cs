@@ -1,8 +1,7 @@
-﻿using RunTaskForAny.Common.Domain;
+﻿using RunTaskForAny.Common.Collect.FunctionRule;
+using RunTaskForAny.Common.Domain;
 using RunTaskForAny.Common.Helper;
 using RunTaskForAny.DataBase;
-using RunTaskForAny.Module.Collect.PageRule;
-using RunTaskForAny.Module.Collect.PageRule.FunctionRule;
 using System;
 using System.Collections.Generic;
 using System.Data;
