@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunTaskForAny.DataBase", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunTaskForAny.Module.Collect", "Modules\RunTaskForAny.Module.Collect\RunTaskForAny.Module.Collect.csproj", "{908B1E61-1992-4920-A40F-CDB7A98E411C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectTool", "CollectTool\CollectTool.csproj", "{1FD893DF-3356-402C-BF8D-A227E1B92943}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{908B1E61-1992-4920-A40F-CDB7A98E411C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{908B1E61-1992-4920-A40F-CDB7A98E411C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{908B1E61-1992-4920-A40F-CDB7A98E411C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FD893DF-3356-402C-BF8D-A227E1B92943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FD893DF-3356-402C-BF8D-A227E1B92943}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FD893DF-3356-402C-BF8D-A227E1B92943}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FD893DF-3356-402C-BF8D-A227E1B92943}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{B2924D0D-C579-439C-B7A1-23E866EA4D48} = {3CBCDB92-17FE-45EE-A395-74725BAA876E}
 		{50341098-B315-48CE-A557-9FDC03737C9A} = {1EB446BA-2B1D-4350-8024-BD6764B439C0}
 		{908B1E61-1992-4920-A40F-CDB7A98E411C} = {3100A4BE-F49D-42C8-9810-139D5235C405}
+		{1FD893DF-3356-402C-BF8D-A227E1B92943} = {9AF80F70-8D7A-4748-ADA5-FA24DC5BD21C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1DD21CAF-76B5-4034-B431-2A7747ACF796}
