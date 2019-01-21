@@ -10,6 +10,9 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
     public class RegexAndDecodeMagnetFunction : BaseFunction
     {
         public string Pattern { get; set; }
+        public RegexAndDecodeMagnetFunction()
+        {
+        }
         public RegexAndDecodeMagnetFunction(string pattern)
         {
             Pattern = pattern;

@@ -9,6 +9,9 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
     public class IndexFunction : BaseFunction
     {
         public int Index { get; set; }
+        public IndexFunction()
+        {
+        }
         public IndexFunction(int index)
         {
             Index = index;

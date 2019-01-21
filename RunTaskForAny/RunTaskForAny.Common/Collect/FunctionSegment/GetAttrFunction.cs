@@ -9,6 +9,9 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
     public class GetAttrFunction : BaseFunction
     {
         public string AttrName { get; set; }
+        public GetAttrFunction()
+        {
+        }
         public GetAttrFunction(string attrName)
         {
             AttrName = attrName;

@@ -9,6 +9,9 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
     public class TagFunction : BaseFunction
     {
         public string TagName { get; set; }
+        public TagFunction()
+        {
+        }
         public TagFunction(string tagName)
         {
             TagName = tagName;

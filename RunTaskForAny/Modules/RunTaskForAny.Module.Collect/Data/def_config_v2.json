@@ -16,11 +16,11 @@
     },
     {
       "Name": "小图",
-      "Segments": "[Attr::class=Po_u_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]"
+      "Segments": "[Attr::class=Po_u_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::res\\images\\small\\]"
     },
     {
       "Name": "大图",
-      "Segments": "[Attr::class=Po_u_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[Clear::onmouseover=showtrail(']$$[Clear::onmouseover=','',10,10)]$$[GetAttr::onmouseover]"
+      "Segments": "[Attr::class=Po_u_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::onmouseover]$$[Clear::showtrail(']$$[Clear::','',10,10)]$$[Down::res\\images\\big\\]"
     }
   ],
   "PagingRuleSegment": {
@@ -34,7 +34,7 @@
     },
     {
       "Name": "图片",
-      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=info_cg]$$[Index::0]$$[Tag::img]$$[FIndex]$$[GetAttr::src]"
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=info_cg]$$[Index::0]$$[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::res\\images\\big\\]"
     },
     {
       "Name": "番号",

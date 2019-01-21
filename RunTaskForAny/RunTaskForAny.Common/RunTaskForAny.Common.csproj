@@ -64,6 +64,7 @@
     <Compile Include="Collect\FunctionSegment\BaseFunction.cs" />
     <Compile Include="Collect\FunctionSegment\ChildFunction.cs" />
     <Compile Include="Collect\FunctionSegment\ClearFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\DownFunction.cs" />
     <Compile Include="Collect\FunctionSegment\FIndexFunction.cs" />
     <Compile Include="Collect\FunctionSegment\GetAttrFunction.cs" />
     <Compile Include="Collect\FunctionSegment\HtmlFunction.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="Collect\FunctionSegment\RegexFunction.cs" />
     <Compile Include="Collect\FunctionSegment\RemoveTagFunction.cs" />
     <Compile Include="Collect\FunctionSegment\RowIndexFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\SplitFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\StringsFunction.cs" />
     <Compile Include="Collect\FunctionSegment\TagFunction.cs" />
     <Compile Include="Collect\FunctionSegment\TextFunction.cs" />
     <Compile Include="Domain\AssemblyKeyValue.cs" />

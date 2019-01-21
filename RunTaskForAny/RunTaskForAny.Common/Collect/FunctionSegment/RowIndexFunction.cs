@@ -9,6 +9,9 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
     public class RowIndexFunction : BaseFunction
     {
         public int RowIndex { get; set; }
+        public RowIndexFunction()
+        {
+        }
         public RowIndexFunction(int rowIndex)
         {
             RowIndex = rowIndex;

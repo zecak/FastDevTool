@@ -18,7 +18,6 @@ namespace RunTaskForAny.Module.Collect
 
         public void Start()
         {
-
             Task.Factory.StartNew(() =>
             {
                 var collect = GetCollect();

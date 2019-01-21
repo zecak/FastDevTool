@@ -72,7 +72,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                 var html = GetUrl(Config.Url);
 
                 var doc = NSoup.NSoupClient.Parse(html);
-                var duan = doc.Body;
+                var duan = doc;
                 if (Config.FirstSinglePageRuleSegment != null)
                 {
                     var first_find_element = GetElement(duan, Config.FirstSinglePageRuleSegment);
@@ -118,7 +118,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                     var html_2 = GetUrl(Config.FirstSinglePageListRuleSegmentUrl);
 
                     var doc_2 = NSoup.NSoupClient.Parse(html_2);
-                    var duan_2 = doc_2.Body;
+                    var duan_2 = doc_2;
 
                     if (collectData.ListData.Columns.Count <= 0)
                     {
@@ -158,7 +158,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                                     var html_content = GetUrl(contentUrl);
 
                                     var doc_content = NSoup.NSoupClient.Parse(html_content);
-                                    var duan_content = doc_content.Body;
+                                    var duan_content = doc_content;
 
                                     if (collectData.ContentData.Columns.Count <= 0)
                                     {
@@ -234,7 +234,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                                     var html_content = GetUrl(contentUrl);
 
                                     var doc_content = NSoup.NSoupClient.Parse(html_content);
-                                    var duan_content = doc_content.Body;
+                                    var duan_content = doc_content;
 
                                     if (collectData.ContentData.Columns.Count <= 0)
                                     {
@@ -282,7 +282,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                 var html = GetUrl(Config.PagingRuleSegmentUrl);
 
                 var doc = NSoup.NSoupClient.Parse(html);
-                var duan = doc.Body;
+                var duan = doc;
 
                 if (collectData.ListData.Columns.Count <= 0)
                 {
@@ -322,7 +322,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                                 var html_content = GetUrl(contentUrl);
 
                                 var doc_content = NSoup.NSoupClient.Parse(html_content);
-                                var duan_content = doc_content.Body;
+                                var duan_content = doc_content;
 
                                 if (collectData.ContentData.Columns.Count <= 0)
                                 {
@@ -365,7 +365,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                 var html_content = GetUrl(contentUrl);
 
                 var doc_content = NSoup.NSoupClient.Parse(html_content);
-                var duan_content = doc_content.Body;
+                var duan_content = doc_content;
 
                 if (dataTable.Columns.Count <= 0)
                 {
@@ -570,7 +570,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
             if (element == null) { return ""; }
             if (ruleSegment == null) { return ""; }
 
-            string val = "";
+            string val = ""; string[] strs = null;
             NSoup.Select.Elements find_elements = null;
             NSoup.Nodes.Element find_element = element;
             for (int i = 0; i < ruleSegment.GetFunctions().Count; i++)
@@ -682,8 +682,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                 var model_Clear = function as ClearFunction;
                 if (model_Clear != null)
                 {
-                    var str = find_element.Attr(model_Clear.AttrName).Trim().Replace(model_Clear.AttrValue, "");
-                    find_element.Attr(model_Clear.AttrName, str);
+                    val = val.Replace(model_Clear.AttrValue, "");
                 }
 
                 var model_RemoveTag = function as RemoveTagFunction;
@@ -716,6 +715,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                         data.Rows.Add(dataRow);
                     }
                     val = data.ToJson();
+                    
                 }
 
                 var model_Regex = function as RegexFunction;
@@ -723,14 +723,13 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                 {
                     var reg = new System.Text.RegularExpressions.Regex(model_Regex.Pattern);
                     var match = reg.Match(val);
-                    if (match.Success)
+                    if (match.Success && match.Groups.Count > 1)
                     {
-                        var str = "";
+                        strs = new string[match.Groups.Count - 1];
                         for (int k = 1; k < match.Groups.Count; k++)
                         {
-                            str += match.Groups[k].Value;
+                            strs[k - 1] += match.Groups[k].Value;
                         }
-                        val = str;
                     }
                 }
 
@@ -748,6 +747,33 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                     }
                 }
 
+                var model_Split = function as SplitFunction;
+                if (model_Split != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(val))
+                    {
+                        strs = val.Split(new string[] { model_Split.Separator }, StringSplitOptions.RemoveEmptyEntries);
+                    }
+                }
+
+                var model_Strings = function as StringsFunction;
+                if (model_Strings != null)
+                {
+                    if (strs != null && (strs.Length > model_Strings.Index))
+                    {
+                        val += strs[model_Strings.Index];
+                    }
+                }
+
+                var model_Down = function as DownFunction;
+                if (model_Down != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(val))
+                    {
+                        val = Tool.DownFile(new Uri(val), model_Down.FilePath);
+                        break;
+                    }
+                }
             }
 
             return val;
@@ -817,11 +843,11 @@ FROM DUAL WHERE NOT EXISTS (
                     {
                         if ((j + 1) == str_arr.Length)
                         {
-                            vals += "'" + str_arr[j].ToString().Replace("'", "''") + "'";
+                            vals += "'" + str_arr[j].ToString().Replace("\\", "\\\\").Replace("'", "\\'").Replace("[","\\[").Replace("]", "\\]") + "'";
                         }
                         else
                         {
-                            vals += "'" + str_arr[j].ToString().Replace("'", "''") + "',";
+                            vals += "'" + str_arr[j].ToString().Replace("\\", "\\\\").Replace("'", "\\'").Replace("[", "\\[").Replace("]", "\\]") + "',";
                         }
                     }
 
@@ -900,11 +926,11 @@ FROM DUAL WHERE NOT EXISTS (
                     {
                         if ((j + 1) == str_arr.Length)
                         {
-                            vals += "'" + str_arr[j].ToString().Replace("'", "''") + "'";
+                            vals += "'" + str_arr[j].ToString().Replace("\\", "\\\\").Replace("'", "\\'").Replace("[", "\\[").Replace("]", "\\]") + "'";
                         }
                         else
                         {
-                            vals += "'" + str_arr[j].ToString().Replace("'", "''") + "',";
+                            vals += "'" + str_arr[j].ToString().Replace("\\", "\\\\").Replace("'", "\\'").Replace("[", "\\[").Replace("]", "\\]") + "',";
                         }
                     }
 

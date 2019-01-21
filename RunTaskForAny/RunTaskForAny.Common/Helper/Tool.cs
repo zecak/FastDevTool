@@ -386,7 +386,7 @@ namespace RunTaskForAny.Common.Helper
             }
         }
 
-        string DownFile(Uri uri, string filepath)
+       public static string DownFile(Uri uri, string filepath)
         {
             System.IO.Directory.CreateDirectory(filepath);
             var name = uri.Segments[uri.Segments.Length - 1];
@@ -396,7 +396,7 @@ namespace RunTaskForAny.Common.Helper
                 try
                 {
                     System.Net.WebClient myWebClient = new System.Net.WebClient();
-                    myWebClient.DownloadFile(uri, filename);
+                    myWebClient.DownloadFile(uri, filename); 
                 }
                 catch (Exception ex)
                 {
@@ -404,10 +404,10 @@ namespace RunTaskForAny.Common.Helper
                     return null;
                 }
             }
-            return name;
+            return filename;
         }
 
-        List<string> DownFiles(List<Uri> uris, string filepath)
+        public static List<string> DownFiles(List<Uri> uris, string filepath)
         {
             List<string> list = new List<string>();
             System.IO.Directory.CreateDirectory(filepath);
@@ -421,7 +421,7 @@ namespace RunTaskForAny.Common.Helper
                     try
                     {
                         myWebClient.DownloadFile(uri, filename);
-                        list.Add(name);
+                        list.Add(filename);
                     }
                     catch (Exception ex)
                     {

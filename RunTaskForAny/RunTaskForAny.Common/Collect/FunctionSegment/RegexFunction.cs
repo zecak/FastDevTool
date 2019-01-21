@@ -9,6 +9,9 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
     public class RegexFunction : BaseFunction
     {
         public string Pattern { get; set; }
+        public RegexFunction()
+        {
+        }
         public RegexFunction(string pattern)
         {
             Pattern = pattern;

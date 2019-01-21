@@ -8,6 +8,9 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
     public class AttrFunction : BaseFunction
     {
+        public AttrFunction()
+        {
+        }
         public AttrFunction(string attrName, string attrValue)
         {
             AttrName = attrName;

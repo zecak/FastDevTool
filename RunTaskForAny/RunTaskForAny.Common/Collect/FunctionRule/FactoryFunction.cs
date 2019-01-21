@@ -11,14 +11,14 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
     {
         static List<BaseFunction> functions = new List<BaseFunction>()
         {
-            new AttrFunction("",""),
+            new AttrFunction(),
             new ChildFunction(),
-            new ClearFunction("",""),
+            new ClearFunction(),
             new FIndexFunction(),
-            new GetAttrFunction(""),
+            new GetAttrFunction(),
             new HtmlFunction(),
             new IHtmlFunction(),
-            new IndexFunction(0),
+            new IndexFunction(),
             new LIndexFunction(),
             new LinkFunction(),
             new NextFunction(),
@@ -26,14 +26,16 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
             new ParentFunction(),
             new PrevFunction(),
             new PrevTextFunction(),
-            new RowIndexFunction(0),
-            new TagFunction(""),
+            new RowIndexFunction(),
+            new TagFunction(),
             new TextFunction(),
-            new RemoveTagFunction(""),
+            new RemoveTagFunction(),
             new ListFunction(),
-            new RegexFunction(""),
-            new RegexAndDecodeMagnetFunction(""),
-
+            new RegexFunction(),
+            new RegexAndDecodeMagnetFunction(),
+            new DownFunction(),
+            new SplitFunction(),
+            new StringsFunction(),
         };
 
         /// <summary>
