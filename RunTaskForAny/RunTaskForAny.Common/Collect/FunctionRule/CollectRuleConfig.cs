@@ -35,10 +35,11 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
         /// </summary>
         public string ConnectionString { get; set; }
 
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         /// <summary>
-        /// 数据库类型:PWMIS.DataProvider.Data.MySQL,PWMIS.MySqlClient||SqlServer
+        /// 数据库类型
         /// </summary>
-        public string ProviderString { get; set; }
+        public Database.SQLType SQLType { get; set; }
 
         /// <summary>
         /// 确定单页功能段
