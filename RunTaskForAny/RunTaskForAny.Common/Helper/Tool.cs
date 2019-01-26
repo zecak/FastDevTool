@@ -388,9 +388,20 @@ namespace RunTaskForAny.Common.Helper
 
        public static string DownFile(Uri uri, string filepath)
         {
-            System.IO.Directory.CreateDirectory(filepath);
+            var path = filepath;
             var name = uri.Segments[uri.Segments.Length - 1];
-            var filename = System.IO.Path.Combine(filepath, name);
+            
+            for (int i = 0; i < uri.Segments.Length-1; i++)
+            {
+                var str = uri.Segments[i].Replace("/","");
+                if(!string.IsNullOrWhiteSpace(str))
+                {
+                    path = System.IO.Path.Combine(path,str);
+                }
+            }
+            System.IO.Directory.CreateDirectory(path);
+
+            var filename = System.IO.Path.Combine(path, name);
             if (!System.IO.File.Exists(filename))
             {
                 try

@@ -42,11 +42,11 @@
     },
     {
       "Name": "小图",
-      "Segments": "[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::res\\images\\small\\]"
+      "Segments": "[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::upload\\collect\\]"
     },
     {
       "Name": "大图",
-      "Segments": "[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::onmouseover]$$[Clear::showtrail(']$$[Clear::','',10,10)]$$[Down::res\\images\\big\\]"
+      "Segments": "[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::onmouseover]$$[Clear::showtrail(']$$[Clear::','',10,10)]$$[Down::upload\\collect\\]"
     }
   ],
   "PagingRuleSegment": {
@@ -64,7 +64,7 @@
     },
     {
       "Name": "图片",
-      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=info_cg]$$[Index::0]$$[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::res\\images\\big\\]"
+      "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=info_cg]$$[Index::0]$$[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::upload\\collect\\]"
     },
     {
       "Name": "番号",
@@ -116,7 +116,7 @@
       "ListSegments": [
         {
           "Name": "cg_img",
-          "Segments": "[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::res\\images\\actress\\]"
+          "Segments": "[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::upload\\collect\\]"
         },
         {
           "Name": "cg_title",
@@ -130,11 +130,11 @@
       "ListSegments": [
         {
           "Name": "cg_img",
-          "Segments": "[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::res\\images\\album_small\\]"
+          "Segments": "[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::upload\\collect\\]"
         },
         {
           "Name": "cg_img_big",
-          "Segments": "[Tag::a]$$[FIndex]$$[Link]$$[Down::res\\images\\album_big\\]"
+          "Segments": "[Tag::a]$$[FIndex]$$[Link]$$[Down::upload\\collect\\]"
         }
       ]
     },
