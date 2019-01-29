@@ -55,7 +55,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
         /// 获取列表数据,为空是未获取到该页面
         /// </summary>
         /// <returns></returns>
-        public CollectData GetPageList(string page_url = "")
+        public CollectData GetAllPageList(string page_url = "")
         {
             CollectData collectData = new CollectData();
             collectData.FirstData = new DataTable();
@@ -101,6 +101,10 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                         dataRow.ItemArray = lst.ToArray();
                         collectData.FirstData.Rows.Add(dataRow);
 
+                    }
+                    else
+                    {
+                        Tool.Log.Warn("FirstSinglePageRuleSegment:找不到该元素,该规则似乎已失效");
                     }
 
                 }
@@ -184,6 +188,10 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
 
                         }
                     }
+                    else
+                    {
+                        Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
+                    }
 
                     Config.PagingRuleSegmentUrl = GetNextUrl(duan_2);
 
@@ -258,6 +266,10 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
                     }
 
                     Config.PagingRuleSegmentUrl = GetNextUrl(duan);
@@ -346,6 +358,10 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                             }
                         }
                     }
+                }
+                else
+                {
+                    Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
                 }
 
                 Config.PagingRuleSegmentUrl = GetNextUrl(duan);

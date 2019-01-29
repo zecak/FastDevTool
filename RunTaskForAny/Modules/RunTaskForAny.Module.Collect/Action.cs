@@ -46,7 +46,7 @@ namespace RunTaskForAny.Module.Collect
                             {
                                 try
                                 {
-                                    collectData = collectRule.GetPageList(collect.LastCollectListDataUrl);
+                                    collectData = collectRule.GetAllPageList(collect.LastCollectListDataUrl);
                                     if (collectData.ListData != null && collectData.ListData.Rows.Count > 0 && collectData.ContentData != null && collectData.ContentData.Rows.Count > 0)
                                     {
 
