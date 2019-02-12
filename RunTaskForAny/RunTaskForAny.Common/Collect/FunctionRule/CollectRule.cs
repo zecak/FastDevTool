@@ -421,75 +421,30 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
             {
                 var function = ruleSegment[i];
 
-                var model_Attr = function as AttrFunction;
-                if (model_Attr != null)
+                var i_findElements = function as IFindElements;
+                if (i_findElements != null)
                 {
-                    find_elements = find_element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
+                    find_elements = i_findElements.FindElements(find_element);
                 }
-                var model_Tag = function as TagFunction;
-                if (model_Tag != null)
+                
+                var i_findElementForList = function as IFindElementByList;
+                if(i_findElementForList!=null)
                 {
-                    find_elements = find_element.GetElementsByTag(model_Tag.TagName);
-                }
-                var model_Child = function as ChildFunction;
-                if (model_Child != null)
-                {
-                    find_elements = find_element.Children;
+                    i_findElementForList.FindElement(find_elements);
                 }
 
-                var model_Prev = function as PrevFunction;
-                if (model_Prev != null)
+                var i_findElement = function as IFindElement;
+                if (i_findElement != null)
                 {
-                    find_element = find_element.PreviousElementSibling;
-                }
-                var model_Next = function as NextFunction;
-                if (model_Next != null)
-                {
-                    find_element = find_element.NextElementSibling;
-                }
-                var model_Parent = function as ParentFunction;
-                if (model_Parent != null)
-                {
-                    find_element = find_element.Parent;
+                    i_findElement.FindElement(find_element);
                 }
 
-                var model_RowIndex = function as RowIndexFunction;
-                if (model_RowIndex != null)
+                var i_filterElement = function as IFilterElement;
+                if (i_filterElement != null)
                 {
-                    find_element = find_elements[model_RowIndex.RowIndex];
+                    i_filterElement.Filter(find_element);
                 }
-                var model_Index = function as IndexFunction;
-                if (model_Index != null)
-                {
-                    if (model_Index.Index < 0)
-                    {
-                        find_element = find_elements[find_elements.Count + model_Index.Index];
-                    }
-                    else
-                    {
-                        find_element = find_elements[model_Index.Index];
-                    }
-                }
-                var model_FIndex = function as FIndexFunction;
-                if (model_FIndex != null)
-                {
-                    find_element = find_elements.First;
-                }
-                var model_LIndex = function as LIndexFunction;
-                if (model_LIndex != null)
-                {
-                    find_element = find_elements.Last;
-                }
-
-                var model_RemoveTag = function as RemoveTagFunction;
-                if (model_RemoveTag != null)
-                {
-                    var es = find_element.GetElementsByTag(model_RemoveTag.TagName);
-                    find_element.Children.RemoveAll(es);
-                }
-
-
-
+                
             }
 
             return find_elements;
@@ -509,71 +464,28 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
             {
                 var function = ruleSegment[i];
 
-                var model_Attr = function as AttrFunction;
-                if (model_Attr != null)
+                var i_findElements = function as IFindElements;
+                if (i_findElements != null)
                 {
-                    find_elements = find_element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
-                }
-                var model_Tag = function as TagFunction;
-                if (model_Tag != null)
-                {
-                    find_elements = find_element.GetElementsByTag(model_Tag.TagName);
-                }
-                var model_Child = function as ChildFunction;
-                if (model_Child != null)
-                {
-                    find_elements = find_element.Children;
+                    find_elements = i_findElements.FindElements(find_element);
                 }
 
-                var model_Prev = function as PrevFunction;
-                if (model_Prev != null)
+                var i_findElementForList = function as IFindElementByList;
+                if (i_findElementForList != null)
                 {
-                    find_element = find_element.PreviousElementSibling;
-                }
-                var model_Next = function as NextFunction;
-                if (model_Next != null)
-                {
-                    find_element = find_element.NextElementSibling;
-                }
-                var model_Parent = function as ParentFunction;
-                if (model_Parent != null)
-                {
-                    find_element = find_element.Parent;
+                    i_findElementForList.FindElement(find_elements);
                 }
 
-                var model_RowIndex = function as RowIndexFunction;
-                if (model_RowIndex != null)
+                var i_findElement = function as IFindElement;
+                if (i_findElement != null)
                 {
-                    find_element = find_elements[model_RowIndex.RowIndex];
-                }
-                var model_Index = function as IndexFunction;
-                if (model_Index != null)
-                {
-                    if (model_Index.Index < 0)
-                    {
-                        find_element = find_elements[find_elements.Count + model_Index.Index];
-                    }
-                    else
-                    {
-                        find_element = find_elements[model_Index.Index];
-                    }
-                }
-                var model_FIndex = function as FIndexFunction;
-                if (model_FIndex != null)
-                {
-                    find_element = find_elements.First;
-                }
-                var model_LIndex = function as LIndexFunction;
-                if (model_LIndex != null)
-                {
-                    find_element = find_elements.Last;
+                    i_findElement.FindElement(find_element);
                 }
 
-                var model_RemoveTag = function as RemoveTagFunction;
-                if (model_RemoveTag != null)
+                var i_filterElement = function as IFilterElement;
+                if (i_filterElement != null)
                 {
-                    var es = find_element.GetElementsByTag(model_RemoveTag.TagName);
-                    find_element.Children.RemoveAll(es);
+                    i_filterElement.Filter(find_element);
                 }
 
             }
@@ -595,122 +507,63 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
 
                 var function = ruleSegment[i];
 
-                var model_Attr = function as AttrFunction;
-                if (model_Attr != null)
+                //查找元素
+                var i_findElements = function as IFindElements;
+                if (i_findElements != null)
                 {
-                    find_elements = find_element.GetElementsByAttributeValue(model_Attr.AttrName, model_Attr.AttrValue);
-                }
-                var model_Tag = function as TagFunction;
-                if (model_Tag != null)
-                {
-                    find_elements = find_element.GetElementsByTag(model_Tag.TagName);
-                }
-                var model_Child = function as ChildFunction;
-                if (model_Child != null)
-                {
-                    find_elements = find_element.Children;
+                    find_elements = i_findElements.FindElements(find_element);
                 }
 
-                var model_Prev = function as PrevFunction;
-                if (model_Prev != null)
+                var i_findElementForList = function as IFindElementByList;
+                if (i_findElementForList != null)
                 {
-                    find_element = find_element.PreviousElementSibling;
-                }
-                var model_Next = function as NextFunction;
-                if (model_Next != null)
-                {
-                    find_element = find_element.NextElementSibling;
-                }
-                var model_Parent = function as ParentFunction;
-                if (model_Parent != null)
-                {
-                    find_element = find_element.Parent;
+                    find_element = i_findElementForList.FindElement(find_elements);
                 }
 
-                var model_RowIndex = function as RowIndexFunction;
-                if (model_RowIndex != null)
+                var i_findElement = function as IFindElement;
+                if (i_findElement != null)
                 {
-                    find_element = find_elements[model_RowIndex.RowIndex];
+                    find_element = i_findElement.FindElement(find_element);
                 }
-                var model_Index = function as IndexFunction;
-                if (model_Index != null)
+
+                //过滤元素
+                var i_filterElement = function as IFilterElement;
+                if (i_filterElement != null)
                 {
-                    if (model_Index.Index < 0)
-                    {
-                        find_element = find_elements[find_elements.Count + model_Index.Index];
-                    }
-                    else
-                    {
-                        find_element = find_elements[model_Index.Index];
-                    }
-                }
-                var model_FIndex = function as FIndexFunction;
-                if (model_FIndex != null)
-                {
-                    find_element = find_elements.First;
-                }
-                var model_LIndex = function as LIndexFunction;
-                if (model_LIndex != null)
-                {
-                    find_element = find_elements.Last;
+                    i_filterElement.Filter(find_element);
                 }
 
 
-                var model_Text = function as TextFunction;
-                if (model_Text != null)
+                //根据元素获取值
+                var i_getValueByElement = function as IGetValueByElement;
+                if (i_getValueByElement != null)
                 {
-                    val = find_element.Text().Trim();
-                }
-                var model_Html = function as HtmlFunction;
-                if (model_Html != null)
-                {
-                    val = find_element.Html().Trim();
-                }
-                var model_IHtml = function as IHtmlFunction;
-                if (model_IHtml != null)
-                {
-                    val = find_element.Children.Html().Trim();
-                }
-                var model_Link = function as LinkFunction;
-                if (model_Link != null)
-                {
-                    var link = find_element.Attr("href");
-                    //Uri baseUri = new Uri(Config.Url);
-                    //Uri absoluteUri = new Uri(baseUri, link);
-                    //val = absoluteUri.AbsoluteUri;
-                    val = link;
-                }
-                var model_PrevText = function as PrevTextFunction;
-                if (model_PrevText != null)
-                {
-                    val = find_element.PreviousSibling.Attr("text").Trim();
-                }
-                var model_NextText = function as NextTextFunction;
-                if (model_NextText != null)
-                {
-                    val = find_element.NextSibling.Attr("text").Trim();
-                }
-                var model_GetAttr = function as GetAttrFunction;
-                if (model_GetAttr != null)
-                {
-                    val = find_element.Attr(model_GetAttr.AttrName).Trim();
-                }
-                var model_Clear = function as ClearFunction;
-                if (model_Clear != null)
-                {
-                    val = val.Replace(model_Clear.AttrValue, "");
+                    val = i_getValueByElement.GetValue(find_element);
                 }
 
-                var model_RemoveTag = function as RemoveTagFunction;
-                if (model_RemoveTag != null)
+                //将值转为数组
+                var i_valueToValues = function as IValueToValues;
+                if (i_valueToValues != null)
                 {
-                    var es = find_element.GetElementsByTag(model_RemoveTag.TagName);
-                    foreach (var item in es)
-                    {
-                        item.Remove();
-                    }
+                    strs = i_valueToValues.GetValues(val);
                 }
 
+                //根据数组获取值
+                var i_valuesToValue = function as IValuesToValue;
+                if (i_valuesToValue != null)
+                {
+                    val = i_valuesToValue.GetValue(strs);
+                }
+
+                //处理值
+                var i_doValue = function as IDoValue;
+                if (i_doValue != null)
+                {
+                    val = i_doValue.DoValue(val);
+                }
+
+
+                //处理内容列表
                 var model_List = function as ListFunction;
                 if (model_List != null)
                 {
@@ -731,65 +584,10 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                         data.Rows.Add(dataRow);
                     }
                     val = data.ToJson();
-                    
+
                 }
 
-                var model_Regex = function as RegexFunction;
-                if (model_Regex != null)
-                {
-                    var reg = new System.Text.RegularExpressions.Regex(model_Regex.Pattern);
-                    var match = reg.Match(val);
-                    if (match.Success && match.Groups.Count > 1)
-                    {
-                        strs = new string[match.Groups.Count - 1];
-                        for (int k = 1; k < match.Groups.Count; k++)
-                        {
-                            strs[k - 1] += match.Groups[k].Value;
-                        }
-                    }
-                }
 
-                var model_RegexAndDecodeMagnet = function as RegexAndDecodeMagnetFunction;
-                if (model_RegexAndDecodeMagnet != null)
-                {
-                    var reg = new System.Text.RegularExpressions.Regex(model_RegexAndDecodeMagnet.Pattern);
-                    var match = reg.Match(val);
-                    if (match.Success)
-                    {
-                        if (match.Groups.Count == 3)
-                        {
-                            val = match.Groups[1].Value + reurl(match.Groups[2].Value);
-                        }
-                    }
-                }
-
-                var model_Split = function as SplitFunction;
-                if (model_Split != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(val))
-                    {
-                        strs = val.Split(new string[] { model_Split.Separator }, StringSplitOptions.RemoveEmptyEntries);
-                    }
-                }
-
-                var model_Strings = function as StringsFunction;
-                if (model_Strings != null)
-                {
-                    if (strs != null && (strs.Length > model_Strings.Index))
-                    {
-                        val += strs[model_Strings.Index];
-                    }
-                }
-
-                var model_Down = function as DownFunction;
-                if (model_Down != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(val))
-                    {
-                        val = Tool.DownFile(new Uri(val), model_Down.FilePath);
-                        break;
-                    }
-                }
             }
 
             return val;
@@ -961,43 +759,6 @@ FROM DUAL WHERE NOT EXISTS (
             return sql;
         }
 
-        List<string> csplit(string body)
-        {
-            List<string> strlist = new List<string>();
-            var chunklen = 8;
-            var num = body.Length / chunklen;
-            var yushu = body.Length % chunklen;
-            if (yushu != 0) { num = num + 1; }
-            for (int i = 0; i < num; i++)
-            {
-                strlist.Add(body.Substring(0 + (i * chunklen), chunklen));
-                if (yushu != 0)
-                {
-                    if ((i + 1) == num)
-                    {
-                        strlist.Add(body.Substring(0 + (i * chunklen), yushu));
-                    }
-                }
-            }
-            return strlist;
-        }
-
-        /// <summary>
-        /// 解密magnet:?xt=urn:btih:后的加密串(..0100101010010...)
-        /// </summary>
-        /// <param name="body"></param>
-        /// <returns></returns>
-        string reurl(string body)
-        {
-            var str = "";
-            var strlist = csplit(body);
-            foreach (var item in strlist)
-            {
-                var d = System.Convert.ToInt32(item, 2) - 10;
-                var unicode = System.Convert.ToChar(d);
-                str += unicode;
-            }
-            return str;
-        }
+       
     }
 }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NSoup.Nodes;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class NextFunction : BaseFunction
+    public class NextFunction : BaseFunction, IFindElement
     {
         public override string Name => "Next";
 
@@ -14,6 +15,11 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
         {
             if (!StartsWithPartSegment(segment)) { return null; }
             return new NextFunction();
+        }
+
+        public Element FindElement(Element find_element)
+        {
+            return find_element.NextElementSibling;
         }
 
         public override string ToSegment()

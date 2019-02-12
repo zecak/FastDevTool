@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NSoup.Nodes;
+using NSoup.Select;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class IndexFunction : BaseFunction
+    public class IndexFunction : BaseFunction, IFindElementByList
     {
         public int Index { get; set; }
         public IndexFunction()
@@ -32,6 +34,15 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
                 return new IndexFunction(int.Parse(temps[1]));
             }
             return null;
+        }
+
+        public Element FindElement(Elements find_elements)
+        {
+            if (Index < 0)
+            {
+                return find_elements[find_elements.Count + Index];
+            }
+            return find_elements[Index];
         }
     }
 }

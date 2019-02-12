@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NSoup.Nodes;
+using NSoup.Select;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class RowIndexFunction : BaseFunction
+    public class RowIndexFunction : BaseFunction, IFindElementByList
     {
         public int RowIndex { get; set; }
         public RowIndexFunction()
@@ -33,6 +35,11 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
                 return new RowIndexFunction(int.Parse(temps[1]));
             }
             return null;
+        }
+
+        public Element FindElement(Elements find_elements)
+        {
+            return find_elements[RowIndex];
         }
     }
 }

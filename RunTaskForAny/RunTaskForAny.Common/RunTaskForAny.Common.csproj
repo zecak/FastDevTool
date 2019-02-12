@@ -80,6 +80,14 @@
     <Compile Include="Collect\FunctionSegment\FIndexFunction.cs" />
     <Compile Include="Collect\FunctionSegment\GetAttrFunction.cs" />
     <Compile Include="Collect\FunctionSegment\HtmlFunction.cs" />
+    <Compile Include="Collect\FunctionSegment\IFilterElement.cs" />
+    <Compile Include="Collect\FunctionSegment\IFindElement.cs" />
+    <Compile Include="Collect\FunctionSegment\IFindElementByList.cs" />
+    <Compile Include="Collect\FunctionSegment\IFindElements.cs" />
+    <Compile Include="Collect\FunctionSegment\IDoValue.cs" />
+    <Compile Include="Collect\FunctionSegment\IValuesToValue.cs" />
+    <Compile Include="Collect\FunctionSegment\IValueToValues.cs" />
+    <Compile Include="Collect\FunctionSegment\IGetValueByElement.cs" />
     <Compile Include="Collect\FunctionSegment\IHtmlFunction.cs" />
     <Compile Include="Collect\FunctionSegment\IndexFunction.cs" />
     <Compile Include="Collect\FunctionSegment\LIndexFunction.cs" />

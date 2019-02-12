@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NSoup.Nodes;
+using NSoup.Select;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class TagFunction : BaseFunction
+    public class TagFunction : BaseFunction, IFindElements
     {
         public string TagName { get; set; }
         public TagFunction()
@@ -33,6 +35,11 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
                 return new TagFunction(temps[1]);
             }
             return null;
+        }
+
+        public Elements FindElements(Element find_element)
+        {
+            return find_element.GetElementsByTag(TagName);
         }
     }
 }

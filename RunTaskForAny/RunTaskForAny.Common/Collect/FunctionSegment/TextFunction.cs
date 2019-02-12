@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NSoup.Nodes;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class TextFunction : BaseFunction
+    public class TextFunction : BaseFunction, IGetValueByElement
     {
         public override string Name => "Text";
 
@@ -14,6 +15,11 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
         {
             if (!StartsWithPartSegment(segment)) { return null; }
             return new TextFunction();
+        }
+
+        public string GetValue(Element find_element)
+        {
+            return find_element.Text().Trim();
         }
 
         public override string ToSegment()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class DownFunction : BaseFunction
+    public class DownFunction : BaseFunction, IDoValue
     {
         public string FilePath { get; set; }
         public DownFunction()
@@ -32,6 +32,15 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
                 return new DownFunction(temps[1]);
             }
             return null;
+        }
+
+        public string DoValue(string val)
+        {
+            if (!string.IsNullOrWhiteSpace(val))
+            {
+                val = Helper.Tool.DownFile(new Uri(val), FilePath);
+            }
+            return val;
         }
     }
 }

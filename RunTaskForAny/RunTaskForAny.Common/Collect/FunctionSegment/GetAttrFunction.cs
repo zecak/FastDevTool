@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NSoup.Nodes;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class GetAttrFunction : BaseFunction
+    public class GetAttrFunction : BaseFunction, IGetValueByElement
     {
         public string AttrName { get; set; }
         public GetAttrFunction()
@@ -32,6 +33,11 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
                 return new GetAttrFunction(temps[1]);
             }
             return null;
+        }
+
+        public string GetValue(Element find_element)
+        {
+            return find_element.Attr(AttrName).Trim();
         }
     }
 }

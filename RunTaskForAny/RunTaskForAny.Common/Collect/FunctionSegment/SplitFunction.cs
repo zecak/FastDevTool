@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class SplitFunction : BaseFunction
+    public class SplitFunction : BaseFunction, IValueToValues
     {
         public string Separator { get; set; }
         public SplitFunction()
@@ -30,6 +30,15 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
             if (temps.Length == 2)
             {
                 return new SplitFunction(temps[1]);
+            }
+            return null;
+        }
+
+        public string[] GetValues(string val)
+        {
+            if (!string.IsNullOrWhiteSpace(val))
+            {
+                return val.Split(new string[] { Separator }, StringSplitOptions.RemoveEmptyEntries);
             }
             return null;
         }

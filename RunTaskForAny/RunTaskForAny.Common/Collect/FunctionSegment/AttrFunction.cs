@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NSoup.Nodes;
+using NSoup.Select;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class AttrFunction : BaseFunction
+    public class AttrFunction : BaseFunction,IFindElements
     {
         public AttrFunction()
         {
@@ -41,6 +43,11 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
                 }
             }
             return null;
+        }
+
+        public Elements FindElements(Element find_element)
+        {
+            return find_element.GetElementsByAttributeValue(AttrName, AttrValue);
         }
     }
 }

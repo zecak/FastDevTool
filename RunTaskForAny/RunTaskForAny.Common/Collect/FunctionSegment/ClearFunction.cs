@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class ClearFunction : BaseFunction
+    public class ClearFunction : BaseFunction, IDoValue
     {
         public string AttrValue { get; set; }
         public ClearFunction()
@@ -32,6 +32,11 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
                 return new ClearFunction(temps[1]);
             }
             return null;
+        }
+
+        public string DoValue(string val)
+        {
+            return val.Replace(AttrValue, "");
         }
     }
 }

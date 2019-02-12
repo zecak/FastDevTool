@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class StringsFunction : BaseFunction
+    public class StringsFunction : BaseFunction, IValuesToValue
     {
         public int Index { get; set; }
         public StringsFunction()
@@ -32,6 +32,15 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
                 return new StringsFunction(int.Parse(temps[1]));
             }
             return null;
+        }
+
+        public string GetValue(string[] strs)
+        {
+            if (strs != null && (strs.Length > Index))
+            {
+                return strs[Index];
+            }
+            return "";
         }
     }
 }

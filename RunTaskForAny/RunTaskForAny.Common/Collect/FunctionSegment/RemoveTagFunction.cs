@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NSoup.Nodes;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class RemoveTagFunction:BaseFunction
+    public class RemoveTagFunction:BaseFunction, IFilterElement
     {
         public string TagName { get; set; }
         public RemoveTagFunction()
@@ -33,6 +34,15 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
                 return new RemoveTagFunction(temps[1]);
             }
             return null;
+        }
+
+        public void Filter(Element find_element)
+        {
+            var es = find_element.GetElementsByTag(TagName);
+            foreach (var item in es)
+            {
+                item.Remove();
+            }
         }
     }
 }

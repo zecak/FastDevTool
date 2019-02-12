@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RunTaskForAny.Common.Collect.FunctionSegment
 {
-    public class RegexFunction : BaseFunction
+    public class RegexFunction : BaseFunction, IValueToValues
     {
         public string Pattern { get; set; }
         public RegexFunction()
@@ -32,6 +32,22 @@ namespace RunTaskForAny.Common.Collect.FunctionSegment
         public override string ToSegment()
         {
             return LeftSeparator + Name + KeySeparator + Pattern + RightSeparator;
+        }
+
+        public string[] GetValues(string val)
+        {
+            var reg = new System.Text.RegularExpressions.Regex(Pattern);
+            var match = reg.Match(val);
+            if (match.Success && match.Groups.Count > 1)
+            {
+                var strs = new string[match.Groups.Count - 1];
+                for (int k = 1; k < match.Groups.Count; k++)
+                {
+                    strs[k - 1] += match.Groups[k].Value;
+                }
+                return strs;
+            }
+            return null;
         }
     }
 }
