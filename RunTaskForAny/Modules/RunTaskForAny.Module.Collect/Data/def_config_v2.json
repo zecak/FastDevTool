@@ -105,7 +105,7 @@
       ]
     }
   ],
-  "IsSaveToDataBase": 1,
+  "IsSaveToDataBase": 0,
   "SQLType": "MYSQL",
   "ConnectionString": "Server=localhost;Port=3306;database=Collect_v1;uid=root;password=123456;Convert Zero Datetime=True;Allow Zero Datetime=True;SslMode = none;CharSet=utf8mb4;"
 }

@@ -31,7 +31,7 @@ namespace RunTaskForAny.Module.Collect
                 }
 
                 Tool.Log.Debug("上次采集的地址:" + collect.LastCollectListDataUrl);
-                
+
                 Tool.Log.Debug("开始采集..");
                 CollectRule collectRule = new CollectRule(config);
 
@@ -40,85 +40,146 @@ namespace RunTaskForAny.Module.Collect
                     case 0:
                         {
                             Tool.Log.Debug("采集模式:默认方式");
-                            CollectData collectData = null;
+                            DataTable listData = null;
                             int i = collect.LastCollectListDataNumber;
+
+                            var firstData = collectRule.GetFirstData();
+                            if (string.IsNullOrWhiteSpace(collect.LastCollectListDataUrl))
+                            {
+                                if (!string.IsNullOrWhiteSpace(config.FirstSinglePageListRuleSegmentUrl))
+                                {
+                                    collect.LastCollectListDataUrl = config.FirstSinglePageListRuleSegmentUrl;
+                                }
+                                else
+                                {
+                                    collect.LastCollectListDataUrl = config.Url;
+                                }
+                            }
                             do
                             {
                                 try
                                 {
-                                    collectData = collectRule.GetAllPageList(collect.LastCollectListDataUrl);
-                                    if (collectData.ListData != null && collectData.ListData.Rows.Count > 0 && collectData.ContentData != null && collectData.ContentData.Rows.Count > 0)
+                                    listData = collectRule.GetPageListData(collect.LastCollectListDataUrl);
+                                    var sql_list = collectRule.DataTableToMySql(config.Name + "_List", listData, i);
+                                    if (config.IsSaveToDataBase == 1)
                                     {
-
-                                        var sql2 = collectRule.DataTableToMySql(config.Name + "_List", collectData.ListData, i);
-                                        var sql3 = collectRule.DataTableToMySql(config.Name + "_Content", collectData.ContentData, i);
-
-                                        var sql = Environment.NewLine + sql2 + Environment.NewLine + sql3 + Environment.NewLine;
-
-                                        if (config.IsSaveToDataBase == 1)
+                                        while (true)
                                         {
-                                            while (true)
+                                            try
                                             {
-                                                try
+                                                using (var db = SQLHelper.GetDB(config.SQLType, config.ConnectionString))
                                                 {
-                                                    using (var db = SQLHelper.GetDB(config.SQLType, config.ConnectionString))
-                                                    {
 
-                                                        var rz = db.ExecuteNonQuery(sql);
-                                                        if (rz != -1)
-                                                        {
-                                                            Tool.Log.Debug("已入库了:第" + i + "页 => " + collect.LastCollectListDataUrl);
-                                                            break;
-                                                        }
-                                                        else
-                                                        {
-                                                            System.Threading.Thread.Sleep(3000);//3秒后重试
-                                                        }
+                                                    var rz = db.ExecuteNonQuery(sql_list);
+                                                    if (rz != -1)
+                                                    {
+                                                        Tool.Log.Debug("列表:已入库了:第" + i + "页 => " + collect.LastCollectListDataUrl);
+                                                        break;
+                                                    }
+                                                    else
+                                                    {
+                                                        System.Threading.Thread.Sleep(3000);//3秒后重试
                                                     }
                                                 }
-                                                catch (Exception ex)
-                                                {
-                                                    Tool.Log.Error("---------------------------");
-                                                    Tool.Log.Error(ex.Message);
-                                                    Tool.Log.Error(Environment.NewLine);
-
-                                                    System.Threading.Thread.Sleep(3000);//暂停3秒
-                                                }
                                             }
-                                        }
-                                        else
-                                        {
-                                            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".sql");
-                                            if (!System.IO.File.Exists(filepath))
+                                            catch (Exception ex)
                                             {
-                                                System.IO.File.WriteAllText(filepath, sql);
+                                                Tool.Log.Error("---------------------------");
+                                                Tool.Log.Error(ex.Message);
+                                                Tool.Log.Error(Environment.NewLine);
+
+                                                System.Threading.Thread.Sleep(3000);//暂停3秒
                                             }
                                         }
-
-                                        if (collectData.ListData.Rows.Count != collectData.ContentData.Rows.Count)
-                                        {
-                                            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\warn_data_" + i + ".sql");
-                                            if (!System.IO.File.Exists(filepath))
-                                            {
-                                                System.IO.File.WriteAllText(filepath, sql);
-                                            }
-                                        }
-
-                                        if (collectData.NextPageData.Rows.Count > 0)
-                                        {
-                                            collect.LastCollectListDataUrl = (string)collectData.NextPageData.Rows[0]["PageUrl"];
-                                            collect.LastCollectListDataNumber = i;
-                                        }
-
-                                        SaveCollect(collect);
-
-                                        Tool.Log.Debug("采集了第" + i + "页 => " + collect.LastCollectListDataUrl);
-                                        collect.LastCollectListDataUrl = "";
-
                                     }
                                     else
                                     {
-                                        Tool.Log.Debug("采集数据为空");
+                                        System.IO.Directory.CreateDirectory(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data\\"));
+                                        var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data\\data_list_" + i + ".sql");
+                                        if (!System.IO.File.Exists(filepath))
+                                        {
+                                            System.IO.File.WriteAllText(filepath, sql_list);
+                                        }
+                                        Tool.Log.Debug("列表:已入库了:第" + i + "页 => " + collect.LastCollectListDataUrl);
+                                    }
+
+                                    DataTable contentData = null;
+                                    int j = 1;
+                                    foreach (DataRow row in listData.Rows)
+                                    {
+                                        var pageNumber = Convert.ToInt32((string)row[listData.Columns.Count - 3]);
+                                        var pageIndex = Convert.ToInt32((string)row[listData.Columns.Count - 2]);
+                                        var content_url = (string)row[listData.Columns.Count - 1];
+                                        if (!string.IsNullOrWhiteSpace(content_url))
+                                        {
+                                            if(contentData==null)
+                                            {
+                                                contentData = collectRule.GetPageContentData(content_url, pageNumber, pageIndex);
+                                            }
+                                            else
+                                            {
+                                                var dt= collectRule.GetPageContentData(content_url, pageNumber, pageIndex);
+                                                var r = contentData.NewRow();
+                                                r.ItemArray = dt.Rows[0].ItemArray;
+                                                contentData.Rows.Add(r);
+                                            }
+                                            Tool.Log.Debug("内容:已收集了:第" + j + "条 => " + content_url);
+                                            j++;
+                                        }
+                                    }
+                                    var sql_content = collectRule.DataTableToMySql(config.Name + "_Content", contentData, i);
+                                    if (config.IsSaveToDataBase == 1)
+                                    {
+                                        while (true)
+                                        {
+                                            try
+                                            {
+                                                using (var db = SQLHelper.GetDB(config.SQLType, config.ConnectionString))
+                                                {
+
+                                                    var rz = db.ExecuteNonQuery(sql_content);
+                                                    if (rz != -1)
+                                                    {
+                                                        Tool.Log.Debug("内容:已入库了:第" + i + "页 => " + collect.LastCollectListDataUrl);
+                                                        break;
+                                                    }
+                                                    else
+                                                    {
+                                                        System.Threading.Thread.Sleep(3000);//3秒后重试
+                                                    }
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Tool.Log.Error("---------------------------");
+                                                Tool.Log.Error(ex.Message);
+                                                Tool.Log.Error(Environment.NewLine);
+
+                                                System.Threading.Thread.Sleep(3000);//暂停3秒
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        System.IO.Directory.CreateDirectory(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data\\"));
+                                        var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data\\data_content_" + i + ".sql");
+                                        if (!System.IO.File.Exists(filepath))
+                                        {
+                                            System.IO.File.WriteAllText(filepath, sql_content);
+                                        }
+                                        Tool.Log.Debug("内容:已入库了:第" + i + "页 => " + collect.LastCollectListDataUrl);
+                                    }
+
+
+                                    if (string.IsNullOrWhiteSpace(config.PagingRuleSegmentUrl))
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        collect.LastCollectListDataUrl = config.PagingRuleSegmentUrl;
+                                        collect.LastCollectListDataNumber = i;
+                                        SaveCollect(collect);
                                     }
 
                                     i++;
@@ -130,10 +191,10 @@ namespace RunTaskForAny.Module.Collect
                                     Tool.Log.Error(ex.Message);
                                     Tool.Log.Error(Environment.NewLine);
 
-                                    System.Threading.Thread.Sleep(10000);//暂停30秒
+                                    System.Threading.Thread.Sleep(10000);//暂停10秒
                                 }
 
-                            } while (collectData.ListData.Rows.Count > 0 && collectData.ContentData.Rows.Count > 0);
+                            } while (listData != null && listData.Rows.Count > 0);
                         }
                         break;
                     case 1:
@@ -187,7 +248,8 @@ namespace RunTaskForAny.Module.Collect
                                         }
                                         else
                                         {
-                                            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules\\Data\\data_" + i + ".sql");
+                                            System.IO.Directory.CreateDirectory(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data\\"));
+                                            var filepath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data\\data_" + i + ".sql");
                                             if (!System.IO.File.Exists(filepath))
                                             {
                                                 System.IO.File.WriteAllText(filepath, sql);

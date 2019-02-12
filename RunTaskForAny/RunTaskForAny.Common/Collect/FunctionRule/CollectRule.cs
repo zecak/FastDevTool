@@ -51,324 +51,430 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
             return html;
         }
 
-        /// <summary>
-        /// 获取列表数据,为空是未获取到该页面
-        /// </summary>
-        /// <returns></returns>
-        public CollectData GetAllPageList(string page_url = "")
+        public DataTable GetFirstData()
         {
-            CollectData collectData = new CollectData();
-            collectData.FirstData = new DataTable();
-            collectData.ListData = new DataTable();
-            collectData.ContentData = new DataTable();
-            collectData.NextPageData = new DataTable();
-            collectData.NextPageData.Columns.Add("PageUrl");
+            var firstData = new DataTable();
+            Tool.Log.Debug("采集地址:" + Config.Url);
 
-            //确定单页=>确定列表地址:如果有则直接(处理列表),没有则进入(确定列表)
-            if (string.IsNullOrWhiteSpace(page_url) && string.IsNullOrWhiteSpace(Config.PagingRuleSegmentUrl))
+            var html = GetUrl(Config.Url);
+
+            var doc = NSoup.NSoupClient.Parse(html);
+            var duan = doc;
+            if (Config.FirstSinglePageRuleSegment != null)
             {
-                Tool.Log.Debug("采集地址:" + Config.Url);
-
-                var html = GetUrl(Config.Url);
-
-                var doc = NSoup.NSoupClient.Parse(html);
-                var duan = doc;
-                if (Config.FirstSinglePageRuleSegment != null)
+                var first_find_element = GetElement(duan, Config.FirstSinglePageRuleSegment);
+                if (first_find_element != null)
                 {
-                    var first_find_element = GetElement(duan, Config.FirstSinglePageRuleSegment);
-                    if (first_find_element != null)
+                    Config.FirstSinglePageListRuleSegmentUrl = GetValue(first_find_element, Config.FirstSinglePageListRuleSegment);
+
+                    Tool.Log.Debug("单页地址:" + Config.FirstSinglePageListRuleSegmentUrl);
+
+                    if (firstData.Columns.Count <= 0)
                     {
-                        Config.FirstSinglePageListRuleSegmentUrl = GetValue(first_find_element, Config.FirstSinglePageListRuleSegment);
-
-                        Tool.Log.Debug("单页地址:" + Config.FirstSinglePageListRuleSegmentUrl);
-
-                        if (collectData.FirstData.Columns.Count <= 0)
-                        {
-                            foreach (var segment in Config.FirstSinglePageRuleSegments)
-                            {
-                                collectData.FirstData.Columns.Add(segment.Name);
-                            }
-                        }
-
-                        DataRow dataRow = collectData.FirstData.NewRow();//保存采集的数据
-                        List<string> lst = new List<string>();
-
                         foreach (var segment in Config.FirstSinglePageRuleSegments)
                         {
-                            lst.Add(GetValue(first_find_element, segment));
-                        }
-
-                        dataRow.ItemArray = lst.ToArray();
-                        collectData.FirstData.Rows.Add(dataRow);
-
-                    }
-                    else
-                    {
-                        Tool.Log.Warn("FirstSinglePageRuleSegment:找不到该元素,该规则似乎已失效");
-                    }
-
-                }
-
-                if (!string.IsNullOrWhiteSpace(Config.FirstSinglePageListRuleSegmentUrl))//处理采集到的地址
-                {
-                    Tool.Log.Debug("列表地址:" + Config.FirstSinglePageListRuleSegmentUrl);
-
-                    {
-                        var row = collectData.NextPageData.NewRow();
-                        row.ItemArray = new string[] { Config.FirstSinglePageListRuleSegmentUrl };
-                        collectData.NextPageData.Rows.Add(row);
-                    }
-
-                    var html_2 = GetUrl(Config.FirstSinglePageListRuleSegmentUrl);
-
-                    var doc_2 = NSoup.NSoupClient.Parse(html_2);
-                    var duan_2 = doc_2;
-
-                    if (collectData.ListData.Columns.Count <= 0)
-                    {
-                        foreach (var segment in Config.ListPageRuleSegments)
-                        {
-                            collectData.ListData.Columns.Add(segment.Name);
+                            firstData.Columns.Add(segment.Name);
                         }
                     }
 
-                    NSoup.Select.Elements find_elements = GetElements(duan_2, Config.ListRuleSegment);
-                    if (find_elements != null && find_elements.Count > 0)
+                    DataRow dataRow = firstData.NewRow();//保存采集的数据
+                    List<string> lst = new List<string>();
+
+                    foreach (var segment in Config.FirstSinglePageRuleSegments)
                     {
-                        var number = 1;
-                        foreach (var element in find_elements)
-                        {
-                            DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
-                            List<string> lst = new List<string>();
-
-                            foreach (var segment in Config.ListPageRuleSegments)
-                            {
-                                lst.Add(GetValue(element, segment));
-                            }
-
-                            dataRow.ItemArray = lst.ToArray();
-                            collectData.ListData.Rows.Add(dataRow);
-
-
-                            //处理内容
-                            if (Config.ListContentPageRuleSegment != null)
-                            {
-                                var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
-                                if (!string.IsNullOrWhiteSpace(contentUrl))
-                                {
-                                    Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
-                                    number++;
-
-                                    var html_content = GetUrl(contentUrl);
-
-                                    var doc_content = NSoup.NSoupClient.Parse(html_content);
-                                    var duan_content = doc_content;
-
-                                    if (collectData.ContentData.Columns.Count <= 0)
-                                    {
-                                        foreach (var segment in Config.ContentPageRuleSegments)
-                                        {
-                                            collectData.ContentData.Columns.Add(segment.Name);
-                                        }
-                                    }
-
-                                    DataRow dataRow_content = collectData.ContentData.NewRow();//保存采集的数据
-                                    List<string> lst_content = new List<string>();
-
-                                    foreach (var segment in Config.ContentPageRuleSegments)
-                                    {
-                                        lst_content.Add(GetValue(duan_content, segment));
-                                    }
-
-                                    dataRow_content.ItemArray = lst_content.ToArray();
-                                    collectData.ContentData.Rows.Add(dataRow_content);
-
-                                }
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
+                        lst.Add(GetValue(first_find_element, segment));
                     }
 
-                    Config.PagingRuleSegmentUrl = GetNextUrl(duan_2);
+                    dataRow.ItemArray = lst.ToArray();
+                    firstData.Rows.Add(dataRow);
 
-                }
-                else//确定列表
-                {
-                    {
-                        var row = collectData.NextPageData.NewRow();
-                        row.ItemArray = new string[] { Config.Url };
-                        collectData.NextPageData.Rows.Add(row);
-                    }
-
-                    if (collectData.ListData.Columns.Count <= 0)
-                    {
-                        foreach (var segment in Config.ListPageRuleSegments)
-                        {
-                            collectData.ListData.Columns.Add(segment.Name);
-                        }
-                    }
-
-                    NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
-                    if (find_elements != null && find_elements.Count > 0)
-                    {
-                        var number = 1;
-                        foreach (var element in find_elements)
-                        {
-                            DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
-                            List<string> lst = new List<string>();
-
-                            foreach (var segment in Config.ListPageRuleSegments)
-                            {
-                                lst.Add(GetValue(element, segment));
-                            }
-
-                            dataRow.ItemArray = lst.ToArray();
-                            collectData.ListData.Rows.Add(dataRow);
-
-
-                            //处理内容
-                            if (Config.ListContentPageRuleSegment != null)
-                            {
-                                var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
-                                if (!string.IsNullOrWhiteSpace(contentUrl))
-                                {
-                                    Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
-                                    number++;
-
-                                    var html_content = GetUrl(contentUrl);
-
-                                    var doc_content = NSoup.NSoupClient.Parse(html_content);
-                                    var duan_content = doc_content;
-
-                                    if (collectData.ContentData.Columns.Count <= 0)
-                                    {
-                                        foreach (var segment in Config.ContentPageRuleSegments)
-                                        {
-                                            collectData.ContentData.Columns.Add(segment.Name);
-                                        }
-                                    }
-
-                                    DataRow dataRow_content = collectData.ContentData.NewRow();//保存采集的数据
-                                    List<string> lst_content = new List<string>();
-
-                                    foreach (var segment in Config.ContentPageRuleSegments)
-                                    {
-                                        lst_content.Add(GetValue(duan_content, segment));
-                                    }
-
-                                    dataRow_content.ItemArray = lst_content.ToArray();
-                                    collectData.ContentData.Rows.Add(dataRow_content);
-
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
-                    }
-
-                    Config.PagingRuleSegmentUrl = GetNextUrl(duan);
-
-                }
-
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(page_url))
-                {
-                    Config.PagingRuleSegmentUrl = page_url;//重新继续处理之前的URL
-                }
-                Tool.Log.Debug("列表下一页地址:" + Config.PagingRuleSegmentUrl);
-
-                {
-                    var row = collectData.NextPageData.NewRow();
-                    row.ItemArray = new string[] { Config.PagingRuleSegmentUrl };
-                    collectData.NextPageData.Rows.Add(row);
-                }
-
-                var html = GetUrl(Config.PagingRuleSegmentUrl);
-
-                var doc = NSoup.NSoupClient.Parse(html);
-                var duan = doc;
-
-                if (collectData.ListData.Columns.Count <= 0)
-                {
-                    foreach (var segment in Config.ListPageRuleSegments)
-                    {
-                        collectData.ListData.Columns.Add(segment.Name);
-                    }
-                }
-
-                NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
-                if (find_elements != null && find_elements.Count > 0)
-                {
-                    var number = 1;
-                    foreach (var element in find_elements)
-                    {
-                        DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
-                        List<string> lst = new List<string>();
-
-                        foreach (var segment in Config.ListPageRuleSegments)
-                        {
-                            lst.Add(GetValue(element, segment));
-                        }
-
-                        dataRow.ItemArray = lst.ToArray();
-                        collectData.ListData.Rows.Add(dataRow);
-
-
-                        //处理内容
-                        if (Config.ListContentPageRuleSegment != null)
-                        {
-                            var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
-                            if (!string.IsNullOrWhiteSpace(contentUrl))
-                            {
-                                Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
-                                number++;
-
-                                var html_content = GetUrl(contentUrl);
-
-                                var doc_content = NSoup.NSoupClient.Parse(html_content);
-                                var duan_content = doc_content;
-
-                                if (collectData.ContentData.Columns.Count <= 0)
-                                {
-                                    foreach (var segment in Config.ContentPageRuleSegments)
-                                    {
-                                        collectData.ContentData.Columns.Add(segment.Name);
-                                    }
-                                }
-
-                                DataRow dataRow_content = collectData.ContentData.NewRow();//保存采集的数据
-                                List<string> lst_content = new List<string>();
-
-                                foreach (var segment in Config.ContentPageRuleSegments)
-                                {
-                                    lst_content.Add(GetValue(duan_content, segment));
-                                }
-
-                                dataRow_content.ItemArray = lst_content.ToArray();
-                                collectData.ContentData.Rows.Add(dataRow_content);
-
-                            }
-                        }
-                    }
                 }
                 else
                 {
-                    Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
+                    Tool.Log.Warn("FirstSinglePageRuleSegment:找不到该元素,该规则似乎已失效");
                 }
 
-                Config.PagingRuleSegmentUrl = GetNextUrl(duan);
+            }
+            return firstData;
+        }
+
+        public DataTable GetPageListData(string url)
+        {
+            var listData = new DataTable();
+
+            Tool.Log.Debug("列表地址:" + url);
+
+            var html = GetUrl(url);
+
+            var doc = NSoup.NSoupClient.Parse(html);
+            var duan = doc;
+
+            if (listData.Columns.Count <= 0)
+            {
+                foreach (var segment in Config.ListPageRuleSegments)
+                {
+                    listData.Columns.Add(segment.Name);
+                }
+
+                listData.Columns.Add("页数");
+                listData.Columns.Add("页码");
+
+                if (Config.ListContentPageRuleSegment != null)
+                {
+                    listData.Columns.Add(Config.ListContentPageRuleSegment.Name);
+                }
+
             }
 
-            return collectData;
+            NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
+            if (find_elements != null && find_elements.Count > 0)
+            {
+                var number = 1;
+                foreach (var element in find_elements)
+                {
+                    DataRow dataRow = listData.NewRow();//保存采集的数据
+                    List<string> lst = new List<string>();
+
+                    foreach (var segment in Config.ListPageRuleSegments)
+                    {
+                        lst.Add(GetValue(element, segment));
+                    }
+
+                    lst.Add(find_elements.Count.ToString());
+                    lst.Add(number.ToString());
+
+                    if (Config.ListContentPageRuleSegment != null)
+                    {
+                        lst.Add(GetValue(element, Config.ListContentPageRuleSegment));
+                    }
+
+                    dataRow.ItemArray = lst.ToArray();
+                    listData.Rows.Add(dataRow);
+
+                    number++;
+                }
+            }
+            else
+            {
+                Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
+            }
+
+            Config.PagingRuleSegmentUrl = GetNextUrl(duan);
+
+            return listData;
         }
+
+        public DataTable GetPageContentData(string url,int pageNumber=-1,int pageIndex=-1)
+        {
+            var contentData = new DataTable();
+
+            if (string.IsNullOrWhiteSpace(url)) { Tool.Log.Warn("采集地址为空"); return contentData; }
+            
+            Tool.Log.Debug("[总页" + pageNumber + "]" + "[第" + pageIndex + "页] " + "内容地址:" + url);
+
+            var html = GetUrl(url);
+            var doc = NSoup.NSoupClient.Parse(html);
+            var duan = doc;
+
+            if (contentData.Columns.Count <= 0)
+            {
+                foreach (var segment in Config.ContentPageRuleSegments)
+                {
+                    contentData.Columns.Add(segment.Name);
+                }
+            }
+
+            DataRow dataRow_content = contentData.NewRow();//保存采集的数据
+            List<string> lst_content = new List<string>();
+
+            foreach (var segment in Config.ContentPageRuleSegments)
+            {
+                lst_content.Add(GetValue(duan, segment));
+            }
+
+            dataRow_content.ItemArray = lst_content.ToArray();
+            contentData.Rows.Add(dataRow_content);
+
+            return contentData;
+        }
+
+        ///// <summary>
+        ///// 获取列表数据,为空是未获取到该页面
+        ///// </summary>
+        ///// <returns></returns>
+        //public CollectData GetAllPageList(string page_url = "")
+        //{
+        //    CollectData collectData = new CollectData();
+        //    collectData.ListData = new DataTable();
+        //    collectData.ContentData = new DataTable();
+        //    collectData.NextPageData = new DataTable();
+        //    collectData.NextPageData.Columns.Add("PageUrl");
+
+        //    //确定单页=>确定列表地址:如果有则直接(处理列表),没有则进入(确定列表)
+        //    if (string.IsNullOrWhiteSpace(page_url) && string.IsNullOrWhiteSpace(Config.PagingRuleSegmentUrl))
+        //    {
+        //        collectData.FirstData = GetFirstData();
+
+        //        if (!string.IsNullOrWhiteSpace(Config.FirstSinglePageListRuleSegmentUrl))//处理采集到的地址
+        //        {
+        //            Tool.Log.Debug("列表地址:" + Config.FirstSinglePageListRuleSegmentUrl);
+
+        //            {
+        //                var row = collectData.NextPageData.NewRow();
+        //                row.ItemArray = new string[] { Config.FirstSinglePageListRuleSegmentUrl };
+        //                collectData.NextPageData.Rows.Add(row);
+        //            }
+
+        //            var html_2 = GetUrl(Config.FirstSinglePageListRuleSegmentUrl);
+
+        //            var doc_2 = NSoup.NSoupClient.Parse(html_2);
+        //            var duan_2 = doc_2;
+
+        //            if (collectData.ListData.Columns.Count <= 0)
+        //            {
+        //                foreach (var segment in Config.ListPageRuleSegments)
+        //                {
+        //                    collectData.ListData.Columns.Add(segment.Name);
+        //                }
+        //            }
+
+        //            NSoup.Select.Elements find_elements = GetElements(duan_2, Config.ListRuleSegment);
+        //            if (find_elements != null && find_elements.Count > 0)
+        //            {
+        //                var number = 1;
+        //                foreach (var element in find_elements)
+        //                {
+        //                    DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
+        //                    List<string> lst = new List<string>();
+
+        //                    foreach (var segment in Config.ListPageRuleSegments)
+        //                    {
+        //                        lst.Add(GetValue(element, segment));
+        //                    }
+
+        //                    dataRow.ItemArray = lst.ToArray();
+        //                    collectData.ListData.Rows.Add(dataRow);
+
+
+        //                    //处理内容
+        //                    if (Config.ListContentPageRuleSegment != null)
+        //                    {
+        //                        var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
+        //                        if (!string.IsNullOrWhiteSpace(contentUrl))
+        //                        {
+        //                            Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
+        //                            number++;
+
+        //                            var html_content = GetUrl(contentUrl);
+
+        //                            var doc_content = NSoup.NSoupClient.Parse(html_content);
+        //                            var duan_content = doc_content;
+
+        //                            if (collectData.ContentData.Columns.Count <= 0)
+        //                            {
+        //                                foreach (var segment in Config.ContentPageRuleSegments)
+        //                                {
+        //                                    collectData.ContentData.Columns.Add(segment.Name);
+        //                                }
+        //                            }
+
+        //                            DataRow dataRow_content = collectData.ContentData.NewRow();//保存采集的数据
+        //                            List<string> lst_content = new List<string>();
+
+        //                            foreach (var segment in Config.ContentPageRuleSegments)
+        //                            {
+        //                                lst_content.Add(GetValue(duan_content, segment));
+        //                            }
+
+        //                            dataRow_content.ItemArray = lst_content.ToArray();
+        //                            collectData.ContentData.Rows.Add(dataRow_content);
+
+        //                        }
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
+        //            }
+
+        //            Config.PagingRuleSegmentUrl = GetNextUrl(duan_2);
+
+        //        }
+        //        else//确定列表
+        //        {
+        //            {
+        //                var row = collectData.NextPageData.NewRow();
+        //                row.ItemArray = new string[] { Config.Url };
+        //                collectData.NextPageData.Rows.Add(row);
+        //            }
+
+        //            if (collectData.ListData.Columns.Count <= 0)
+        //            {
+        //                foreach (var segment in Config.ListPageRuleSegments)
+        //                {
+        //                    collectData.ListData.Columns.Add(segment.Name);
+        //                }
+        //            }
+
+        //            NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
+        //            if (find_elements != null && find_elements.Count > 0)
+        //            {
+        //                var number = 1;
+        //                foreach (var element in find_elements)
+        //                {
+        //                    DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
+        //                    List<string> lst = new List<string>();
+
+        //                    foreach (var segment in Config.ListPageRuleSegments)
+        //                    {
+        //                        lst.Add(GetValue(element, segment));
+        //                    }
+
+        //                    dataRow.ItemArray = lst.ToArray();
+        //                    collectData.ListData.Rows.Add(dataRow);
+
+
+        //                    //处理内容
+        //                    if (Config.ListContentPageRuleSegment != null)
+        //                    {
+        //                        var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
+        //                        if (!string.IsNullOrWhiteSpace(contentUrl))
+        //                        {
+        //                            Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
+        //                            number++;
+
+        //                            var html_content = GetUrl(contentUrl);
+
+        //                            var doc_content = NSoup.NSoupClient.Parse(html_content);
+        //                            var duan_content = doc_content;
+
+        //                            if (collectData.ContentData.Columns.Count <= 0)
+        //                            {
+        //                                foreach (var segment in Config.ContentPageRuleSegments)
+        //                                {
+        //                                    collectData.ContentData.Columns.Add(segment.Name);
+        //                                }
+        //                            }
+
+        //                            DataRow dataRow_content = collectData.ContentData.NewRow();//保存采集的数据
+        //                            List<string> lst_content = new List<string>();
+
+        //                            foreach (var segment in Config.ContentPageRuleSegments)
+        //                            {
+        //                                lst_content.Add(GetValue(duan_content, segment));
+        //                            }
+
+        //                            dataRow_content.ItemArray = lst_content.ToArray();
+        //                            collectData.ContentData.Rows.Add(dataRow_content);
+
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
+        //            }
+
+        //            Config.PagingRuleSegmentUrl = GetNextUrl(duan);
+
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        if (!string.IsNullOrWhiteSpace(page_url))
+        //        {
+        //            Config.PagingRuleSegmentUrl = page_url;//重新继续处理之前的URL
+        //        }
+        //        Tool.Log.Debug("列表下一页地址:" + Config.PagingRuleSegmentUrl);
+
+        //        {
+        //            var row = collectData.NextPageData.NewRow();
+        //            row.ItemArray = new string[] { Config.PagingRuleSegmentUrl };
+        //            collectData.NextPageData.Rows.Add(row);
+        //        }
+
+        //        var html = GetUrl(Config.PagingRuleSegmentUrl);
+
+        //        var doc = NSoup.NSoupClient.Parse(html);
+        //        var duan = doc;
+
+        //        if (collectData.ListData.Columns.Count <= 0)
+        //        {
+        //            foreach (var segment in Config.ListPageRuleSegments)
+        //            {
+        //                collectData.ListData.Columns.Add(segment.Name);
+        //            }
+        //        }
+
+        //        NSoup.Select.Elements find_elements = GetElements(duan, Config.ListRuleSegment);
+        //        if (find_elements != null && find_elements.Count > 0)
+        //        {
+        //            var number = 1;
+        //            foreach (var element in find_elements)
+        //            {
+        //                DataRow dataRow = collectData.ListData.NewRow();//保存采集的数据
+        //                List<string> lst = new List<string>();
+
+        //                foreach (var segment in Config.ListPageRuleSegments)
+        //                {
+        //                    lst.Add(GetValue(element, segment));
+        //                }
+
+        //                dataRow.ItemArray = lst.ToArray();
+        //                collectData.ListData.Rows.Add(dataRow);
+
+
+        //                //处理内容
+        //                if (Config.ListContentPageRuleSegment != null)
+        //                {
+        //                    var contentUrl = GetValue(element, Config.ListContentPageRuleSegment);
+        //                    if (!string.IsNullOrWhiteSpace(contentUrl))
+        //                    {
+        //                        Tool.Log.Debug("[总页" + find_elements.Count + "]" + "[第" + number + "页] " + "内容地址:" + contentUrl);
+        //                        number++;
+
+        //                        var html_content = GetUrl(contentUrl);
+
+        //                        var doc_content = NSoup.NSoupClient.Parse(html_content);
+        //                        var duan_content = doc_content;
+
+        //                        if (collectData.ContentData.Columns.Count <= 0)
+        //                        {
+        //                            foreach (var segment in Config.ContentPageRuleSegments)
+        //                            {
+        //                                collectData.ContentData.Columns.Add(segment.Name);
+        //                            }
+        //                        }
+
+        //                        DataRow dataRow_content = collectData.ContentData.NewRow();//保存采集的数据
+        //                        List<string> lst_content = new List<string>();
+
+        //                        foreach (var segment in Config.ContentPageRuleSegments)
+        //                        {
+        //                            lst_content.Add(GetValue(duan_content, segment));
+        //                        }
+
+        //                        dataRow_content.ItemArray = lst_content.ToArray();
+        //                        collectData.ContentData.Rows.Add(dataRow_content);
+
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Tool.Log.Warn("ListRuleSegment:找不到该元素,该规则似乎已失效");
+        //        }
+
+        //        Config.PagingRuleSegmentUrl = GetNextUrl(duan);
+        //    }
+
+        //    return collectData;
+        //}
 
         public DataTable GetPageContent(string contentUrl)
         {
@@ -426,9 +532,9 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                 {
                     find_elements = i_findElements.FindElements(find_element);
                 }
-                
+
                 var i_findElementForList = function as IFindElementByList;
-                if(i_findElementForList!=null)
+                if (i_findElementForList != null)
                 {
                     i_findElementForList.FindElement(find_elements);
                 }
@@ -444,7 +550,7 @@ namespace RunTaskForAny.Common.Collect.FunctionRule
                 {
                     i_filterElement.Filter(find_element);
                 }
-                
+
             }
 
             return find_elements;
@@ -657,7 +763,7 @@ FROM DUAL WHERE NOT EXISTS (
                     {
                         if ((j + 1) == str_arr.Length)
                         {
-                            vals += "'" + str_arr[j].ToString().Replace("\\", "\\\\").Replace("'", "\\'").Replace("[","\\[").Replace("]", "\\]") + "'";
+                            vals += "'" + str_arr[j].ToString().Replace("\\", "\\\\").Replace("'", "\\'").Replace("[", "\\[").Replace("]", "\\]") + "'";
                         }
                         else
                         {
@@ -759,6 +865,6 @@ FROM DUAL WHERE NOT EXISTS (
             return sql;
         }
 
-       
+
     }
 }
