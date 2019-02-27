@@ -30,7 +30,7 @@ namespace FastDev.Web.Common
             {
                 return null;
             }
-           
+
         }
 
         public object ExecuteScalar(string sql)
@@ -43,19 +43,44 @@ namespace FastDev.Web.Common
             {
                 return "";
             }
-            
+
         }
 
         public DataTable GetListForPage(string tablename, Paging paging)
         {
             if (string.IsNullOrWhiteSpace(tablename)) { return null; }
             tablename = ReplaceFieldValue(tablename);
-            var rez = ExecuteScalar(string.Format("select count(*) from [{0}]", tablename)).ToString();
+            paging.Where= ReplaceFieldValue(paging.Where);
+            var where = "(1=1)";
+            if (!string.IsNullOrWhiteSpace(paging.Where))
+            {
+                where = "";
+                var dt = ExecuteDataSet(string.Format("SELECT name FROM [sys].[columns] where object_id in(SELECT object_id FROM [sys].[tables] where name= '{0}')", tablename)).Tables[0];
+                
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    var row = dt.Rows[i];
+                    var str = (string)row["name"];
+                    if(i==(dt.Rows.Count-1))
+                    {
+                        where += " " + str + " like '%" + paging.Where + "%' ";
+                    }
+                    else
+                    {
+                        where += " " + str + " like '%" + paging.Where + "%' or ";
+                    }
+                    
+                }
+
+                where = "("+where+")";
+            }
+
+            var rez = ExecuteScalar(string.Format("select count(*) from [{0}] where {1}", tablename, where)).ToString();
             if (string.IsNullOrWhiteSpace(rez)) { return null; }
             paging.Count = Convert.ToInt32(rez);
-            var sql = string.Format("SELECT TOP {0} * FROM (SELECT ROW_NUMBER() OVER (ORDER BY id) AS RowNumber,* FROM [{1}]) as A WHERE RowNumber > {0}*({2}-1)", paging.PageSize, tablename, paging.PageIndex);
+            var sql = string.Format("SELECT TOP {0} * FROM (SELECT ROW_NUMBER() OVER (ORDER BY id) AS RowNumber,* FROM [{1}]) as A WHERE RowNumber > {0}*({2}-1) and {3}", paging.PageSize, tablename, paging.PageIndex, where);
             var dset = ExecuteDataSet(sql);
-            if(dset==null)
+            if (dset == null)
             {
                 return null;
             }

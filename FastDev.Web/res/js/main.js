@@ -1,36 +1,12 @@
 ﻿/// <reference path="jquery-3.1.1.js" />
 /// <reference path="vue.js" />
 
-function csplit(body, chunklen, end) {
-    chunklen = parseInt(chunklen, 10) || 76;
-    end = end || '\r\n';
-    if (chunklen < 1) { return false; }
-    str= body.match(new RegExp(".{0," + chunklen + "}", "g")).join(end);
-    return str;
-}
 
-
-        function reurl(a)
-        {
-            var b = '';
-            var c = csplit(a, 8).split('\r\n');
-            for (var i = 0; i < (c.length - 1); i++)
-            {
-                var dd = parseInt(c[i], 2);
-                var dd2 = (dd - 10);
-                var dd3 = dd2.toString(10);
-                b = b + String.fromCharCode(dd3);
-            }
-            return b;
-        }
 
 
 var mapfile = [];
 
 $(function () {
-
-    $('#rid_509247631172').attr('href', 'magnet:?xt=urn:btih:' + reurl('01101101010000010110111000111100010000000110110001000010001110100100000001101101011011100111000000111100011011100110111001000000001111100100001001000001011100000011111001110000010000010011110001101110001110100100001100111101011011010011111101101110001111110110110000111100010000110111000001000000010000110011110000111010'));//c7d26b806cdf2dd6487f4f72d093c5d5b29f6920
-    alert($('#rid_509247631172').attr('href') =='magnet:?xt=urn:btih:c7d26b806cdf2dd6487f4f72d093c5d5b29f6920');
 
     var files = [{ key: "vpage", value: "/components/vpage.html" }];//公共模板
     LoadFile(files);
@@ -53,6 +29,7 @@ function LoadFile(files) {
 }
 
 function FileAllLoaded() {
+    alert("init_databind");
     init_databind();
 }
 
@@ -74,11 +51,12 @@ function init_databind() {
         var mf = mapfile.find(f => f.key == "vpage");
         var p = d.find(".vpage"); p.append(mf.value[0].innerHTML);
         var url = d.attr("api-url");
-        var _tname = d.attr("api-data-tname");
-        var _where = d.attr("api-data-where");
-        var _pindex = d.attr("api-data-pindex");
-        var _psize = d.attr("api-data-psize");
-        var data = { tname: _tname, where: _where, pindex: _pindex, psize: _psize };
+        var _action = d.attr("arg-action");
+        var _tname = d.attr("arg-tname");
+        var _where = d.attr("arg-where");
+        var _pindex = d.attr("arg-pindex");
+        var _psize = d.attr("arg-psize");
+        var data = { action: _action, tname: _tname, where: _where, pindex: _pindex, psize: _psize };
         PostAjax(url, data, function (msg) {
             if (msg.code == 1) {
                 msg.page.goindex = msg.page.PageIndex;

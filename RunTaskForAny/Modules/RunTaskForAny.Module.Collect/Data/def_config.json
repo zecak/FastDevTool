@@ -33,20 +33,12 @@
   },
   "ListPageRuleSegments": [
     {
-      "Name": "标题",
-      "Segments": "[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Text]"
-    },
-    {
-      "Name": "链接",
-      "Segments": "[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]"
+      "Name": "Key",
+      "Segments": "[Attr::class=Po_topic_title]$$[FIndex]$$[Tag::a]$$[FIndex]$$[Link]$$[Clear::https://ww2464.com]"
     },
     {
       "Name": "小图",
       "Segments": "[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::upload\\collect\\]"
-    },
-    {
-      "Name": "大图",
-      "Segments": "[Attr::class=Po_topicCG]$$[FIndex]$$[Tag::img]$$[FIndex]$$[GetAttr::onmouseover]$$[Clear::showtrail(']$$[Clear::','',10,10)]$$[Down::upload\\collect\\]"
     }
   ],
   "PagingRuleSegment": {
@@ -63,7 +55,7 @@
       "Segments": "[Attr::id=title]$$[FIndex]$$[Text]"
     },
     {
-      "Name": "图片",
+      "Name": "大图",
       "Segments": "[Attr::id=info]$$[FIndex]$$[Attr::class=info_cg]$$[Index::0]$$[Tag::img]$$[FIndex]$$[GetAttr::src]$$[Down::upload\\collect\\]"
     },
     {

@@ -109,7 +109,9 @@
     <Content Include="res\js\main.js" />
     <Content Include="res\js\vue.js" />
     <Content Include="res\js\vue.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ajax\one.ashx.cs">

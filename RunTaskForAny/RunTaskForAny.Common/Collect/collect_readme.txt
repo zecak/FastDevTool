@@ -29,9 +29,9 @@
 
 取值功能:
 	[Text](获取不了script标签的内容),
-	[Html],
+	[Html](源码),
 	[IHtml](内源码),
-	[Link],
+	[Link](链接),
 	[PrevText](上节点内容),
 	[NextText](下节点内容),
 	[GetAttr::class](获取class属性的值),
@@ -41,6 +41,10 @@
 	[RegexAndDecodeMagnet::\.attr\('href','(.+)'\+reurl\('(.+)'\)\);](特殊处理magnet:?xt=urn:btih:后的加密字符,即处理第二个值)(正则取值,多个值则合并成一个字符串),
 	[Split::,](将字符串以","分隔,并返回字符串数组),
 	[Clear::http://img.xxxx.com],(删除字符串"http://img.xxxx.com")
+
+链接处理功能(处理链接):
+	[UrlRelative::](取相对路径),
+
 
 取数组值功能(多个值时使用,上接Regex和Split功能):
 	[Strings::0](获取字符串数组中的第一个,继续取数组值的话,将合并在一起)

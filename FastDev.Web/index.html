@@ -53,7 +53,7 @@
         </div>
     </div><!-- /.container -->
 
-    <div class="load_data" api-url="/Ajax/one.ashx" api-data-tname="u_o_o_j_k_j" api-data-where="" api-data-pindex="7" api-data-psize="10">
+    <div class="load_data" api-url="/Ajax/one.ashx" arg-action="get_list_page" arg-tname="u_new_category" arg-where="" arg-pindex="1" arg-psize="5">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -74,16 +74,5 @@
        
     </div>
 
-
-    <div class="load_data" api-url="/Ajax/one.ashx" api-data-tname="sys_table_column" api-data-where="" api-data-pindex="1" api-data-psize="10">
-        <ol>
-            <li v-for="item in list" v-bind:d_item="item" v-bind:key="item.ID">
-                {{ item.Title }}-{{ item.Name }}
-            </li>
-        </ol>
-    </div>
-    <div>
-        <a id="rid_509247631172">mmmmm</a>
-    </div>
 </body>
 </html>
