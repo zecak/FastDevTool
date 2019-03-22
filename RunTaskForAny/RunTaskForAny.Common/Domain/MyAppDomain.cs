@@ -9,6 +9,8 @@ namespace RunTaskForAny.Common.Domain
 {
     public class MyAppDomain : IDisposable
     {
+        static object _lock_obj = new object();
+
         string modulePrefix = null;
 
         string domainName = null;
@@ -55,16 +57,31 @@ namespace RunTaskForAny.Common.Domain
 
         void MonitorFiles()
         {
-            Init();
-
-            dir_monitor = new DirectoryMonitor(path, filter, includeSubDir);
-            dir_monitor.Change += Dir_monitor_Change;
-            dir_monitor.Start();
-
-            var files = System.IO.Directory.GetFiles(path, filter, includeSubDir ? System.IO.SearchOption.AllDirectories : System.IO.SearchOption.TopDirectoryOnly);
-            foreach (var file in files)
+            try
             {
-                Load(file);
+                System.Threading.Monitor.Enter(_lock_obj);
+                isLoading = true;
+                Init();
+
+                dir_monitor = new DirectoryMonitor(path, filter, includeSubDir);
+                dir_monitor.Change += Dir_monitor_Change;
+
+                var files = System.IO.Directory.GetFiles(path, filter, includeSubDir ? System.IO.SearchOption.AllDirectories : System.IO.SearchOption.TopDirectoryOnly);
+                foreach (var file in files)
+                {
+                    Load(file);
+                }
+                isLoading = false;
+                System.Threading.Monitor.Exit(_lock_obj);
+
+                dir_monitor.Start();
+            }
+            catch (Exception ex)
+            {
+                isLoading = false;
+                System.Threading.Monitor.Exit(_lock_obj);
+                dir_monitor.Start();
+                Tool.Log.Error(ex.Message + " " + ex.StackTrace);
             }
         }
 
@@ -82,6 +99,7 @@ namespace RunTaskForAny.Common.Domain
         {
             try
             {
+                System.Threading.Monitor.Enter(_lock_obj);
                 isLoading = true;
                 if (ad != null)
                 {
@@ -94,11 +112,12 @@ namespace RunTaskForAny.Common.Domain
                     Load(file);
                 }
                 isLoading = false;
-
+                System.Threading.Monitor.Exit(_lock_obj);
             }
             catch (Exception ex)
             {
                 isLoading = false;
+                System.Threading.Monitor.Exit(_lock_obj);
                 Tool.Log.Error(ex.Message + " " + ex.StackTrace);
             }
 
@@ -135,7 +154,7 @@ namespace RunTaskForAny.Common.Domain
 
         public void StartAction()
         {
-            if (isLoading || obj == null) { return ; }
+            if (isLoading || obj == null) { return; }
 
             foreach (var filename in obj.FileNameModules)
             {
