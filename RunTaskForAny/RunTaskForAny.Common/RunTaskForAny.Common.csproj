@@ -128,6 +128,9 @@
     <Compile Include="HtmlDesign\Blocks\TagBlock.cs" />
     <Compile Include="HtmlDesign\HtmlTemplate.cs" />
     <Compile Include="HtmlDesign\ResData.cs" />
+    <Compile Include="MEF\CustomExportMetadata.cs" />
+    <Compile Include="MEF\IMetadata.cs" />
+    <Compile Include="MEF\IPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\API.cs" />
     <Compile Include="Security\Encrypt\DES.cs" />

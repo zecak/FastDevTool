@@ -17,9 +17,6 @@ namespace ProjectPlan.Models
         public string FamilyName { get; set; }
         public string FullName => $"{GivenNames} {FamilyName}";
 
-        public void ShowMessageBox()
-        {
-            GivenNames = "Message";
-        }
+
     }
 }
