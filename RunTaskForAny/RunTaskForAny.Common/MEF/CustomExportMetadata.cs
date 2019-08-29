@@ -16,7 +16,9 @@ namespace RunTaskForAny.Common.MEF
         public string Author { get; private set; }
         public string Version { get; private set; }
 
-        public CustomExportMetadata() : base(typeof(IMetadata))
+        public int VersionNumber { get; private set; }
+
+    public CustomExportMetadata() : base(typeof(IMetadata))
         {
         }
 
@@ -35,7 +37,11 @@ namespace RunTaskForAny.Common.MEF
             this.Author = author;
         }
 
-        public CustomExportMetadata(string name, string description, string author, string version) : this(name, description, author)
+        public CustomExportMetadata(string name, string description, string author,int versionNumber) : this(name, description, author)
+        {
+            this.VersionNumber = versionNumber;
+        }
+        public CustomExportMetadata(string name, string description, string author, int versionNumber, string version) : this(name, description, author, versionNumber)
         {
             this.Version = version;
         }

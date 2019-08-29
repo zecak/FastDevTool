@@ -22,7 +22,7 @@ namespace ProjectPlan.Helper
     public class CustomViewManager : ViewManager
     {
         public string ViewModelToViewRootName = ConfigurationManager.AppSettings["ViewModelToViewRootName"] ?? "Pages";
-        public string ViewModelToViewCurName = ConfigurationManager.AppSettings["ViewModelToViewCurName"] ?? "v1.0.0.0";
+        public string ViewModelToViewCurName = ConfigurationManager.AppSettings["ViewModelToViewCurName"] ?? "v1";
 
         List<NameValue> rootElement;
 
@@ -65,6 +65,15 @@ namespace ProjectPlan.Helper
             return view;
         }
 
+        public override void BindViewToModel(UIElement view, object viewModel)
+        {
+            base.BindViewToModel(view, viewModel);
+        }
+
+        public override UIElement CreateAndBindViewForModelIfNecessary(object model)
+        {
+            return base.CreateAndBindViewForModelIfNecessary(model);
+        }
 
     }
 

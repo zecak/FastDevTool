@@ -11,7 +11,7 @@
         <DockPanel>
             
             <DockPanel DockPanel.Dock="Top">
-                <TextBlock Text="MyPlan" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="24"></TextBlock>
+                <TextBlock Text="{Binding TitleInfo}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="24"></TextBlock>
             </DockPanel>
             <DockPanel DockPanel.Dock="Left" Visibility="Collapsed">
                 <TextBlock Text="Left" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="24" Foreground="#FFB6B6B6"></TextBlock>
@@ -20,24 +20,21 @@
                 <TextBlock Text="底部" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="24" Foreground="#FFB6B6B6"></TextBlock>
             </DockPanel>
             <DockPanel>
-                <TabControl>
-                    <TabItem>
-                        <TabItem.Header>
-                            <TextBlock Text="进行中计划"></TextBlock>
-                        </TabItem.Header>
-                        <DockPanel>
-                            <TextBlock Text="{Binding PersonInfo.FullName}" Background="#FFDCBCBC"></TextBlock>
-                            <Button Command="{s:Action ShowBox}"></Button>
-                        </DockPanel>
-                    </TabItem>
-                    <TabItem>
-                        <TabItem.Header>
-                            <TextBlock Text="未计划"></TextBlock>
-                        </TabItem.Header>
-                        <DockPanel>
-
-                        </DockPanel>
-                    </TabItem>
+                <TabControl ItemsSource="{Binding Plugins}" SelectedIndex="0">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Metadata.Name}"/>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <ContentControl DockPanel.Dock="Top" Content="{Binding Value}">
+                                </ContentControl>
+                            </DockPanel>
+                            
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
                 </TabControl>
             </DockPanel>
         </DockPanel>

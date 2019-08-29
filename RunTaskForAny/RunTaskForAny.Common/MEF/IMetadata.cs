@@ -11,6 +11,9 @@ namespace RunTaskForAny.Common.MEF
         string Name { get; }
         string Description { get; }
         string Author { get; }
+
         string Version { get; }
+
+        int VersionNumber { get; } 
     }
 }

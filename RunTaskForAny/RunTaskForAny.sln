@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MEFPlugins", "MEFPlugins", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin1", "MEFPlugins\Plugin1\Plugin1.csproj", "{20A2EF40-633C-4580-A988-952BCA114C32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfControlLibrary1", "MEFPlugins\WpfControlLibrary1\WpfControlLibrary1.csproj", "{710C95BC-8F5F-48E4-B062-1DDAAAF38C82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{20A2EF40-633C-4580-A988-952BCA114C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20A2EF40-633C-4580-A988-952BCA114C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20A2EF40-633C-4580-A988-952BCA114C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{710C95BC-8F5F-48E4-B062-1DDAAAF38C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{710C95BC-8F5F-48E4-B062-1DDAAAF38C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{710C95BC-8F5F-48E4-B062-1DDAAAF38C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{710C95BC-8F5F-48E4-B062-1DDAAAF38C82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{A3824BB3-A8A0-4464-9C0F-54A16C86BBAA} = {9AF80F70-8D7A-4748-ADA5-FA24DC5BD21C}
 		{1B2A51B3-3AA3-4DEA-9CFA-35CC99B68338} = {9AF80F70-8D7A-4748-ADA5-FA24DC5BD21C}
 		{20A2EF40-633C-4580-A988-952BCA114C32} = {1B2A51B3-3AA3-4DEA-9CFA-35CC99B68338}
+		{710C95BC-8F5F-48E4-B062-1DDAAAF38C82} = {1B2A51B3-3AA3-4DEA-9CFA-35CC99B68338}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1DD21CAF-76B5-4034-B431-2A7747ACF796}

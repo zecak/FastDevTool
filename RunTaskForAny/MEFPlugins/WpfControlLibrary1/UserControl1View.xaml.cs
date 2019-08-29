@@ -15,24 +15,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Plugin1
+namespace WpfControlLibrary1
 {
     [Export(typeof(IPlugin))]
-    [CustomExportMetadata("Plugin1", "这是第一个插件", "snake",1, "1.0")]
+    [CustomExportMetadata("Plugin1", "这是第一个插件", "snake", 2, "2.0")]
     /// <summary>
     /// UserControl1.xaml 的交互逻辑
     /// </summary>
-    public partial class UserControl1 : UserControl, IPlugin
+    public partial class UserControl1View : UserControl, IPlugin
     {
-        public UserControl1()
+        public UserControl1View()
         {
             InitializeComponent();
         }
 
         public void Dowork(string[] args)
         {
-            
-        }
 
+        }
     }
 }
