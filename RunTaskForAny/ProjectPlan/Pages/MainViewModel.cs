@@ -14,9 +14,7 @@ namespace ProjectPlan.Pages
 {
     public class MainViewModel : Screen
     {
-        private CompositionContainer container = null;
 
-        [ImportMany(typeof(IPlugin))]
         public List<Lazy<IPlugin, IMetadata>> Plugins { get; set; }
 
 
@@ -34,28 +32,14 @@ namespace ProjectPlan.Pages
 
             TitleInfo = "MyPlan";
 
-            try
-            {
-                var catalog = new DirectoryCatalog("Plugins");
-                container = new CompositionContainer(catalog);
-                container.ComposeParts(this);
-
-                Plugins = Plugins.OrderBy(p=>p.Metadata.Name).ThenByDescending(p=>p.Metadata.VersionNumber).Distinct(new PuluginMetadataComparer()).ToList();
-
-                //var p1 = Plugins.FirstOrDefault(p => p.Metadata.Name == "Plugin1");
-                //var model = p1.Value;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            Plugins = PluginManager.Instance.Plugins;
 
         }
 
         public void ShowBox()
         {
             PersonInfo.FamilyName = "MOI";
-            this.windowManager.ShowMessageBox("1fffffffffffsssssssssss0");
+            this.windowManager.ShowMessageBox("主界面ViewModel");
         }
     }
 }

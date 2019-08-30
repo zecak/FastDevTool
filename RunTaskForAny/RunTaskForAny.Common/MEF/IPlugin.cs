@@ -8,7 +8,6 @@ namespace RunTaskForAny.Common.MEF
 {
     public interface IPlugin
     {
-        void Dowork(string[] args);
 
     }
 }

@@ -7,8 +7,13 @@
              mc:Ignorable="d" 
              xmlns:s="https://github.com/canton7/Stylet"
         d:DataContext="{d:DesignInstance local:UserControl1ViewModel}"
-             d:DesignHeight="450" d:DesignWidth="800" Background="#FFEEEEEE">
+             d:DesignHeight="450" d:DesignWidth="800" Background="#FFE06565" x:Name="myc">
     <Grid>
-        <TextBlock Text="{Binding TitleInfo}" FontSize="20" FontWeight="Bold"></TextBlock>
+        <DockPanel>
+            <TextBlock Text="{Binding PersonInfo.FullName}" FontSize="20" FontWeight="Bold"></TextBlock>
+
+            <Button s:View.ActionTarget="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type Window}}}" Command="{s:Action ShowBox}"></Button>
+        </DockPanel>
+        
     </Grid>
 </UserControl>

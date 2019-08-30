@@ -17,21 +17,17 @@ using System.Windows.Shapes;
 
 namespace WpfControlLibrary1
 {
-    [Export(typeof(IPlugin))]
-    [CustomExportMetadata("Plugin1", "这是第一个插件", "snake", 2, "2.0")]
+    
     /// <summary>
     /// UserControl1.xaml 的交互逻辑
     /// </summary>
-    public partial class UserControl1View : UserControl, IPlugin
+    public partial class UserControl1View : UserControl
     {
         public UserControl1View()
         {
             InitializeComponent();
         }
 
-        public void Dowork(string[] args)
-        {
-
-        }
+       
     }
 }

@@ -1,6 +1,9 @@
-﻿using Stylet;
+﻿using RunTaskForAny.Common.MEF;
+using Stylet;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -21,42 +24,52 @@ namespace ProjectPlan.Helper
 
     public class CustomViewManager : ViewManager
     {
-        public string ViewModelToViewRootName = ConfigurationManager.AppSettings["ViewModelToViewRootName"] ?? "Pages";
-        public string ViewModelToViewCurName = ConfigurationManager.AppSettings["ViewModelToViewCurName"] ?? "v1";
+        public static string ViewModelToViewRootName = ConfigurationManager.AppSettings["ViewModelToViewRootName"] ?? "Pages";
+        public static string ViewModelToViewCurName = ConfigurationManager.AppSettings["ViewModelToViewCurName"] ?? "v1";
 
-        List<NameValue> rootElement;
+        static List<NameValue> rootElement;
 
         public CustomViewManager(ViewManagerConfig config) : base(config)
         {
-            rootElement = new List<NameValue>();
-            var xamlFiles = System.IO.Directory.GetFiles(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ViewModelToViewRootName, ViewModelToViewCurName));
-            foreach (var xamlFile in xamlFiles)
+            foreach (var plugin in PluginManager.Instance.Plugins)
             {
-                try
+                var model = plugin.Value;
+                var model_view = this.CreateAndBindViewForModelIfNecessary(model);
+            }
+
+            if (rootElement == null)
+            {
+                rootElement = new List<NameValue>();
+                var xamlFiles = System.IO.Directory.GetFiles(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ViewModelToViewRootName, ViewModelToViewCurName));
+                foreach (var xamlFile in xamlFiles)
                 {
-                    System.IO.FileInfo fileInfo = new FileInfo(xamlFile);
-                    FrameworkElement element = null;
-                    using (FileStream fs = new FileStream(xamlFile, FileMode.Open, FileAccess.Read))
+                    try
                     {
-                        element = System.Windows.Markup.XamlReader.Load(fs) as FrameworkElement;
-                        if (element != null)
+                        System.IO.FileInfo fileInfo = new FileInfo(xamlFile);
+                        FrameworkElement element = null;
+                        using (FileStream fs = new FileStream(xamlFile, FileMode.Open, FileAccess.Read))
                         {
-                            rootElement.Add(new NameValue() { Name = fileInfo.Name.Substring(0, fileInfo.Name.LastIndexOf(".")), Value = element });
+                            element = System.Windows.Markup.XamlReader.Load(fs) as FrameworkElement;
+                            if (element != null)
+                            {
+                                rootElement.Add(new NameValue() { Name = fileInfo.Name.Substring(0, fileInfo.Name.LastIndexOf(".")), Value = element });
+                            }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("加载界面时出错:"+ex.Message+"," + xamlFile);
+                    catch (Exception ex)
+                    {
+                        throw new Exception("加载界面时出错:" + ex.Message + "," + xamlFile);
+                    }
                 }
             }
+            
 
         }
 
         public override UIElement CreateViewForModel(object model)
         {
             var mtype = model.GetType();
-            var nv = rootElement.FirstOrDefault(m => m.Name + "Model" == mtype.Name);
+            var nv = rootElement?.FirstOrDefault(m => m.Name + "Model" == mtype.Name);
             if (nv == null)
             {
                 return base.CreateViewForModel(model);

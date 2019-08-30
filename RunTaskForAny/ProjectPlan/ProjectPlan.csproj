@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\CustomViewManager.cs" />
+    <Compile Include="Helper\PluginManager.cs" />
     <Compile Include="Helper\RedisCacheHelper.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Pages\MainViewModel.cs" />

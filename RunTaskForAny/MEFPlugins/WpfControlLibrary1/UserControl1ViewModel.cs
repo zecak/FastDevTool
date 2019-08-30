@@ -1,23 +1,31 @@
-﻿using Stylet;
+﻿using RunTaskForAny.Common.MEF;
+using Stylet;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WpfControlLibrary1
 {
-    public class UserControl1ViewModel : Screen
+    [Export(typeof(IPlugin))]
+    [CustomExportMetadata("Plugin1", "这是第一个插件", "snake", 2, "2.0")]
+    public class UserControl1ViewModel : Screen, IPlugin
     {
-        public string TitleInfo { get; set; }
+        public Person PersonInfo { get; set; }= new Person() { ID = 0, FamilyName = "A", GivenNames = "B" };
+        public string TitleInfo { get; set; } = "Def";
 
-        private IWindowManager windowManager;
-
-        public UserControl1ViewModel(IWindowManager _windowManager)
+        public UserControl1ViewModel()
         {
-            this.windowManager = _windowManager;
-
+            PersonInfo = new Person() { ID = 0, FamilyName = "插件1", GivenNames = "2" };
             TitleInfo = "插件1 版本2";
         }
+
+        public void ShowBox()
+        { 
+            System.Windows.MessageBox.Show(TitleInfo);
+        }
+
     }
 }

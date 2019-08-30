@@ -29,7 +29,7 @@
                     <TabControl.ContentTemplate>
                         <DataTemplate>
                             <DockPanel>
-                                <ContentControl DockPanel.Dock="Top" Content="{Binding Value}">
+                                <ContentControl Content="{Binding Value.View}">
                                 </ContentControl>
                             </DockPanel>
                             

@@ -58,6 +58,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Person.cs" />
     <Compile Include="UserControl1ViewModel.cs" />
     <Page Include="UserControl1View.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -29,10 +29,6 @@ namespace Plugin1
             InitializeComponent();
         }
 
-        public void Dowork(string[] args)
-        {
-            
-        }
 
     }
 }
