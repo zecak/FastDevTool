@@ -31,7 +31,7 @@ namespace ProjectPlan.Helper
 
         public CustomViewManager(ViewManagerConfig config) : base(config)
         {
-            foreach (var plugin in PluginManager.Instance.Plugins)
+            foreach (var plugin in PluginManager.Instance.UIPlugins)
             {
                 var model = plugin.Value;
                 var model_view = this.CreateAndBindViewForModelIfNecessary(model);

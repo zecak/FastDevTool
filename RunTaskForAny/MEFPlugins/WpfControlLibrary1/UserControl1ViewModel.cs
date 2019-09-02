@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace WpfControlLibrary1
 {
-    [Export(typeof(IPlugin))]
+    [Export(typeof(IPluginForFrameworkElement))]
     [CustomExportMetadata("Plugin1", "这是第一个插件", "snake", 2, "2.0")]
-    public class UserControl1ViewModel : Screen, IPlugin
+    public class UserControl1ViewModel : Screen, IPluginForFrameworkElement
     {
         public Person PersonInfo { get; set; }= new Person() { ID = 0, FamilyName = "A", GivenNames = "B" };
         public string TitleInfo { get; set; } = "Def";

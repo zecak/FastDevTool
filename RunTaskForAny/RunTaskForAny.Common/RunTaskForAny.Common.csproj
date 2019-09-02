@@ -131,6 +131,8 @@
     <Compile Include="MEF\CustomExportMetadata.cs" />
     <Compile Include="MEF\IMetadata.cs" />
     <Compile Include="MEF\IPlugin.cs" />
+    <Compile Include="MEF\IPluginForFrameworkElement.cs" />
+    <Compile Include="MEF\PluginForFrameworkElementMetadataComparer.cs" />
     <Compile Include="MEF\PuluginMetadataComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\API.cs" />

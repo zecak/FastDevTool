@@ -32,7 +32,7 @@ namespace ProjectPlan.Pages
 
             TitleInfo = "MyPlan";
 
-            Plugins = PluginManager.Instance.Plugins;
+            Plugins = PluginManager.Instance.UIPlugins;
 
         }
 
