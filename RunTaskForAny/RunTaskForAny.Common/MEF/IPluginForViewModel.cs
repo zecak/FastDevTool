@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RunTaskForAny.Common.MEF
 {
-    public interface IPluginForFrameworkElement
+    public interface IPluginForViewModel
     {
     }
 }

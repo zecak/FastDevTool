@@ -15,7 +15,7 @@ namespace ProjectPlan.Pages
     public class MainViewModel : Screen
     {
 
-        public List<Lazy<IPlugin, IMetadata>> Plugins { get; set; }
+        public List<Lazy<IPluginForViewModel, IMetadata>> Plugins { get; set; }
 
 
         public Person PersonInfo { get; set; }
@@ -32,7 +32,7 @@ namespace ProjectPlan.Pages
 
             TitleInfo = "MyPlan";
 
-            Plugins = PluginManager.Instance.UIPlugins;
+            Plugins = PluginManager.Instance.ViewModelPlugins;
 
         }
 

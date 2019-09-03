@@ -30,8 +30,8 @@ namespace ProjectPlan.Helper
 
         private CompositionContainer container = null;
 
-        [ImportMany(typeof(IPluginForFrameworkElement))]
-        public List<Lazy<IPluginForFrameworkElement, IMetadata>> UIPlugins { get; set; }
+        [ImportMany(typeof(IPluginForViewModel))]
+        public List<Lazy<IPluginForViewModel, IMetadata>> ViewModelPlugins { get; set; }
 
         public PluginManager()
         {
@@ -41,7 +41,7 @@ namespace ProjectPlan.Helper
                 container = new CompositionContainer(catalog);
                 container.ComposeParts(this);
 
-                UIPlugins = UIPlugins.OrderBy(p => p.Metadata.Name).ThenByDescending(p => p.Metadata.VersionNumber).Distinct(new PluginForFrameworkElementMetadataComparer()).ToList();
+                ViewModelPlugins = ViewModelPlugins.OrderBy(p => p.Metadata.Name).ThenByDescending(p => p.Metadata.VersionNumber).Distinct(new PluginForViewModelMetadataComparer()).ToList();
 
 
                 //var p1 = Plugins.FirstOrDefault(p => p.Metadata.Name == "Plugin1");
@@ -62,7 +62,7 @@ namespace ProjectPlan.Helper
                 if(assemblies==null)
                 {
                     var list = new List<Assembly>();
-                    foreach (var plugin in UIPlugins)
+                    foreach (var plugin in ViewModelPlugins)
                     {
                         var model = plugin.Value;
                         var modelType = model.GetType();
