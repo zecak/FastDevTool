@@ -4,9 +4,314 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectPlan.Pages"
-        xmlns:s="https://github.com/canton7/Stylet"
+        xmlns:s="https://github.com/canton7/Stylet" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         d:DataContext="{d:DesignInstance local:MainViewModel}"
-        mc:Ignorable="d"  Height="400" Width="600" Title="主界面">
+        mc:Ignorable="d"  Height="400" Width="600" Title="主界面" Style="{DynamicResource BaseWindowStyle}">
+    <Window.Resources>
+        <!--自定义窗体外框样式-->
+        <Style x:Key="winStyle" TargetType="Border">
+            <Setter Property="Background" Value="#7F000000" />
+        </Style>
+
+        <!--窗体标题样式-->
+        <Style x:Key="titleStyle" TargetType="Border">
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Width" Value="Auto"></Setter>
+            <Setter Property="Height" Value="28"></Setter>
+            <Setter Property="DockPanel.Dock" Value="Top"></Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Padding" Value="10,5,10,5"></Setter>
+        </Style>
+
+        <!--最小化按钮样式-->
+        <Style x:Key="minBtnStyle" TargetType="Button">
+            <Setter Property="Margin" Value="2,0,2,0"></Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Opacity" Value=".75"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Rectangle Width="18" Height="16" Fill="White" Opacity=".1" RadiusX="4" RadiusY="4" StrokeThickness="2"></Rectangle>
+                            <Rectangle Width="18" Height="16" StrokeThickness="2" RadiusX="4" RadiusY="4" Stroke="White"></Rectangle>
+                            <!--按钮内容-->
+                            <Grid>
+                                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5">
+                                    <Line StrokeThickness="2" Stroke="White" X1="0" Y1="4" X2="8" Y2="4"></Line>
+                                </Canvas>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsMouseOver"  Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--关闭按钮样式-->
+        <Style x:Key="closeBtnStyle" TargetType="Button">
+            <Setter Property="Margin" Value="2,0,2,0"></Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Opacity" Value="0.75" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse x:Name="borderBtn" Width="18" Height="18" StrokeThickness="2" Fill="{x:Null}" Stroke="White"></Ellipse>
+
+                            <!--按钮内容-->
+                            <Grid>
+                                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5">
+                                    <Line StrokeThickness="2" Stroke="White" X1="0" Y1="0" X2="8" Y2="8"></Line>
+                                    <Line StrokeThickness="2" Stroke="White" X1="0" Y1="8" X2="8" Y2="0"></Line>
+                                </Canvas>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsMouseOver"  Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="btnStyle" TargetType="Button">
+            <Setter Property="Margin" Value="5,5,5,5"></Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Opacity" Value=".75"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border BorderBrush="White" BorderThickness="1" HorizontalAlignment="Center" Background="Transparent" Width="{TemplateBinding Width}">
+                                <TextBlock Grid.Column="1" Text="{TemplateBinding Content}"  HorizontalAlignment="Center" Margin="3 0 3 0" Foreground="White"></TextBlock>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsMouseOver"  Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="statusTxtStyle" TargetType="TextBlock">
+            <Setter Property="Opacity" Value=".75"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+        </Style>
+
+        <!--窗口圆角-->
+        <CornerRadius x:Key="winCorner">
+            <CornerRadius.BottomLeft>5</CornerRadius.BottomLeft>
+            <CornerRadius.BottomRight>5</CornerRadius.BottomRight>
+            <CornerRadius.TopLeft>5</CornerRadius.TopLeft>
+            <CornerRadius.TopRight>5</CornerRadius.TopRight>
+        </CornerRadius>
+
+        <!--标题栏圆角-->
+        <CornerRadius x:Key="winTitleCorner">
+            <CornerRadius.BottomLeft>0</CornerRadius.BottomLeft>
+            <CornerRadius.BottomRight>0</CornerRadius.BottomRight>
+            <CornerRadius.TopLeft>5</CornerRadius.TopLeft>
+            <CornerRadius.TopRight>5</CornerRadius.TopRight>
+        </CornerRadius>
+
+        <!--状态栏圆角-->
+        <CornerRadius x:Key="winStatusCorner">
+            <CornerRadius.BottomLeft>5</CornerRadius.BottomLeft>
+            <CornerRadius.BottomRight>5</CornerRadius.BottomRight>
+            <CornerRadius.TopLeft>0</CornerRadius.TopLeft>
+            <CornerRadius.TopRight>0</CornerRadius.TopRight>
+        </CornerRadius>
+
+        <!--基窗口模板-->
+        <ControlTemplate x:Key="BaseWindowControlTemplate" TargetType="{x:Type Window}">
+            <Grid>
+                <Border BorderThickness="5" CornerRadius="6" BorderBrush="#000000" Opacity=".08"></Border>
+                <Border x:Name="borderBg" Margin="5" Background="Black" BorderBrush="#ffffff" Opacity=".8" BorderThickness="2" CornerRadius="{DynamicResource winCorner}" Style="{DynamicResource winStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="1"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Background="#4f535d" CornerRadius="{DynamicResource winTitleCorner}" Style="{DynamicResource titleStyle}">
+                            
+                        </Border>
+                        <Canvas Grid.Row="2" Background="#42464d"></Canvas>
+                        <Border Grid.Row="3" CornerRadius="{DynamicResource winStatusCorner}"></Border>
+                    </Grid>
+                </Border>
+
+                <Grid Margin="7">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="1"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <!--标题栏框-->
+
+                    <Border x:Name="borderTitle" Grid.Row="0" CornerRadius="{DynamicResource winTitleCorner}" Style="{DynamicResource titleStyle}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseMove">
+                                <i:InvokeCommandAction Command="{s:Action RequestMouseMove}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <DockPanel>
+                            <TextBlock Text="{TemplateBinding Title}" Foreground="White" Opacity=".75" HorizontalAlignment="Left"></TextBlock>
+                            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                                <!--关闭按钮-->
+                                <Button Style="{DynamicResource minBtnStyle}" Command="{s:Action RequestMin}" ></Button>
+                                <Button Style="{DynamicResource closeBtnStyle}" Command="{s:Action RequestClose}" ></Button>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <!--内容-->
+                    <Grid x:Name="gridContent" Grid.Row="1">
+                        <ContentPresenter />
+                    </Grid>
+
+                </Grid>
+
+            </Grid>
+        </ControlTemplate>
+
+        <!--基窗口样式-->
+        <Style x:Key="BaseWindowStyle" TargetType="{x:Type Window}">
+            <Setter Property="Template" Value="{DynamicResource BaseWindowControlTemplate}"/>
+            <Setter Property="Background"
+                Value="Transparent" />
+            <Setter Property="WindowStyle"
+                Value="None" />
+            <Setter Property="AllowsTransparency"
+                Value="True" />
+        </Style>
+
+        <!--ScrollViewer样式-->
+        <Style TargetType="{x:Type ScrollViewer}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Grid.Column="0" VerticalAlignment="Top">
+                                <ScrollContentPresenter CanContentScroll="True" Content="{TemplateBinding ScrollViewer.Content}" />
+                            </Border>
+                            <ScrollBar Orientation="Vertical" Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="{TemplateBinding ScrollViewer.ScrollableHeight}" Value="{TemplateBinding ScrollViewer.VerticalOffset}" ViewportSize="{TemplateBinding ScrollViewer.ViewportHeight}" Name="PART_VerticalScrollBar" Visibility="{TemplateBinding ScrollViewer.ComputedVerticalScrollBarVisibility}" />
+
+                            <ScrollBar Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="{TemplateBinding ScrollViewer.ScrollableWidth}" Value="{TemplateBinding ScrollViewer.HorizontalOffset}" ViewportSize="{TemplateBinding ScrollViewer.ViewportWidth}" Name="PART_HorizontalScrollBar" Visibility="{TemplateBinding ScrollViewer.ComputedHorizontalScrollBarVisibility}"/>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--</Snippet1>-->
+
+        <!--滚动条两端箭头按钮-->
+        <Style x:Key="ScrollBar_LineButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+
+                        <Path x:Name="arrow" HorizontalAlignment="Center" Stroke="LightGray" Fill="Transparent" VerticalAlignment="Center" Data="{Binding Path=Content,
+                       RelativeSource={RelativeSource TemplatedParent}}"  />
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="arrow" Property="Stroke" Value="White">
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter TargetName="arrow" Property="Stroke" Value="White">
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ScrollBar_PageButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="Transparent" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--滚动条-->
+        <Style x:Key="ScrollBar_Thumb" TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border CornerRadius="3" Background="Transparent" BorderBrush="LightGray" Width="12" BorderThickness="1">
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- ScrollBar Style -->
+        <Style TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="14" />
+            <Setter Property="MinWidth" Value="14" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="16" />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="16" />
+                            </Grid.RowDefinitions>
+                            <RepeatButton Grid.Row="0" Style="{DynamicResource ScrollBar_LineButton}" Command="ScrollBar.LineUpCommand" Content="M 0 10 L 6 0 L 12 10 Z" />
+
+                            <Track Grid.Row="1" Name="PART_Track" IsDirectionReversed="true">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Style="{DynamicResource ScrollBar_PageButton}"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{DynamicResource ScrollBar_Thumb}" MinHeight="4"/>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Style="{DynamicResource ScrollBar_PageButton}"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+
+                            <RepeatButton Grid.Row="2" Style="{DynamicResource ScrollBar_LineButton}" Command="ScrollBar.LineDownCommand" Content="M 0 0 L 6 10 L 12 0 Z" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+    </Window.Resources>
     <Grid>
         <DockPanel>
             
