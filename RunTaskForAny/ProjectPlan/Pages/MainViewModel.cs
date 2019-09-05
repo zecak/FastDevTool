@@ -25,6 +25,17 @@ namespace ProjectPlan.Pages
 
         public string TitleInfo { get; set; }
 
+        public MainViewModel()
+        {
+            PersonInfo = new Person() { ID = 0, FamilyName = "K", GivenNames = "L" };
+
+            TitleInfo = "MyPlan";
+
+            Plugins = PluginManager.Instance.ViewModelPlugins;
+
+        }
+
+
         private IWindowManager windowManager;
 
         public MainViewModel(IWindowManager _windowManager)
@@ -47,6 +58,22 @@ namespace ProjectPlan.Pages
             Window.WindowState = WindowState.Minimized;
         }
 
+        public void RequestMid()
+        {
+            Window = this.View as Window;
+            if (Window != null)
+            {
+                if(Window.WindowState== WindowState.Maximized)
+                {
+                    Window.WindowState = WindowState.Normal;
+                }
+                else
+                {
+                    Window.WindowState = WindowState.Maximized;
+                }
+            }
+        }
+
         public void RequestMouseMove()
         { 
             Window = this.View as Window;
@@ -60,11 +87,50 @@ namespace ProjectPlan.Pages
                         var left = System.Windows.Input.Mouse.GetPosition(Window).X;
                         Window.WindowState = WindowState.Normal;
                         Window.Top = 0;
-                        Window.Left = left-(left/ fullWidth)*Window.Width;
-                        
+                        if(Window.Left<0)//左屏(从屏)
+                        {
+                            //纠正左偏移
+                            
+                            Window.Left = (-fullWidth+left) - (left / fullWidth) * Window.Width;
+                        }
+                        else//主屏
+                        {
+                            Window.Left = left - (left / fullWidth) * Window.Width;
+                        }
+                       
                     }
                     Window.DragMove();
                 }
+            }
+        }
+
+        private long _oncetime = long.MaxValue;
+        private Point _oncePoint;
+        public void RequestMouseLeftButtonDown()
+        {
+            Window = this.View as Window;
+            if (Window != null)
+            { 
+                //双击,两次单机距离不超过4像素，时间再0.5秒以内视为双击
+                Point p = System.Windows.Input.Mouse.GetPosition(Window);
+                long time = DateTime.Now.Ticks;
+                if (Math.Abs(p.X - _oncePoint.X) < 4 && Math.Abs(p.Y - _oncePoint.Y) < 4 && (time - _oncetime < 5000000))
+                {
+                    _oncetime = long.MaxValue;
+                    //此处促发双击事件
+                    if (Window.WindowState == WindowState.Maximized)
+                    {
+                        Window.WindowState = WindowState.Normal;
+                    }
+                    else
+                    {
+                        Window.WindowState = WindowState.Maximized;
+                    }
+                    
+                }
+                _oncetime = time;
+                _oncePoint = p;
+
             }
         }
 

@@ -15,10 +15,10 @@ namespace ProjectPlan.Helper
         private static PluginManager _instance;
 
         public static PluginManager Instance
-        { 
+        {
             get
             {
-                if(_instance==null)
+                if (_instance == null)
                 {
                     _instance = new PluginManager();
                 }
@@ -37,7 +37,10 @@ namespace ProjectPlan.Helper
         {
             try
             {
-                var catalog = new DirectoryCatalog("Plugins");
+                var path = AppDomain.CurrentDomain.BaseDirectory;
+
+                var catalog = new DirectoryCatalog(System.IO.Path.Combine(path, "Plugins"));
+                catalog.Changed += Catalog_Changed;
                 container = new CompositionContainer(catalog);
                 container.ComposeParts(this);
 
@@ -53,13 +56,18 @@ namespace ProjectPlan.Helper
             }
         }
 
+        private void Catalog_Changed(object sender, ComposablePartCatalogChangeEventArgs e)
+        {
+            
+        }
+
         private Assembly[] assemblies;
 
         public Assembly[] Assemblies
         {
             get
             {
-                if(assemblies==null)
+                if (assemblies == null)
                 {
                     var list = new List<Assembly>();
                     foreach (var plugin in ViewModelPlugins)

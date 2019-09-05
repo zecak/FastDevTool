@@ -3,47 +3,112 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ProjectPlan.Pages"
+        xmlns:local="clr-namespace:ProjectPlan.Pages" xmlns:Helper="clr-namespace:ProjectPlan.Helper"
         xmlns:s="https://github.com/canton7/Stylet" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        d:DataContext="{d:DesignInstance local:MainViewModel}"
-        mc:Ignorable="d"  Height="400" Width="600" Title="主界面" Style="{DynamicResource BaseWindowStyle}">
+        d:DataContext="{d:DesignInstance local:MainViewModel}" 
+        mc:Ignorable="d"  Height="400" Width="600" Title="主界面">
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="WindowStyle" Value="None" />
+            <Setter Property="AllowsTransparency" Value="True" />
+            <Setter Property="MinHeight" Value="100"/>
+            <Setter Property="MinWidth" Value="200"/>
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome UseAeroCaptionButtons="False" CornerRadius="6" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Window">
+                        <Grid>
+                            <Border BorderThickness="4" CornerRadius="6" BorderBrush="#19000000"></Border>
+                            <Border BorderThickness="4" CornerRadius="6" Background="#7F000000">
+                                <DockPanel>
+                                    <DockPanel DockPanel.Dock="Top" Background="#7F000000" >
+                                        <WrapPanel DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" >
+                                            <Button Style="{DynamicResource minBtnStyle}" Command="{s:Action RequestMin}" ToolTip="最小化"></Button>
+                                            <Button Style="{DynamicResource midBtnStyle}" Command="{s:Action RequestMid}" ToolTip="还原"></Button>
+                                            <Button Style="{DynamicResource closeBtnStyle}" Command="{s:Action RequestClose}" ToolTip="关闭"></Button>
+                                        </WrapPanel>
+                                        <WrapPanel>
+                                            <Image Source="{TemplateBinding Icon}" Height="{x:Static SystemParameters.SmallIconHeight}" Width="{x:Static SystemParameters.SmallIconWidth}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            <TextBlock FontSize="{DynamicResource {x:Static SystemFonts.CaptionFontSize}}" Text="{TemplateBinding Title}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                        </WrapPanel>
+                                    </DockPanel>
+                                    <DockPanel>
+                                        <Grid>
+                                            <AdornerDecorator KeyboardNavigation.IsTabStop="False">
+                                                <ContentPresenter Content="{TemplateBinding Content}" KeyboardNavigation.TabNavigation="Cycle" />
+                                            </AdornerDecorator>
+                                        </Grid>
+                                    </DockPanel>
+                                </DockPanel>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Style>
     <Window.Resources>
+
         <!--自定义窗体外框样式-->
         <Style x:Key="winStyle" TargetType="Border">
-            <Setter Property="Background" Value="#7F000000" />
+            <Setter Property="Background" Value="#B2001766" />
         </Style>
 
         <!--窗体标题样式-->
         <Style x:Key="titleStyle" TargetType="Border">
-            <Setter Property="Cursor" Value="Hand"></Setter>
             <Setter Property="Width" Value="Auto"></Setter>
             <Setter Property="Height" Value="28"></Setter>
             <Setter Property="DockPanel.Dock" Value="Top"></Setter>
-            <Setter Property="Cursor" Value="Hand"></Setter>
             <Setter Property="Padding" Value="10,5,10,5"></Setter>
         </Style>
 
         <!--最小化按钮样式-->
         <Style x:Key="minBtnStyle" TargetType="Button">
             <Setter Property="Margin" Value="2,0,2,0"></Setter>
-            <Setter Property="Cursor" Value="Hand"></Setter>
-            <Setter Property="Opacity" Value=".75"></Setter>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Rectangle Width="18" Height="16" Fill="White" Opacity=".1" RadiusX="4" RadiusY="4" StrokeThickness="2"></Rectangle>
-                            <Rectangle Width="18" Height="16" StrokeThickness="2" RadiusX="4" RadiusY="4" Stroke="White"></Rectangle>
-                            <!--按钮内容-->
+                        <Grid Background="{TemplateBinding Background}" Width="18" Height="16">
                             <Grid>
                                 <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5">
-                                    <Line StrokeThickness="2" Stroke="White" X1="0" Y1="4" X2="8" Y2="4"></Line>
+                                    <Line StrokeThickness="1" Stroke="White" X1="0" Y1="4" X2="8" Y2="4"></Line>
                                 </Canvas>
                             </Grid>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Button.IsMouseOver"  Value="True">
-                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="Background" Value="#33FFFFFF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="midBtnStyle" TargetType="Button">
+            <Setter Property="Margin" Value="2,0,2,0"></Setter>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Background="{TemplateBinding Background}" Width="18" Height="18">
+                            <Grid>
+                                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5">
+                                    <Line StrokeThickness="1" Stroke="White" X1="0" Y1="4" X2="8" Y2="4"></Line>
+                                    <Line StrokeThickness="1" Stroke="White" X1="4" Y1="0" X2="4" Y2="8"></Line>
+                                </Canvas>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsMouseOver"  Value="True">
+                                <Setter Property="Background" Value="#33FFFFFF" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -54,25 +119,22 @@
         <!--关闭按钮样式-->
         <Style x:Key="closeBtnStyle" TargetType="Button">
             <Setter Property="Margin" Value="2,0,2,0"></Setter>
-            <Setter Property="Cursor" Value="Hand"></Setter>
-            <Setter Property="Opacity" Value="0.75" />
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Ellipse x:Name="borderBtn" Width="18" Height="18" StrokeThickness="2" Fill="{x:Null}" Stroke="White"></Ellipse>
-
+                        <Grid Background="{TemplateBinding Background}">
                             <!--按钮内容-->
-                            <Grid>
+                            <Grid Width="18" Height="18">
                                 <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5">
-                                    <Line StrokeThickness="2" Stroke="White" X1="0" Y1="0" X2="8" Y2="8"></Line>
-                                    <Line StrokeThickness="2" Stroke="White" X1="0" Y1="8" X2="8" Y2="0"></Line>
+                                    <Line StrokeThickness="1" Stroke="White" X1="0" Y1="0" X2="8" Y2="8"></Line>
+                                    <Line StrokeThickness="1" Stroke="White" X1="0" Y1="8" X2="8" Y2="0"></Line>
                                 </Canvas>
                             </Grid>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Button.IsMouseOver"  Value="True">
-                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="Background" Value="#33FFFFFF" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -80,32 +142,6 @@
             </Setter>
         </Style>
 
-        <Style x:Key="btnStyle" TargetType="Button">
-            <Setter Property="Margin" Value="5,5,5,5"></Setter>
-            <Setter Property="Cursor" Value="Hand"></Setter>
-            <Setter Property="Opacity" Value=".75"></Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Border BorderBrush="White" BorderThickness="1" HorizontalAlignment="Center" Background="Transparent" Width="{TemplateBinding Width}">
-                                <TextBlock Grid.Column="1" Text="{TemplateBinding Content}"  HorizontalAlignment="Center" Margin="3 0 3 0" Foreground="White"></TextBlock>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="Button.IsMouseOver"  Value="True">
-                                <Setter Property="Opacity" Value="1" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="statusTxtStyle" TargetType="TextBlock">
-            <Setter Property="Opacity" Value=".75"></Setter>
-            <Setter Property="Foreground" Value="White"></Setter>
-        </Style>
 
         <!--窗口圆角-->
         <CornerRadius x:Key="winCorner">
@@ -134,8 +170,8 @@
         <!--基窗口模板-->
         <ControlTemplate x:Key="BaseWindowControlTemplate" TargetType="{x:Type Window}">
             <Grid>
-                <Border BorderThickness="5" CornerRadius="6" BorderBrush="#000000" Opacity=".08"></Border>
-                <Border x:Name="borderBg" Margin="5" Background="Black" BorderBrush="#ffffff" Opacity=".8" BorderThickness="2" CornerRadius="{DynamicResource winCorner}" Style="{DynamicResource winStyle}">
+                <Border BorderThickness="4" CornerRadius="6" BorderBrush="#000000" Opacity=".08"></Border>
+                <Border x:Name="borderBg" Margin="5" Background="Black" BorderBrush="#99FFFFFF" Opacity=".8" BorderThickness="2" CornerRadius="{DynamicResource winCorner}" Style="{DynamicResource winStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"></RowDefinition>
@@ -143,10 +179,10 @@
                             <RowDefinition Height="1"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0" Background="#4f535d" CornerRadius="{DynamicResource winTitleCorner}" Style="{DynamicResource titleStyle}">
+                        <Border Grid.Row="0" Background="#7F000000" CornerRadius="{DynamicResource winTitleCorner}" Style="{DynamicResource titleStyle}">
                             
                         </Border>
-                        <Canvas Grid.Row="2" Background="#42464d"></Canvas>
+                        <Canvas Grid.Row="2" Background="#FFFF5100"></Canvas>
                         <Border Grid.Row="3" CornerRadius="{DynamicResource winStatusCorner}"></Border>
                     </Grid>
                 </Border>
@@ -160,19 +196,22 @@
                     </Grid.RowDefinitions>
                     <!--标题栏框-->
 
-                    <Border x:Name="borderTitle" Grid.Row="0" CornerRadius="{DynamicResource winTitleCorner}" Style="{DynamicResource titleStyle}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                    <Border x:Name="borderTitle" Grid.Row="0" CornerRadius="{DynamicResource winTitleCorner}" Style="{DynamicResource titleStyle}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" >
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseMove">
                                 <i:InvokeCommandAction Command="{s:Action RequestMouseMove}"></i:InvokeCommandAction>
                             </i:EventTrigger>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{s:Action RequestMouseLeftButtonDown}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <DockPanel>
-                            <TextBlock Text="{TemplateBinding Title}" Foreground="White" Opacity=".75" HorizontalAlignment="Left"></TextBlock>
+                            <TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type Window}}}" Foreground="White" Opacity=".75" HorizontalAlignment="Left"></TextBlock>
                             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top"
                         Orientation="Horizontal">
                                 <!--关闭按钮-->
-                                <Button Style="{DynamicResource minBtnStyle}" Command="{s:Action RequestMin}" ></Button>
-                                <Button Style="{DynamicResource closeBtnStyle}" Command="{s:Action RequestClose}" ></Button>
+                                <Button Style="{DynamicResource minBtnStyle}" Command="{s:Action RequestMin}" ToolTip="最小化"></Button>
+                                <Button Style="{DynamicResource closeBtnStyle}" Command="{s:Action RequestClose}" ToolTip="关闭"></Button>
                             </StackPanel>
                         </DockPanel>
                     </Border>
@@ -189,12 +228,16 @@
         <!--基窗口样式-->
         <Style x:Key="BaseWindowStyle" TargetType="{x:Type Window}">
             <Setter Property="Template" Value="{DynamicResource BaseWindowControlTemplate}"/>
-            <Setter Property="Background"
-                Value="Transparent" />
-            <Setter Property="WindowStyle"
-                Value="None" />
-            <Setter Property="AllowsTransparency"
-                Value="True" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="WindowStyle" Value="None" />
+            <Setter Property="AllowsTransparency" Value="True" />
+            <Setter Property="MinHeight" Value="100"/>
+            <Setter Property="MinWidth" Value="200"/>
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="4" GlassFrameThickness="4" CornerRadius="6" ResizeBorderThickness="6" />
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!--ScrollViewer样式-->
@@ -325,7 +368,7 @@
                 <TextBlock Text="底部" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="24" Foreground="#FFB6B6B6"></TextBlock>
             </DockPanel>
             <DockPanel>
-                <TabControl ItemsSource="{Binding Plugins}" SelectedIndex="0">
+                <TabControl ItemsSource="{Binding Plugins}" SelectedIndex="0" Background="Transparent">
                     <TabControl.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Metadata.Name}"/>
