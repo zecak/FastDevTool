@@ -23,27 +23,42 @@ namespace ProjectPlan.Pages
 
         public Person PersonInfo { get; set; }
 
+        public List<Person> Persons { get; set; }
+
         public string TitleInfo { get; set; }
-
-        public MainViewModel()
-        {
-            PersonInfo = new Person() { ID = 0, FamilyName = "K", GivenNames = "L" };
-
-            TitleInfo = "MyPlan";
-
-            Plugins = PluginManager.Instance.ViewModelPlugins;
-
-        }
 
 
         private IWindowManager windowManager;
 
         public MainViewModel(IWindowManager _windowManager)
         {
-            
+
             this.windowManager = _windowManager;
 
             PersonInfo = new Person() { ID = 0, FamilyName = "K", GivenNames = "L" };
+
+            using (var client = RedisHelper.GetClient())
+            {
+                //获取数据
+
+                var user = new List<Person>();
+                user = RedisHelper.Get<List<Person>>("PersonTable", client);
+                if (user == null)
+                {
+                    user = new List<Person>();
+                    for (int i = 0; i < 10000; i++)
+                    {
+
+                        Person uu = new Person();
+                        uu.ID = i + 1;
+                        uu.FamilyName = "诸葛";
+                        uu.GivenNames = i.ToString() + "号";
+                        user.Add(uu);
+                    }
+                    bool flag = RedisHelper.Set("PersonTable", user, client);
+                }
+                Persons = user;
+            }
 
             TitleInfo = "MyPlan";
 
@@ -54,8 +69,8 @@ namespace ProjectPlan.Pages
         public void RequestMin()
         {
             Window = this.View as Window;
-            if (Window!=null)
-            Window.WindowState = WindowState.Minimized;
+            if (Window != null)
+                Window.WindowState = WindowState.Minimized;
         }
 
         public void RequestMid()
@@ -63,7 +78,7 @@ namespace ProjectPlan.Pages
             Window = this.View as Window;
             if (Window != null)
             {
-                if(Window.WindowState== WindowState.Maximized)
+                if (Window.WindowState == WindowState.Maximized)
                 {
                     Window.WindowState = WindowState.Normal;
                 }
@@ -74,65 +89,65 @@ namespace ProjectPlan.Pages
             }
         }
 
-        public void RequestMouseMove()
-        { 
-            Window = this.View as Window;
-            if (Window != null)
-            {
-                if (System.Windows.Input.Mouse.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-                {
-                    if (Window.WindowState == WindowState.Maximized)
-                    {
-                        var fullWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
-                        var left = System.Windows.Input.Mouse.GetPosition(Window).X;
-                        Window.WindowState = WindowState.Normal;
-                        Window.Top = 0;
-                        if(Window.Left<0)//左屏(从屏)
-                        {
-                            //纠正左偏移
-                            
-                            Window.Left = (-fullWidth+left) - (left / fullWidth) * Window.Width;
-                        }
-                        else//主屏
-                        {
-                            Window.Left = left - (left / fullWidth) * Window.Width;
-                        }
-                       
-                    }
-                    Window.DragMove();
-                }
-            }
-        }
+        //public void RequestMouseMove()
+        //{ 
+        //    Window = this.View as Window;
+        //    if (Window != null)
+        //    {
+        //        if (System.Windows.Input.Mouse.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+        //        {
+        //            if (Window.WindowState == WindowState.Maximized)
+        //            {
+        //                var fullWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+        //                var left = System.Windows.Input.Mouse.GetPosition(Window).X;
+        //                Window.WindowState = WindowState.Normal;
+        //                Window.Top = 0;
+        //                if(Window.Left<0)//左屏(从屏)
+        //                {
+        //                    //纠正左偏移
 
-        private long _oncetime = long.MaxValue;
-        private Point _oncePoint;
-        public void RequestMouseLeftButtonDown()
-        {
-            Window = this.View as Window;
-            if (Window != null)
-            { 
-                //双击,两次单机距离不超过4像素，时间再0.5秒以内视为双击
-                Point p = System.Windows.Input.Mouse.GetPosition(Window);
-                long time = DateTime.Now.Ticks;
-                if (Math.Abs(p.X - _oncePoint.X) < 4 && Math.Abs(p.Y - _oncePoint.Y) < 4 && (time - _oncetime < 5000000))
-                {
-                    _oncetime = long.MaxValue;
-                    //此处促发双击事件
-                    if (Window.WindowState == WindowState.Maximized)
-                    {
-                        Window.WindowState = WindowState.Normal;
-                    }
-                    else
-                    {
-                        Window.WindowState = WindowState.Maximized;
-                    }
-                    
-                }
-                _oncetime = time;
-                _oncePoint = p;
+        //                    Window.Left = (-fullWidth+left) - (left / fullWidth) * Window.Width;
+        //                }
+        //                else//主屏
+        //                {
+        //                    Window.Left = left - (left / fullWidth) * Window.Width;
+        //                }
 
-            }
-        }
+        //            }
+        //            Window.DragMove();
+        //        }
+        //    }
+        //}
+
+        //private long _oncetime = long.MaxValue;
+        //private Point _oncePoint;
+        //public void RequestMouseLeftButtonDown()
+        //{
+        //    Window = this.View as Window;
+        //    if (Window != null)
+        //    { 
+        //        //双击,两次单机距离不超过4像素，时间再0.5秒以内视为双击
+        //        Point p = System.Windows.Input.Mouse.GetPosition(Window);
+        //        long time = DateTime.Now.Ticks;
+        //        if (Math.Abs(p.X - _oncePoint.X) < 4 && Math.Abs(p.Y - _oncePoint.Y) < 4 && (time - _oncetime < 5000000))
+        //        {
+        //            _oncetime = long.MaxValue;
+        //            //此处促发双击事件
+        //            if (Window.WindowState == WindowState.Maximized)
+        //            {
+        //                Window.WindowState = WindowState.Normal;
+        //            }
+        //            else
+        //            {
+        //                Window.WindowState = WindowState.Maximized;
+        //            }
+
+        //        }
+        //        _oncetime = time;
+        //        _oncePoint = p;
+
+        //    }
+        //}
 
         public void ShowBox()
         {

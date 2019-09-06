@@ -116,7 +116,7 @@
   <ItemGroup>
     <Compile Include="Helper\CustomViewManager.cs" />
     <Compile Include="Helper\PluginManager.cs" />
-    <Compile Include="Helper\RedisCacheHelper.cs" />
+    <Compile Include="Helper\RedisHelper.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Pages\MainViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

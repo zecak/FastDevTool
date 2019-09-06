@@ -59,13 +59,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Person.cs" />
-    <Compile Include="UserControl1ViewModel.cs" />
-    <Page Include="UserControl1View.xaml">
+    <Compile Include="UserControlViewModel.cs" />
+    <Page Include="UserControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="UserControl1View.xaml.cs">
-      <DependentUpon>UserControl1View.xaml</DependentUpon>
+    <Compile Include="UserControlView.xaml.cs">
+      <DependentUpon>UserControlView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

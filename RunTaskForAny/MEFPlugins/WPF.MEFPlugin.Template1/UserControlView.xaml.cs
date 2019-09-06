@@ -21,9 +21,9 @@ namespace WPF.MEFPlugin.Template1
     /// <summary>
     /// UserControl1.xaml 的交互逻辑
     /// </summary>
-    public partial class UserControl1View : UserControl
+    public partial class UserControlView : UserControl
     {
-        public UserControl1View()
+        public UserControlView()
         {
             InitializeComponent();
         }

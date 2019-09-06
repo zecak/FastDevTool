@@ -15,7 +15,7 @@ namespace ProjectPlan.Models
         public int ID { get; set; } 
         public string GivenNames { get; set; }
         public string FamilyName { get; set; }
-        public string FullName => $"{GivenNames} {FamilyName}";
+        public string FullName => $"{FamilyName}{GivenNames}";
 
 
     }
