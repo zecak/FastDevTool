@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Common\Helper.cs" />
+    <Compile Include="Common\MyEx.cs" />
     <Compile Include="Common\Pager.cs" />
     <Compile Include="Common\Paging.cs" />
     <Compile Include="Common\TemplateManage.cs" />

@@ -104,7 +104,7 @@
                                         </DockPanel>
 
                                     </DockPanel>
-                                    <DataGrid x:Name="dg_grid" AutoGenerateColumns="True" Style="{DynamicResource MyStyle_AzureDataGrid}" ItemsSource="{Binding Table}"  SelectedIndex="{Binding IndexTableInfo}" MinHeight="400" >
+                                    <DataGrid x:Name="dg_grid" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" AutoGenerateColumns="True" Style="{DynamicResource MyStyle_AzureDataGrid}" ItemsSource="{Binding Table}"  SelectedIndex="{Binding IndexTableInfo}" MinHeight="400" >
                                     </DataGrid>
                                     
                                 </DockPanel>

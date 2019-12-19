@@ -12,7 +12,7 @@ namespace FastDevTool.Common
         public event PropertyChangedEventHandler PropertyChanged;
         public Paging()
         {
-            PageSize = 10;
+            PageSize = 20;
             PageIndex = 1;
             count = 0;
             pageCount = 1;

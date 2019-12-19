@@ -228,38 +228,62 @@ namespace FastDevTool.DataBase
             var sql = string.Format("SELECT TOP {0} * FROM (SELECT ROW_NUMBER() OVER (ORDER BY id) AS RowNumber,* FROM [{1}]) as A WHERE RowNumber > {0}*({2}-1)", paging.PageSize, tablename, paging.PageIndex);
             var dset = ExecuteDataSet(sql);
             var dt = dset.Tables[0];
+            var jsondata = dt.ToJson();
+            var dt2 =new DataTable();
             dt.Columns.Remove("RowNumber");
             dt.Columns.Remove("VersonTime");
             foreach (DataColumn c in dt.Columns)
             {
                 var myc = myColumns.FirstOrDefault(m => m.Name == c.ColumnName);
+                
+                var dc = new DataColumn();
+               
+                dc.ColumnName = c.ColumnName;
+                
+                if (c.DataType == typeof(DateTime))
+                {
+                    dc.DataType = typeof(String);
+                }
+
+                dc.Caption = c.Caption;
+
                 if (myc != null)
                 {
-                    c.ColumnName = myc.Title;
+                    dc.ColumnName = myc.Title;
                 }
+
+                dt2.Columns.Add(dc);
             }
-            return dt;
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                var dr2=dt2.NewRow();
+                dr2.ItemArray = dataRow.ItemArray;
+                dt2.Rows.Add(dr2);
+            }
+
+            return dt2;
         }
 
-        public bool AddColumn(string tableName,string fieldName,string fieldType,int maxLength)
+
+        public bool AddColumn(string tableName, string fieldName, string fieldType, int maxLength)
         {
             var str = "";
-            if(fieldType== "nvarchar"||fieldType== "varchar")
+            if (fieldType == "nvarchar" || fieldType == "varchar")
             {
-                str =" "+ fieldType+"("+ maxLength.ToString() + ") ";
+                str = " " + fieldType + "(" + maxLength.ToString() + ") ";
             }
             else
             {
-                str = " "+ fieldType+" ";
+                str = " " + fieldType + " ";
             }
-            var sql = "alter table "+tableName+" add column "+fieldName+" "+ str + ";";
+            var sql = "alter table " + tableName + " add column " + fieldName + " " + str + ";";
             var num = ExecuteNonQuery(sql);
             return num;
         }
 
         public bool DelColumn(string tableName, string fieldName)
         {
-            var sql = "alter table "+ ReplaceFieldValue(tableName) +" drop column "+ ReplaceFieldValue(fieldName) +";";
+            var sql = "alter table " + ReplaceFieldValue(tableName) + " drop column " + ReplaceFieldValue(fieldName) + ";";
             var num = ExecuteNonQuery(sql);
             return num;
         }
