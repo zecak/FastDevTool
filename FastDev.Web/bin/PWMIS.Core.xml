@@ -1747,6 +1747,11 @@
             </summary>
             <remarks></remarks>
         </member>
+        <member name="F:PWMIS.Common.enumResultClass.ObjectList">
+            <summary>
+            任意对象列表，要求对象属性名必须与字段名严格一致，否则请用EntityList类型，需要指定 ResuleMap 属性
+            </summary>
+        </member>
         <member name="T:PWMIS.Common.enumCompare">
             <summary>
             实体对象字段比较枚举
@@ -4998,6 +5003,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:PWMIS.DataMap.Entity.OQL1.WhereAll">
+            <summary>
+            操作所有记录，不附带任何条件，比如更新或者删除所有记录。请谨慎使用此方法避免造成操作失误。
+            </summary>
+            <remarks>网友【深圳-百转魂回】2019.8.22日提供建议</remarks>
+            <returns></returns>
+        </member>
         <member name="M:PWMIS.DataMap.Entity.OQL1.Where(PWMIS.DataMap.Entity.QueryParameter[])">
             <summary>
             根据传入的查询参数数组，对字段名执行不区分大小写的比较，生成查询条件。
@@ -5942,6 +5954,14 @@
             <value></value>
             <returns></returns>
             <remarks></remarks>
+        </member>
+        <member name="M:PWMIS.DataMap.SqlMap.DBMapper.MapObjectList``1(System.Data.IDataReader)">
+            <summary>
+            映射到对象列表，要求对象的属性名根字段名大小写严格一致
+            </summary>
+            <typeparam name="T">对象类型，如一个DTO类</typeparam>
+            <param name="reader">数据阅读器</param>
+            <returns>对象列表</returns>
         </member>
         <member name="T:PWMIS.DataMap.SqlMap.XmlCommand">
             <summary>
