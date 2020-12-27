@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+package GrpcLib;
+service gRPC {
+  //简单rpc
+  rpc Exec (APIRequest) returns (APIReply) {}
+ 
+  //双向流rpc
+  rpc Chat(stream APIRequest) returns ( stream APIReply) {}
+}
+
+message APIRequest {
+    string parameters=1;
+}
+
+message APIReply {
+    string jsondata=1;
+}
