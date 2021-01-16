@@ -64,6 +64,16 @@ namespace Grpc.Server.Common
                 return;
             }
             StartWork(reqData);
+
+            var sign = (reqData.AppID + reqData.Data + reqData.Time + Tool.Setting.ServerKey).ToMd5();
+            if (sign != reqData.Sign)
+            {
+                resp.Code = 2222;
+                resp.Msg = "电子签名不一致";
+                await responseStream.WriteAsync(resp);
+                return;
+            }
+
             switch (reqData.ApiPath)
             {
                 case "/api/login":
@@ -94,6 +104,7 @@ namespace Grpc.Server.Common
         void StartWork(APIRequest reqData)
         {
             Tool.Log.Info("req:" + reqData.ToJson());
+
         }
 
         void EndWork(APIReply resp)

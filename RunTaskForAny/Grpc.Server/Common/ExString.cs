@@ -969,14 +969,15 @@ namespace Grpc.Server.Common
             }
         }
 
-        public static string ToMd5(this string s, Encoding encoding)
+        public static string ToMd5(this string s)
         {
+            Encoding encoding = Encoding.UTF8;
             var bytes = encoding.GetBytes(s);
             var md5Bytes = Encrypt(bytes);
             var md5 = "";
             foreach (var b in md5Bytes)
             {
-                md5 += b.ToString("x2");
+                md5 += b.ToString("X2");
             }
 
             return md5;

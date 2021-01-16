@@ -71,5 +71,25 @@ namespace WpfApp1.Common
             }
             return (long)vDate.Subtract(dtZone).TotalSeconds;
         }
+
+        public static string ToMd5(this string s)
+        {
+            Encoding encoding = Encoding.UTF8;
+            var bytes = encoding.GetBytes(s);
+            var md5Bytes = Encrypt(bytes);
+            var md5 = "";
+            foreach (var b in md5Bytes)
+            {
+                md5 += b.ToString("X2");
+            }
+
+            return md5;
+        }
+        static byte[] Encrypt(byte[] Source)
+        {
+            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] result = md5.ComputeHash(Source);
+            return result;
+        }
     }
 }
