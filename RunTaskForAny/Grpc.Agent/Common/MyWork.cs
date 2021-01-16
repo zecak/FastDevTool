@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using GrpcLib;
+using GrpcLib.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Grpc.Agent.Common
             {
                 server = new Core.Server
                 {
-                    Services = { GrpcLib.gRPC.BindService(new GrpcImpl()) },
+                    Services = { gRPC.BindService(new GrpcImpl()) },
                     Ports = { new Core.ServerPort(Tool.Setting.AgentIP, Tool.Setting.AgentPort.ToInt(), Core.ServerCredentials.Insecure) }
                 };
 
@@ -33,7 +34,7 @@ namespace Grpc.Agent.Common
                     Tool.Log.Info("ServerInfo:" + serverinfo.IP + ":" + serverinfo.Port);
                     var client = new GrpcClient(serverinfo.IP + ":" + serverinfo.Port);
                     client.ChatFailed += Client_GrpcFailed;
-                    client.Chating += Client_Chating; ;
+                    client.Chating += Client_Chating;
                     grpcClientList.Add(client);
                     var task2TokenSource = new CancellationTokenSource();
                     task2TokenSourceList.Add(task2TokenSource);
@@ -43,7 +44,7 @@ namespace Grpc.Agent.Common
                         {
                             try
                             {
-                                client.NewChat(new ReqData() { API = "/api/online", APPID = "代理服务", Data = "", Sign = "", Time = DateTime.Now.DateTimeToUTC() }.ToJson());
+                                client.NewChat(new APIRequest() { ApiPath = "/server/online", AppID = "代理服务", Data = "", Sign = "", Time = DateTime.Now.DateTimeToUTC() });
                             }
                             catch (RpcException ex)
                             {
@@ -76,19 +77,13 @@ namespace Grpc.Agent.Common
 
         }
 
-        private void Client_Chating(object sender, string jsondata)
+        private void Client_Chating(object sender, APIReply resp)
         {
             var grpc = (GrpcClient)sender;
-            var resp = jsondata.JsonTo<RespData>();
-            if (resp == null)
-            {
-                Tool.Log.Error("解析数据失败:" + jsondata);
-                return;
-            }
 
             if (resp.Code != 1)
             {
-                Tool.Log.Error("操作失败:" + resp.ErrorInfo);
+                Tool.Log.Error("操作失败:" + resp.Msg);
                 return;
             }
             var serverinfo = Tool.Setting.ServerList.FirstOrDefault(f => (f.IP + ":" + f.Port) == grpc.Target);

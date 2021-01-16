@@ -40,3 +40,8 @@
 /RunTaskForAny/Grpc.Agent/bin/Debug
 /RunTaskForAny/Grpc.Agent/obj/Debug/Costura
 /RunTaskForAny/Grpc.Server/obj/Debug/Costura
+/RunTaskForAny/Grpc.Agent/obj/Debug
+/RunTaskForAny/Grpc.Server/bin/Debug
+/RunTaskForAny/Grpc.Server/obj/Debug
+/RunTaskForAny/GrpcLib/bin/Debug
+/RunTaskForAny/GrpcLib/obj/Debug

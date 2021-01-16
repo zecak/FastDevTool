@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using GrpcLib;
+using GrpcLib.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,22 @@ namespace Grpc.Server.Common
 {
     public class GrpcImpl : gRPC.gRPCBase
     {
-
+        public static List<ClientInfo> ClientInfos = new List<ClientInfo>();
         public override async Task Chat(IAsyncStreamReader<APIRequest> requestStream, IServerStreamWriter<APIReply> responseStream, ServerCallContext context)
         {
-            Tool.Log.Info("Client:" + context.Peer + " Status:" + context.Status.StatusCode);
+            //Tool.Log.Debug("Client:" + context.Peer + " Status:" + context.Status.StatusCode);
+
+            var clientInfo = ClientInfos.FirstOrDefault(f => f.Key == context.Peer);
+            if (clientInfo == null)
+            {
+                clientInfo = new ClientInfo() { Key = context.Peer, StartTime = DateTime.Now, LastTime = DateTime.Now, HitCount = 1 };
+                ClientInfos.Add(clientInfo);
+            }
+            else
+            {
+                clientInfo.LastTime = DateTime.Now;
+                clientInfo.HitCount++;
+            }
 
             //for (int i = 0; i < context.RequestHeaders.Count; i++)
             //{
@@ -25,30 +38,8 @@ namespace Grpc.Server.Common
                 try
                 {
                     var req = requestStream.Current;
-                    Tool.Log.Info("req:" + req.Parameters);
-                    var parameterData = req.Parameters.JsonTo<ReqData>();
-                    if (parameterData == null)
-                    {
-                        await responseStream.WriteAsync(new APIReply() { Jsondata = new RespData() { Code = 1000, ErrorInfo = "请求数据转换失败" }.ToJson() });
-                        continue;
-                    }
 
-                    switch (parameterData.API)
-                    {
-                        case "/api/login":
-                            {
-                                await responseStream.WriteAsync(new APIReply() { Jsondata = new RespData() { Code = 1, ErrorInfo = "请求了"+ parameterData.API }.ToJson() });
-                            }
-                            break;
-                        case "/api/online":
-                            {
-                                await responseStream.WriteAsync(new APIReply() { Jsondata = new RespData() { Code = 1 }.ToJson() });
-                            }
-                            break;
-                        default:
-                            await responseStream.WriteAsync(new APIReply() { Jsondata = new RespData() { Code = 10000, ErrorInfo = "未知Action" }.ToJson() });
-                            break;
-                    }
+                    await DoworkAsync(req, responseStream);
 
                 }
                 catch (Exception ex)
@@ -60,6 +51,54 @@ namespace Grpc.Server.Common
                 }
 
             }
+        }
+
+        async Task DoworkAsync(APIRequest reqData, IServerStreamWriter<APIReply> responseStream)
+        {
+            var resp = new APIReply();
+            if (reqData.ApiPath == "/server/online")
+            {
+                resp.Code = 1;
+                resp.Msg = "请求成功";
+                await responseStream.WriteAsync(resp);
+                return;
+            }
+            StartWork(reqData);
+            switch (reqData.ApiPath)
+            {
+                case "/api/login":
+                    {
+                        resp.Code = 1;
+                        resp.Msg = "请求了" + reqData.ApiPath;
+                        
+                        await responseStream.WriteAsync(resp);
+                    }
+                    break;
+                case "/api/getclients":
+                    {
+                        resp.Code = 1;
+                        resp.Msg = "请求成功";
+                        resp.Data = ClientInfos.ToJson();
+                        await responseStream.WriteAsync(resp);
+                    }
+                    break;
+                default:
+                    {
+                        await responseStream.WriteAsync(new APIReply() { Code = 10000, Msg = "未知Action" });
+                    }
+                    break;
+            }
+            EndWork(resp);
+        }
+
+        void StartWork(APIRequest reqData)
+        {
+            Tool.Log.Info("req:" + reqData.ToJson());
+        }
+
+        void EndWork(APIReply resp)
+        {
+            Tool.Log.Info("resp:" + resp.ToJson());
         }
     }
 

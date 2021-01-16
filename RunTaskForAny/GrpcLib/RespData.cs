@@ -9,8 +9,7 @@ namespace GrpcLib
     public class RespData
     {
         public int Code { get; set; }
-        public object Data { get; set; }
-        public string ErrorInfo { get; set; }
-        public long Time { get; set; }
+        public string Data { get; set; }
+        public string Msg { get; set; }
     }
 }

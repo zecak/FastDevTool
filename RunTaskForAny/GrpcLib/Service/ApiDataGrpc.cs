@@ -7,10 +7,10 @@
 
 using grpc = global::Grpc.Core;
 
-namespace GrpcLib {
+namespace GrpcLib.Service {
   public static partial class gRPC
   {
-    static readonly string __ServiceName = "GrpcLib.gRPC";
+    static readonly string __ServiceName = "GrpcLib.Service.gRPC";
 
     static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
     {
@@ -42,27 +42,27 @@ namespace GrpcLib {
       return parser.ParseFrom(context.PayloadAsNewBuffer());
     }
 
-    static readonly grpc::Marshaller<global::GrpcLib.APIRequest> __Marshaller_GrpcLib_APIRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::GrpcLib.APIRequest.Parser));
-    static readonly grpc::Marshaller<global::GrpcLib.APIReply> __Marshaller_GrpcLib_APIReply = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::GrpcLib.APIReply.Parser));
+    static readonly grpc::Marshaller<global::GrpcLib.Service.APIRequest> __Marshaller_GrpcLib_Service_APIRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::GrpcLib.Service.APIRequest.Parser));
+    static readonly grpc::Marshaller<global::GrpcLib.Service.APIReply> __Marshaller_GrpcLib_Service_APIReply = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::GrpcLib.Service.APIReply.Parser));
 
-    static readonly grpc::Method<global::GrpcLib.APIRequest, global::GrpcLib.APIReply> __Method_Exec = new grpc::Method<global::GrpcLib.APIRequest, global::GrpcLib.APIReply>(
+    static readonly grpc::Method<global::GrpcLib.Service.APIRequest, global::GrpcLib.Service.APIReply> __Method_Exec = new grpc::Method<global::GrpcLib.Service.APIRequest, global::GrpcLib.Service.APIReply>(
         grpc::MethodType.Unary,
         __ServiceName,
         "Exec",
-        __Marshaller_GrpcLib_APIRequest,
-        __Marshaller_GrpcLib_APIReply);
+        __Marshaller_GrpcLib_Service_APIRequest,
+        __Marshaller_GrpcLib_Service_APIReply);
 
-    static readonly grpc::Method<global::GrpcLib.APIRequest, global::GrpcLib.APIReply> __Method_Chat = new grpc::Method<global::GrpcLib.APIRequest, global::GrpcLib.APIReply>(
+    static readonly grpc::Method<global::GrpcLib.Service.APIRequest, global::GrpcLib.Service.APIReply> __Method_Chat = new grpc::Method<global::GrpcLib.Service.APIRequest, global::GrpcLib.Service.APIReply>(
         grpc::MethodType.DuplexStreaming,
         __ServiceName,
         "Chat",
-        __Marshaller_GrpcLib_APIRequest,
-        __Marshaller_GrpcLib_APIReply);
+        __Marshaller_GrpcLib_Service_APIRequest,
+        __Marshaller_GrpcLib_Service_APIReply);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
-      get { return global::GrpcLib.ApiDataReflection.Descriptor.Services[0]; }
+      get { return global::GrpcLib.Service.ApiDataReflection.Descriptor.Services[0]; }
     }
 
     /// <summary>Base class for server-side implementations of gRPC</summary>
@@ -75,7 +75,7 @@ namespace GrpcLib {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
-      public virtual global::System.Threading.Tasks.Task<global::GrpcLib.APIReply> Exec(global::GrpcLib.APIRequest request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::GrpcLib.Service.APIReply> Exec(global::GrpcLib.Service.APIRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -87,7 +87,7 @@ namespace GrpcLib {
       /// <param name="responseStream">Used for sending responses back to the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>A task indicating completion of the handler.</returns>
-      public virtual global::System.Threading.Tasks.Task Chat(grpc::IAsyncStreamReader<global::GrpcLib.APIRequest> requestStream, grpc::IServerStreamWriter<global::GrpcLib.APIReply> responseStream, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task Chat(grpc::IAsyncStreamReader<global::GrpcLib.Service.APIRequest> requestStream, grpc::IServerStreamWriter<global::GrpcLib.Service.APIReply> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -125,7 +125,7 @@ namespace GrpcLib {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
-      public virtual global::GrpcLib.APIReply Exec(global::GrpcLib.APIRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual global::GrpcLib.Service.APIReply Exec(global::GrpcLib.Service.APIRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Exec(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -135,7 +135,7 @@ namespace GrpcLib {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
-      public virtual global::GrpcLib.APIReply Exec(global::GrpcLib.APIRequest request, grpc::CallOptions options)
+      public virtual global::GrpcLib.Service.APIReply Exec(global::GrpcLib.Service.APIRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_Exec, null, options, request);
       }
@@ -147,7 +147,7 @@ namespace GrpcLib {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
-      public virtual grpc::AsyncUnaryCall<global::GrpcLib.APIReply> ExecAsync(global::GrpcLib.APIRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::GrpcLib.Service.APIReply> ExecAsync(global::GrpcLib.Service.APIRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return ExecAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -157,7 +157,7 @@ namespace GrpcLib {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
-      public virtual grpc::AsyncUnaryCall<global::GrpcLib.APIReply> ExecAsync(global::GrpcLib.APIRequest request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::GrpcLib.Service.APIReply> ExecAsync(global::GrpcLib.Service.APIRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_Exec, null, options, request);
       }
@@ -168,7 +168,7 @@ namespace GrpcLib {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
-      public virtual grpc::AsyncDuplexStreamingCall<global::GrpcLib.APIRequest, global::GrpcLib.APIReply> Chat(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncDuplexStreamingCall<global::GrpcLib.Service.APIRequest, global::GrpcLib.Service.APIReply> Chat(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Chat(new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -177,7 +177,7 @@ namespace GrpcLib {
       /// </summary>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
-      public virtual grpc::AsyncDuplexStreamingCall<global::GrpcLib.APIRequest, global::GrpcLib.APIReply> Chat(grpc::CallOptions options)
+      public virtual grpc::AsyncDuplexStreamingCall<global::GrpcLib.Service.APIRequest, global::GrpcLib.Service.APIReply> Chat(grpc::CallOptions options)
       {
         return CallInvoker.AsyncDuplexStreamingCall(__Method_Chat, null, options);
       }
@@ -203,8 +203,8 @@ namespace GrpcLib {
     /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
     public static void BindService(grpc::ServiceBinderBase serviceBinder, gRPCBase serviceImpl)
     {
-      serviceBinder.AddMethod(__Method_Exec, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::GrpcLib.APIRequest, global::GrpcLib.APIReply>(serviceImpl.Exec));
-      serviceBinder.AddMethod(__Method_Chat, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::GrpcLib.APIRequest, global::GrpcLib.APIReply>(serviceImpl.Chat));
+      serviceBinder.AddMethod(__Method_Exec, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::GrpcLib.Service.APIRequest, global::GrpcLib.Service.APIReply>(serviceImpl.Exec));
+      serviceBinder.AddMethod(__Method_Chat, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::GrpcLib.Service.APIRequest, global::GrpcLib.Service.APIReply>(serviceImpl.Chat));
     }
 
   }

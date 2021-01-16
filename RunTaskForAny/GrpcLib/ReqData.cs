@@ -8,9 +8,9 @@ namespace GrpcLib
 {
     public class ReqData
     {
-        public string API { get; set; }
-        public object Data { get; set; }
-        public string APPID { get; set; }
+        public string ApiPath { get; set; }
+        public string Data { get; set; }
+        public string AppID { get; set; }
         public string Sign { get; set; }
         public long Time { get; set; }
 

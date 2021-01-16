@@ -1,5 +1,5 @@
 ﻿syntax = "proto3";
-package GrpcLib;
+package GrpcLib.Service;
 service gRPC {
   //简单rpc
   rpc Exec (APIRequest) returns (APIReply) {}
@@ -9,9 +9,15 @@ service gRPC {
 }
 
 message APIRequest {
-    string parameters=1;
+    string ApiPath=1;
+	string Data=2;
+	string AppID=3;
+	string Sign=4;
+	int64 Time=5;
 }
 
 message APIReply {
-    string jsondata=1;
+    int32 Code=1;
+	string Data=2;
+	string Msg=3;
 }

@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using GrpcLib.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace GrpcLib
         }
 
         public event GrpcFailedHandler ExecFailed;
-        public event Action<object, string> Chating;
+        public event Action<object, APIReply> Chating;
         public string Target { get; set; }
         Channel channel = null;
         gRPC.gRPCClient client = null;
@@ -38,7 +39,7 @@ namespace GrpcLib
 
         }
 
-        public void NewChat(string reqData)
+        public void NewChat(APIRequest reqData)
         {
             var call_temp = client.Chat();
             Task.Run(async () =>
@@ -48,13 +49,13 @@ namespace GrpcLib
                     while (await call_temp.ResponseStream.MoveNext())
                     {
                         var note = call_temp.ResponseStream.Current;
-                        Chating?.Invoke(this, note.Jsondata);
+                        Chating?.Invoke(this, note);
                     }
                 });
 
                 try
                 {
-                    await call_temp.RequestStream.WriteAsync(new APIRequest() { Parameters = reqData });
+                    await call_temp.RequestStream.WriteAsync(reqData);
                     await call_temp.RequestStream.CompleteAsync();
                 }
                 catch (RpcException ex)
@@ -66,11 +67,11 @@ namespace GrpcLib
             });
         }
 
-        public APIReply Exec(string data)
+        public APIReply Exec(APIRequest reqData)
         {
             try
             {
-                return client.ExecAsync(new APIRequest() { Parameters = data }).GetAwaiter().GetResult();
+                return client.ExecAsync(reqData).GetAwaiter().GetResult();
             }
             catch (RpcException ex)
             {

@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace GrpcLib {
+namespace GrpcLib.Service {
 
   /// <summary>Holder for reflection information generated from ApiData.proto</summary>
   public static partial class ApiDataReflection {
@@ -24,17 +24,19 @@ namespace GrpcLib {
     static ApiDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg1BcGlEYXRhLnByb3RvEgtHcnBjTGlicmFyeSIgCgpBUElSZXF1ZXN0EhIK",
-            "CnBhcmFtZXRlcnMYASABKAkiHAoIQVBJUmVwbHkSEAoIanNvbmRhdGEYASAB",
-            "KAkyfgoEZ1JQQxI4CgRFeGVjEhcuR3JwY0xpYnJhcnkuQVBJUmVxdWVzdBoV",
-            "LkdycGNMaWJyYXJ5LkFQSVJlcGx5IgASPAoEQ2hhdBIXLkdycGNMaWJyYXJ5",
-            "LkFQSVJlcXVlc3QaFS5HcnBjTGlicmFyeS5BUElSZXBseSIAKAEwAWIGcHJv",
-            "dG8z"));
+            "Cg1BcGlEYXRhLnByb3RvEg9HcnBjTGliLlNlcnZpY2UiVgoKQVBJUmVxdWVz",
+            "dBIPCgdBcGlQYXRoGAEgASgJEgwKBERhdGEYAiABKAkSDQoFQXBwSUQYAyAB",
+            "KAkSDAoEU2lnbhgEIAEoCRIMCgRUaW1lGAUgASgDIjMKCEFQSVJlcGx5EgwK",
+            "BENvZGUYASABKAUSDAoERGF0YRgCIAEoCRILCgNNc2cYAyABKAkyjgEKBGdS",
+            "UEMSQAoERXhlYxIbLkdycGNMaWIuU2VydmljZS5BUElSZXF1ZXN0GhkuR3Jw",
+            "Y0xpYi5TZXJ2aWNlLkFQSVJlcGx5IgASRAoEQ2hhdBIbLkdycGNMaWIuU2Vy",
+            "dmljZS5BUElSZXF1ZXN0GhkuR3JwY0xpYi5TZXJ2aWNlLkFQSVJlcGx5IgAo",
+            "ATABYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::GrpcLib.APIRequest), global::GrpcLib.APIRequest.Parser, new[]{ "Parameters" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GrpcLib.APIReply), global::GrpcLib.APIReply.Parser, new[]{ "Jsondata" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GrpcLib.Service.APIRequest), global::GrpcLib.Service.APIRequest.Parser, new[]{ "ApiPath", "Data", "AppID", "Sign", "Time" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GrpcLib.Service.APIReply), global::GrpcLib.Service.APIReply.Parser, new[]{ "Code", "Data", "Msg" }, null, null, null, null)
           }));
     }
     #endregion
@@ -53,7 +55,7 @@ namespace GrpcLib {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GrpcLib.ApiDataReflection.Descriptor.MessageTypes[0]; }
+      get { return global::GrpcLib.Service.ApiDataReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -70,7 +72,11 @@ namespace GrpcLib {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public APIRequest(APIRequest other) : this() {
-      parameters_ = other.parameters_;
+      apiPath_ = other.apiPath_;
+      data_ = other.data_;
+      appID_ = other.appID_;
+      sign_ = other.sign_;
+      time_ = other.time_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -79,14 +85,58 @@ namespace GrpcLib {
       return new APIRequest(this);
     }
 
-    /// <summary>Field number for the "parameters" field.</summary>
-    public const int ParametersFieldNumber = 1;
-    private string parameters_ = "";
+    /// <summary>Field number for the "ApiPath" field.</summary>
+    public const int ApiPathFieldNumber = 1;
+    private string apiPath_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Parameters {
-      get { return parameters_; }
+    public string ApiPath {
+      get { return apiPath_; }
       set {
-        parameters_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        apiPath_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "Data" field.</summary>
+    public const int DataFieldNumber = 2;
+    private string data_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Data {
+      get { return data_; }
+      set {
+        data_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "AppID" field.</summary>
+    public const int AppIDFieldNumber = 3;
+    private string appID_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string AppID {
+      get { return appID_; }
+      set {
+        appID_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "Sign" field.</summary>
+    public const int SignFieldNumber = 4;
+    private string sign_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Sign {
+      get { return sign_; }
+      set {
+        sign_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "Time" field.</summary>
+    public const int TimeFieldNumber = 5;
+    private long time_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public long Time {
+      get { return time_; }
+      set {
+        time_ = value;
       }
     }
 
@@ -103,14 +153,22 @@ namespace GrpcLib {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Parameters != other.Parameters) return false;
+      if (ApiPath != other.ApiPath) return false;
+      if (Data != other.Data) return false;
+      if (AppID != other.AppID) return false;
+      if (Sign != other.Sign) return false;
+      if (Time != other.Time) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Parameters.Length != 0) hash ^= Parameters.GetHashCode();
+      if (ApiPath.Length != 0) hash ^= ApiPath.GetHashCode();
+      if (Data.Length != 0) hash ^= Data.GetHashCode();
+      if (AppID.Length != 0) hash ^= AppID.GetHashCode();
+      if (Sign.Length != 0) hash ^= Sign.GetHashCode();
+      if (Time != 0L) hash ^= Time.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -127,9 +185,25 @@ namespace GrpcLib {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Parameters.Length != 0) {
+      if (ApiPath.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(Parameters);
+        output.WriteString(ApiPath);
+      }
+      if (Data.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Data);
+      }
+      if (AppID.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(AppID);
+      }
+      if (Sign.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Sign);
+      }
+      if (Time != 0L) {
+        output.WriteRawTag(40);
+        output.WriteInt64(Time);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -140,9 +214,25 @@ namespace GrpcLib {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Parameters.Length != 0) {
+      if (ApiPath.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(Parameters);
+        output.WriteString(ApiPath);
+      }
+      if (Data.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Data);
+      }
+      if (AppID.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(AppID);
+      }
+      if (Sign.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Sign);
+      }
+      if (Time != 0L) {
+        output.WriteRawTag(40);
+        output.WriteInt64(Time);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -153,8 +243,20 @@ namespace GrpcLib {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Parameters.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Parameters);
+      if (ApiPath.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ApiPath);
+      }
+      if (Data.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Data);
+      }
+      if (AppID.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(AppID);
+      }
+      if (Sign.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Sign);
+      }
+      if (Time != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Time);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -167,8 +269,20 @@ namespace GrpcLib {
       if (other == null) {
         return;
       }
-      if (other.Parameters.Length != 0) {
-        Parameters = other.Parameters;
+      if (other.ApiPath.Length != 0) {
+        ApiPath = other.ApiPath;
+      }
+      if (other.Data.Length != 0) {
+        Data = other.Data;
+      }
+      if (other.AppID.Length != 0) {
+        AppID = other.AppID;
+      }
+      if (other.Sign.Length != 0) {
+        Sign = other.Sign;
+      }
+      if (other.Time != 0L) {
+        Time = other.Time;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -185,7 +299,23 @@ namespace GrpcLib {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            Parameters = input.ReadString();
+            ApiPath = input.ReadString();
+            break;
+          }
+          case 18: {
+            Data = input.ReadString();
+            break;
+          }
+          case 26: {
+            AppID = input.ReadString();
+            break;
+          }
+          case 34: {
+            Sign = input.ReadString();
+            break;
+          }
+          case 40: {
+            Time = input.ReadInt64();
             break;
           }
         }
@@ -203,7 +333,23 @@ namespace GrpcLib {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            Parameters = input.ReadString();
+            ApiPath = input.ReadString();
+            break;
+          }
+          case 18: {
+            Data = input.ReadString();
+            break;
+          }
+          case 26: {
+            AppID = input.ReadString();
+            break;
+          }
+          case 34: {
+            Sign = input.ReadString();
+            break;
+          }
+          case 40: {
+            Time = input.ReadInt64();
             break;
           }
         }
@@ -225,7 +371,7 @@ namespace GrpcLib {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GrpcLib.ApiDataReflection.Descriptor.MessageTypes[1]; }
+      get { return global::GrpcLib.Service.ApiDataReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -242,7 +388,9 @@ namespace GrpcLib {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public APIReply(APIReply other) : this() {
-      jsondata_ = other.jsondata_;
+      code_ = other.code_;
+      data_ = other.data_;
+      msg_ = other.msg_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -251,14 +399,36 @@ namespace GrpcLib {
       return new APIReply(this);
     }
 
-    /// <summary>Field number for the "jsondata" field.</summary>
-    public const int JsondataFieldNumber = 1;
-    private string jsondata_ = "";
+    /// <summary>Field number for the "Code" field.</summary>
+    public const int CodeFieldNumber = 1;
+    private int code_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Jsondata {
-      get { return jsondata_; }
+    public int Code {
+      get { return code_; }
       set {
-        jsondata_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        code_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "Data" field.</summary>
+    public const int DataFieldNumber = 2;
+    private string data_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Data {
+      get { return data_; }
+      set {
+        data_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "Msg" field.</summary>
+    public const int MsgFieldNumber = 3;
+    private string msg_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Msg {
+      get { return msg_; }
+      set {
+        msg_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -275,14 +445,18 @@ namespace GrpcLib {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Jsondata != other.Jsondata) return false;
+      if (Code != other.Code) return false;
+      if (Data != other.Data) return false;
+      if (Msg != other.Msg) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Jsondata.Length != 0) hash ^= Jsondata.GetHashCode();
+      if (Code != 0) hash ^= Code.GetHashCode();
+      if (Data.Length != 0) hash ^= Data.GetHashCode();
+      if (Msg.Length != 0) hash ^= Msg.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -299,9 +473,17 @@ namespace GrpcLib {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Jsondata.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Jsondata);
+      if (Code != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Code);
+      }
+      if (Data.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Data);
+      }
+      if (Msg.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Msg);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -312,9 +494,17 @@ namespace GrpcLib {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Jsondata.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Jsondata);
+      if (Code != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Code);
+      }
+      if (Data.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Data);
+      }
+      if (Msg.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Msg);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -325,8 +515,14 @@ namespace GrpcLib {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Jsondata.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Jsondata);
+      if (Code != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Code);
+      }
+      if (Data.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Data);
+      }
+      if (Msg.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Msg);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -339,8 +535,14 @@ namespace GrpcLib {
       if (other == null) {
         return;
       }
-      if (other.Jsondata.Length != 0) {
-        Jsondata = other.Jsondata;
+      if (other.Code != 0) {
+        Code = other.Code;
+      }
+      if (other.Data.Length != 0) {
+        Data = other.Data;
+      }
+      if (other.Msg.Length != 0) {
+        Msg = other.Msg;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -356,8 +558,16 @@ namespace GrpcLib {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            Jsondata = input.ReadString();
+          case 8: {
+            Code = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            Data = input.ReadString();
+            break;
+          }
+          case 26: {
+            Msg = input.ReadString();
             break;
           }
         }
@@ -374,8 +584,16 @@ namespace GrpcLib {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            Jsondata = input.ReadString();
+          case 8: {
+            Code = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            Data = input.ReadString();
+            break;
+          }
+          case 26: {
+            Msg = input.ReadString();
             break;
           }
         }
