@@ -14,6 +14,7 @@ namespace Grpc.Server
         {
             try
             {
+                Tool.Log.Info(Tool.Setting.ServerIP+":"+Tool.Setting.ServerPort);
                 HostFactory.Run(x =>
                 {
                     x.Service<MyWork>(t =>
@@ -25,9 +26,9 @@ namespace Grpc.Server
 
                     x.RunAsLocalSystem();
                     x.StartAutomatically();
-                    x.SetDescription("Grpc服务");
-                    x.SetDisplayName("Grpc服务中心");
-                    x.SetServiceName("Grpc Service Center");
+                    x.SetDescription(Tool.Setting.Description);
+                    x.SetDisplayName(Tool.Setting.Name);
+                    x.SetServiceName(Tool.Setting.ServiceName);
                 });
             }
             catch (Exception ex)

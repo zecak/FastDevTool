@@ -29,6 +29,32 @@ namespace Grpc.Server.Common
             }
         }
 
+        const string settingFileName = "setting.json";
+        static SettingInfo settingjson = null;
+
+        public static SettingInfo Setting
+        {
+            get
+            {
+                if (settingjson == null)
+                {
+                    var settingPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, settingFileName);
+                    if (!System.IO.File.Exists(settingPath))
+                    {
+                        var temp = new SettingInfo() { Name = "Grpc Server Service", ServiceName = "Grpc Server Service", Description = "Grpc Server Service", ServerIP = "127.0.0.1", ServerKey = "12345678", ServerPort = "8090" };
+                        File.WriteAllText(settingPath, temp.ToJson());
+                    }
+                    settingjson = System.IO.File.ReadAllText(settingPath).JsonTo<SettingInfo>();
+                }
+                return settingjson;
+            }
+            set
+            {
+                settingjson = value;
+            }
+        }
+
+
         public static bool PortInUse(int port)
         {
             bool inUse = false;
@@ -371,17 +397,17 @@ namespace Grpc.Server.Common
             }
         }
 
-       public static string DownFile(Uri uri, string filepath)
+        public static string DownFile(Uri uri, string filepath)
         {
             var path = filepath;
             var name = uri.Segments[uri.Segments.Length - 1];
-            
-            for (int i = 0; i < uri.Segments.Length-1; i++)
+
+            for (int i = 0; i < uri.Segments.Length - 1; i++)
             {
-                var str = uri.Segments[i].Replace("/","");
-                if(!string.IsNullOrWhiteSpace(str))
+                var str = uri.Segments[i].Replace("/", "");
+                if (!string.IsNullOrWhiteSpace(str))
                 {
-                    path = System.IO.Path.Combine(path,str);
+                    path = System.IO.Path.Combine(path, str);
                 }
             }
             System.IO.Directory.CreateDirectory(path);
@@ -392,7 +418,7 @@ namespace Grpc.Server.Common
                 try
                 {
                     System.Net.WebClient myWebClient = new System.Net.WebClient();
-                    myWebClient.DownloadFile(uri, filename); 
+                    myWebClient.DownloadFile(uri, filename);
                 }
                 catch (Exception ex)
                 {

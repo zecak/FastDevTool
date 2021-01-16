@@ -16,9 +16,11 @@ namespace Grpc.Server.Common
                 server = new Core.Server
                 {
                     Services = { GrpcLib.gRPC.BindService(new GrpcImpl()) },
-                    Ports = { new Core.ServerPort("localhost", 8090, Core.ServerCredentials.Insecure) }
+                    Ports = { new Core.ServerPort(Tool.Setting.ServerIP, Tool.Setting.ServerPort.ToInt(), Core.ServerCredentials.Insecure) }
                 };
+                
                 server.Start();
+
             }
             catch (Exception ex)
             {

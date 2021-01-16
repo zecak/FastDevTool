@@ -37,3 +37,6 @@
 /RunTaskForAny/MEFPlugins/WpfControlLibrary1/obj/Debug
 /RunTaskForAny/MEFPlugins/WPF.MEFPlugin.Template1/obj/Debug
 /FastDev.Web/obj/Debug
+/RunTaskForAny/Grpc.Agent/bin/Debug
+/RunTaskForAny/Grpc.Agent/obj/Debug/Costura
+/RunTaskForAny/Grpc.Server/obj/Debug/Costura

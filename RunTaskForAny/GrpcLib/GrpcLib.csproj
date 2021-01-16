@@ -64,7 +64,10 @@
   <ItemGroup>
     <Compile Include="ApiData.cs" />
     <Compile Include="ApiDataGrpc.cs" />
+    <Compile Include="GrpcClient.cs" />
+    <Compile Include="ReqData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RespData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ApiData.proto" />
