@@ -33,10 +33,10 @@ namespace Grpc.Agent
             }
             catch (Exception ex)
             {
-                Tool.Log.Error("--------------");
+                Tool.Log.Error(" [--------------");
                 Tool.Log.Error(ex.Message);
                 Tool.Log.Error(ex);
-                Tool.Log.Error("--------------");
+                Tool.Log.Error(" --------------]");
                 Console.ReadKey();
             }
         }

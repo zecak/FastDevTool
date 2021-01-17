@@ -16,6 +16,8 @@ namespace Grpc.Agent.Common
 
         List<CancellationTokenSource> task2TokenSourceList = new List<CancellationTokenSource>();
         List<GrpcClient> grpcClientList = new List<GrpcClient>();
+
+        List<KeyValuePair<string,string>> rpcExceptions = new List<KeyValuePair<string, string>>();
         public void Start()
         {
             try
@@ -35,6 +37,7 @@ namespace Grpc.Agent.Common
                     var client = new GrpcClient(serverinfo.IP + ":" + serverinfo.Port);
                     client.ChatFailed += Client_GrpcFailed;
                     client.Chating += Client_Chating;
+                    client.InitChat();
                     grpcClientList.Add(client);
                     var task2TokenSource = new CancellationTokenSource();
                     task2TokenSourceList.Add(task2TokenSource);
@@ -44,13 +47,15 @@ namespace Grpc.Agent.Common
                         {
                             try
                             {
-                                client.NewChat(new APIRequest() { ApiPath = "/server/online", AppID = "代理服务", Data = "", Sign = "", Time = DateTime.Now.DateTimeToUTC() });
+                                var req = new APIRequest() { ApiPath = "/server/online", AppID = "代理服务", Time = DateTime.Now.DateTimeToUTC() };
+                                req.Sign = (req.AppID + req.Data + req.Time + serverinfo.Key).ToMd5();
+                                client.Chat(req);
                             }
-                            catch (RpcException ex)
+                            catch (Exception ex)
                             {
                                 Tool.Log.Error(ex);
                             }
-
+                            
                             System.Threading.Thread.Sleep(1000);
                         }
                     }, task2TokenSource.Token);
@@ -66,8 +71,16 @@ namespace Grpc.Agent.Common
 
         }
 
+
         private void Client_GrpcFailed(object sender, GrpcFailedEventArgs args)
         {
+            var rpcex=rpcExceptions.FirstOrDefault(f => f.Key == args.Exception.Status.StatusCode.ToString()&& f.Value == args.Exception.Status.Detail);
+            if(rpcex.Key==null)
+            {
+                Tool.Log.Error(args.Exception);
+                rpcExceptions.Add(new KeyValuePair<string, string>(args.Exception.Status.StatusCode.ToString(), args.Exception.Status.Detail));
+            }
+            
             var grpc = (GrpcClient)sender;
             var serverinfo = Tool.Setting.ServerList.FirstOrDefault(f => (f.IP + ":" + f.Port) == grpc.Target);
             if (serverinfo != null)
@@ -87,7 +100,7 @@ namespace Grpc.Agent.Common
                 return;
             }
             var serverinfo = Tool.Setting.ServerList.FirstOrDefault(f => (f.IP + ":" + f.Port) == grpc.Target);
-            if(serverinfo!=null)
+            if (serverinfo != null)
             {
                 serverinfo.Status = "1";
             }

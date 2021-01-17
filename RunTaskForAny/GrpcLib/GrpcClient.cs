@@ -23,6 +23,7 @@ namespace GrpcLib
             add => _chatFailed += value;
             remove => _chatFailed -= value;
         }
+        public event GrpcFailedHandler RespChatFailed;
 
         private event GrpcFailedHandler _newchatFailed;
 
@@ -60,9 +61,8 @@ namespace GrpcLib
                     }
                     catch (RpcException ex)
                     {
-                        _chatFailed?.Invoke(this, new GrpcFailedEventArgs() { Exception = ex });
+                        RespChatFailed?.Invoke(this, new GrpcFailedEventArgs() { Exception = ex });
                     }
-                    
                 }
             });
         }
@@ -86,6 +86,11 @@ namespace GrpcLib
             catch (RpcException ex)
             {
                 _chatFailed?.Invoke(this, new GrpcFailedEventArgs() { Exception = ex });
+                if (ex.Status.Detail== "failed to connect to all addresses"|| ex.Status.Detail == "Stream removed")
+                {
+                    EndChat();
+                    InitChat();
+                }
             }
         }
 

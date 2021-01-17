@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GrpcLib
 {
-    public class RespData
+    public class GroupInfo
     {
-        public string Action { get; set; }
-        public string Data { get; set; }
+        public string Name { get; set; }
+        public List<string> Users { get; set; }
 
     }
 }

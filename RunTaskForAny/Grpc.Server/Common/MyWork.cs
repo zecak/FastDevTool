@@ -19,7 +19,7 @@ namespace Grpc.Server.Common
                     Services = { gRPC.BindService(new GrpcImpl()) },
                     Ports = { new Core.ServerPort(Tool.Setting.ServerIP, Tool.Setting.ServerPort.ToInt(), Core.ServerCredentials.Insecure) }
                 };
-                
+
                 server.Start();
 
 
