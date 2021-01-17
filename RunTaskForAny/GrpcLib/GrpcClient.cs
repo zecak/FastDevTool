@@ -24,19 +24,69 @@ namespace GrpcLib
             remove => _chatFailed -= value;
         }
 
+        private event GrpcFailedHandler _newchatFailed;
+
+        public event GrpcFailedHandler NewChatFailed
+        {
+            add => _newchatFailed += value;
+            remove => _newchatFailed -= value;
+        }
+
         public event GrpcFailedHandler ExecFailed;
         public event Action<object, APIReply> Chating;
+        public event Action<object, APIReply> NewChating;
         public string Target { get; set; }
         Channel channel = null;
         gRPC.gRPCClient client = null;
-        // AsyncDuplexStreamingCall<APIRequest, APIReply> call = null;
+        AsyncDuplexStreamingCall<APIRequest, APIReply> call = null;
         public GrpcClient(string target)
         {
             Target = target;
             channel = new Channel(Target, ChannelCredentials.Insecure);
             client = new gRPC.gRPCClient(channel);
-            //call = client.Chat();
+        }
 
+        public void InitChat()
+        {
+            call = client.Chat();
+            Task.Run(async () =>
+            {
+                while (await call.ResponseStream.MoveNext())
+                {
+                    try
+                    {
+                        var note = call.ResponseStream.Current;
+                        Chating?.Invoke(this, note);
+                    }
+                    catch (RpcException ex)
+                    {
+                        _chatFailed?.Invoke(this, new GrpcFailedEventArgs() { Exception = ex });
+                    }
+                    
+                }
+            });
+        }
+
+        public void EndChat()
+        {
+            if(call!=null)
+            {
+                call.RequestStream.CompleteAsync().GetAwaiter().GetResult();
+                call.Dispose();
+                call = null;
+            }
+        }
+
+        public void Chat(APIRequest reqData)
+        {
+            try
+            {
+                call?.RequestStream.WriteAsync(reqData).GetAwaiter().GetResult();
+            }
+            catch (RpcException ex)
+            {
+                _chatFailed?.Invoke(this, new GrpcFailedEventArgs() { Exception = ex });
+            }
         }
 
         public void NewChat(APIRequest reqData)
@@ -49,7 +99,7 @@ namespace GrpcLib
                     while (await call_temp.ResponseStream.MoveNext())
                     {
                         var note = call_temp.ResponseStream.Current;
-                        Chating?.Invoke(this, note);
+                        NewChating?.Invoke(this, note);
                     }
                 });
 
@@ -60,7 +110,7 @@ namespace GrpcLib
                 }
                 catch (RpcException ex)
                 {
-                    _chatFailed?.Invoke(this, new GrpcFailedEventArgs() { Exception = ex });
+                    _newchatFailed?.Invoke(this, new GrpcFailedEventArgs() { Exception = ex });
                 }
 
                 await responseReaderTask;
