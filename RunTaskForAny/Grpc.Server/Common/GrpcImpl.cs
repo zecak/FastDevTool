@@ -153,7 +153,7 @@ namespace Grpc.Server.Common
                             await responseStream.WriteAsync(resp);
                             return;
                         }
-                        var chatInfo = new ChatInfo() { UserName = user, Msg = userInfo.Data, SendTime = DateTime.Now.ToString().ToDateTime() };
+                        var chatInfo = new ChatInfo() { UserName = user, Msg = userInfo.Data, SendTime = DateTime.Now.ToTimestamp() };
 
                         groupInfo.ChatInfos.Add(chatInfo);
                         {

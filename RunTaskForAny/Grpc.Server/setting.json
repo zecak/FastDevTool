@@ -2,7 +2,7 @@
   "Name": "Grpc Server Service",
   "ServiceName": "Grpc Server Service",
   "Description": "Grpc Server Service",
-  "ServerIP": "127.0.0.1",
+  "ServerIP": "172.16.1.60",
   "ServerPort": "8090",
   "ServerKey": "12345678"
 }

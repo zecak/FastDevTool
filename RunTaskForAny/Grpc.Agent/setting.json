@@ -2,13 +2,13 @@
   "Name": "Grpc Agent Service Center",
   "ServiceName": "Grpc Agent Service Center",
   "Description": "Grpc Agent Service Center",
-  "AgentIP": "127.0.0.1",
+  "AgentIP": "172.16.1.60",
   "AgentPort": "8080",
   "AgentKey": "123456",
   "ServerRun": "1",
   "ServerList": [
     {
-      "IP": "127.0.0.1",
+      "IP": "172.16.1.60",
       "Port": "8090",
       "Key": "12345678",
       "Status": "0"

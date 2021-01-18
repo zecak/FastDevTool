@@ -47,7 +47,7 @@ namespace Grpc.Agent.Common
                         {
                             try
                             {
-                                var req = new APIRequest() { ApiPath = "/server/online", AppID = "代理服务", Time = DateTime.Now.DateTimeToUTC() };
+                                var req = new APIRequest() { ApiPath = "/server/online", AppID = "代理服务", Time = DateTime.Now.ToTimestamp() };
                                 req.Sign = (req.AppID + req.Data + req.Time + serverinfo.Key).ToMd5();
                                 client.NewChat(req);
                             }

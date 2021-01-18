@@ -14,6 +14,7 @@ namespace Grpc.Server
         {
             try
             {
+
                 Tool.Log.Info(Tool.Setting.ServerIP+":"+Tool.Setting.ServerPort);
                 HostFactory.Run(x =>
                 {
@@ -33,10 +34,10 @@ namespace Grpc.Server
             }
             catch (Exception ex)
             {
-                Tool.Log.Error("--------------");
+                Tool.Log.Error("[--------------");
                 Tool.Log.Error(ex.Message);
                 Tool.Log.Error(ex);
-                Tool.Log.Error("--------------");
+                Tool.Log.Error(" --------------]");
                 Console.ReadKey();
             }
 

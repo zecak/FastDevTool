@@ -61,7 +61,7 @@ namespace WpfApp1.Common
         /// <param name="vDate">待转换的时间</param>
         /// <param name="Milliseconds">是否精确到毫秒</param>
         /// <returns>UTC时间</returns>
-        public static long DateTimeToUTC(this DateTime vDate, bool Milliseconds=false)
+        public static long ToTimestamp(this DateTime vDate, bool Milliseconds=true)
         {
             vDate = vDate.ToUniversalTime();
             var dtZone = new DateTime(1970, 1, 1, 0, 0, 0);
@@ -70,6 +70,19 @@ namespace WpfApp1.Common
                 return (long)vDate.Subtract(dtZone).TotalMilliseconds;
             }
             return (long)vDate.Subtract(dtZone).TotalSeconds;
+        }
+
+        public static DateTime ToDateTime(this long timestamp, bool milliseconds = true)
+        {
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1, 0, 0, 0)); // 当地时区
+            if (milliseconds)
+            {
+                return startTime.AddMilliseconds(timestamp);
+            }
+            else
+            {
+                return startTime.AddSeconds(timestamp);
+            }
         }
 
         public static string ToMd5(this string s)

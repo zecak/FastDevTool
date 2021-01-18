@@ -10,6 +10,6 @@ namespace GrpcLib
     {
         public string UserName { get; set; }
         public string Msg { get; set; }
-        public DateTime SendTime { get; set; }
+        public long SendTime { get; set; }
     }
 }
