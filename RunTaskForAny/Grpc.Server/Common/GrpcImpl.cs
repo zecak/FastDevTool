@@ -11,15 +11,14 @@ namespace Grpc.Server.Common
 {
     public class GrpcImpl : gRPC.gRPCBase
     {
-        
+
         static object mylock = new object();
-        List<ChatInfo> chatInfos = new List<ChatInfo>();
-        List<ChatInfoUser> ChatInfoUsers = new List<ChatInfoUser>();
+
         List<string> onlineUser = new List<string>();
 
         public static List<ClientInfo> ClientInfos = new List<ClientInfo>();
 
-        GroupInfo groupInfo = new GroupInfo() { Name = "世界聊天室", Users = new List<string>() };
+        GroupInfo groupInfo = new GroupInfo() { Name = "世界聊天室", Users = new List<string>(), ChatInfos = new List<ChatInfo>() };
         public override async Task Chat(IAsyncStreamReader<APIRequest> requestStream, IServerStreamWriter<APIReply> responseStream, ServerCallContext context)
         {
 
@@ -73,26 +72,31 @@ namespace Grpc.Server.Common
             }
             if (reqData.ApiPath == "/api/heartbeat")
             {
-
-                var toChats = chatInfos.FindAll(c => c.UserName != reqData.AppID);
-                foreach (var chat in ChatInfoUsers)
+                var sign2 = (reqData.AppID + reqData.Data + reqData.Time + Tool.Setting.ServerKey).ToMd5();
+                if (sign2 != reqData.Sign)
                 {
-                    toChats = toChats.FindAll(c=>c.GID!=chat.GID&&c.UserName!=chat.UserName);
-                }
-                if (toChats.Count == 0)
-                {
-                    resp.Code = 1;
-                    resp.Msg = "请求成功";
+                    resp.Code = 2222;
+                    resp.Msg = "电子签名不一致";
                     await responseStream.WriteAsync(resp);
                     return;
                 }
+
+                var userInfo = reqData.Data.JsonTo<UserInfo>();
+                if (userInfo == null)
+                {
+                    resp.Code = 1001;
+                    resp.Msg = "请求参数不正确";
+                    await responseStream.WriteAsync(resp);
+                    return;
+                }
+                var toChats = groupInfo.ChatInfos.FindAll(c => (c.SendTime > userInfo.LoingTime) && c.UserName != userInfo.UserName);
+
                 foreach (var chat in toChats)
                 {
                     resp.Code = 1;
                     resp.Data = new RespData() { Action = "ChatMsg", Data = chat.ToJson() }.ToJson();
                     resp.Msg = "请求成功";
                     await responseStream.WriteAsync(resp);
-                    ChatInfoUsers.Add(new ChatInfoUser() { GID=chat.GID, UserName=chat.UserName, IsSended=true });
                 }
                 return;
             }
@@ -111,26 +115,50 @@ namespace Grpc.Server.Common
             {
                 case "/api/login":
                     {
+                        var userInfo = reqData.Data.JsonTo<UserInfo>();
+                        if (userInfo == null)
+                        {
+                            resp.Code = 1001;
+                            resp.Msg = "请求参数不正确";
+                            await responseStream.WriteAsync(resp);
+                            return;
+                        }
+                        var user = onlineUser.FirstOrDefault(n => n == userInfo.UserName);
+                        if (user == null)
+                        {
+                            onlineUser.Add(userInfo.UserName);
+                            groupInfo.Users.Add(userInfo.UserName);
+                        }
                         resp.Code = 1;
-                        resp.Msg = "请求了" + reqData.ApiPath;
+                        resp.Msg = "登录成功";
 
                         await responseStream.WriteAsync(resp);
                     }
                     break;
                 case "/api/wordchat":
                     {
-                        var user = onlineUser.FirstOrDefault(n => n == reqData.AppID);
+                        var userInfo = reqData.Data.JsonTo<RespData>();
+                        if (userInfo == null)
+                        {
+                            resp.Code = 1001;
+                            resp.Msg = "请求参数不正确";
+                            await responseStream.WriteAsync(resp);
+                            return;
+                        }
+                        var user = onlineUser.FirstOrDefault(n => n == userInfo.Action);
                         if (user == null)
                         {
-                            onlineUser.Add(user);
-                            groupInfo.Users.Add(user);
+                            resp.Code = 1002;
+                            resp.Msg = "未登录";
+                            await responseStream.WriteAsync(resp);
+                            return;
                         }
-                        var chatInfo = new ChatInfo() { UserName = reqData.AppID, Msg = reqData.Data };
-                        chatInfos.Add(chatInfo);
-                        //foreach (var chatInfo in chatInfos)
+                        var chatInfo = new ChatInfo() { UserName = user, Msg = userInfo.Data, SendTime = DateTime.Now.ToString().ToDateTime() };
+
+                        groupInfo.ChatInfos.Add(chatInfo);
                         {
                             resp.Code = 1;
-                            resp.Data = chatInfo.Msg;
+                            resp.Data = new RespData() { Action = "ChatMsg", Data = chatInfo.ToJson() }.ToJson();
                             await responseStream.WriteAsync(resp);
                         }
 
@@ -161,7 +189,7 @@ namespace Grpc.Server.Common
 
         void EndWork(APIReply resp)
         {
-            Tool.Log.Info("resp:" + resp.ToJson());
+            Tool.Log.Debug("resp:" + resp.ToJson());
         }
     }
 

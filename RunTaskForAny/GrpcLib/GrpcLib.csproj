@@ -62,7 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatInfoUser.cs" />
+    <Compile Include="UserInfo.cs" />
     <Compile Include="ChatInfo.cs" />
     <Compile Include="GroupInfo.cs" />
     <Compile Include="Service\ApiData.cs" />

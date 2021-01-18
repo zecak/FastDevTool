@@ -35,9 +35,9 @@ namespace Grpc.Agent.Common
                 {
                     Tool.Log.Info("ServerInfo:" + serverinfo.IP + ":" + serverinfo.Port);
                     var client = new GrpcClient(serverinfo.IP + ":" + serverinfo.Port);
-                    client.ChatFailed += Client_GrpcFailed;
-                    client.Chating += Client_Chating;
-                    client.InitChat();
+                    client.NewChatFailed += Client_GrpcFailed;
+                    client.NewChating += Client_Chating;
+                    //client.InitChat();
                     grpcClientList.Add(client);
                     var task2TokenSource = new CancellationTokenSource();
                     task2TokenSourceList.Add(task2TokenSource);
@@ -49,7 +49,7 @@ namespace Grpc.Agent.Common
                             {
                                 var req = new APIRequest() { ApiPath = "/server/online", AppID = "代理服务", Time = DateTime.Now.DateTimeToUTC() };
                                 req.Sign = (req.AppID + req.Data + req.Time + serverinfo.Key).ToMd5();
-                                client.Chat(req);
+                                client.NewChat(req);
                             }
                             catch (Exception ex)
                             {

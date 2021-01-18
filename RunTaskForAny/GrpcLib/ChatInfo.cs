@@ -8,8 +8,8 @@ namespace GrpcLib
 {
     public class ChatInfo
     {
-        public string GID { get; set; } = Guid.NewGuid().ToString();
         public string UserName { get; set; }
         public string Msg { get; set; }
+        public DateTime SendTime { get; set; }
     }
 }

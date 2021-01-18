@@ -11,5 +11,7 @@ namespace GrpcLib
         public string Name { get; set; }
         public List<string> Users { get; set; }
 
+        public List<ChatInfo> ChatInfos { get; set; }
+
     }
 }
