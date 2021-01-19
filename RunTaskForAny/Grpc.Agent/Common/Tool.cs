@@ -30,7 +30,9 @@ namespace Grpc.Agent.Common
             }
         }
 
-         const string settingFileName = "setting.json";
+        static DirectoryMonitor monitor2 = null;
+
+        const string settingFileName = "setting.json";
         static SettingInfo settingjson = null;
 
         public static SettingInfo Setting
@@ -39,22 +41,47 @@ namespace Grpc.Agent.Common
             {
                 if (settingjson == null)
                 {
-                    var settingPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, settingFileName);
-                    if (!System.IO.File.Exists(settingPath))
-                    {
-                        var temp = new SettingInfo() { Name = "Grpc Agent Service Center", ServiceName = "Grpc Agent Service Center", Description = "Grpc Agent Service Center", AgentIP = "127.0.0.1", AgentKey = "123456", AgentPort = "8080", ServerRun="1", ServerList=new List<ServerInfo>() { new ServerInfo() { IP = "127.0.0.1", Key = "12345678", Port = "8090" } } };
-                        File.WriteAllText(settingPath, temp.ToJson());
-                    }
-                    settingjson = System.IO.File.ReadAllText(settingPath).JsonTo<SettingInfo>();
+                    Monitor_Change2("");
+
+                    monitor2 = new DirectoryMonitor(AppDomain.CurrentDomain.BaseDirectory, settingFileName);
+                    monitor2.Change += Monitor_Change2;
+                    monitor2.Start();
+
+                    //var settingPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, settingFileName);
+                    //if (!System.IO.File.Exists(settingPath))
+                    //{
+                    //    var temp = new SettingInfo() { Name = "Grpc Agent Service Center", ServiceName = "Grpc Agent Service Center", Description = "Grpc Agent Service Center", AgentIP = "127.0.0.1", AgentKey = "123456", AgentPort = "8080", ServerRun="1", ServerList=new List<ServerInfo>() { new ServerInfo() { IP = "127.0.0.1", Key = "12345678", Port = "8090" } } };
+                    //    File.WriteAllText(settingPath, temp.ToJson());
+                    //}
+                    //settingjson = System.IO.File.ReadAllText(settingPath).JsonTo<SettingInfo>();
                 }
                 return settingjson;
             }
             set
             {
-                settingjson = value;
+                if (value != null)
+                {
+                    settingjson = value;
+                    var settingPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, settingFileName);
+                    System.IO.File.WriteAllText(settingPath, settingjson.ToJson());
+                }
             }
         }
 
+        private static void Monitor_Change2(string _path)
+        {
+            var settingPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, settingFileName);
+            if (!System.IO.File.Exists(settingPath)) 
+            { 
+                Log.Error("未找到配置文件" + settingFileName); 
+                throw new Exception("未找到配置文件" + settingFileName);
+            }
+            settingjson = System.IO.File.ReadAllText(settingPath).JsonTo<SettingInfo>();
+            if (settingjson == null)
+            {
+                Log.Error("配置文件" + settingFileName + "加载错误"); throw new Exception("配置文件" + settingFileName + "加载错误");
+            }
+        }
 
         public static bool PortInUse(int port)
         {

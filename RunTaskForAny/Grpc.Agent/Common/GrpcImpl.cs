@@ -26,7 +26,7 @@ namespace Grpc.Agent.Common
                 {
                     if(Tool.Setting.ServerRun!="1")
                     {
-                        return Task.FromResult(new APIReply { Code=2, Msg = "服务器维护中" });
+                        return Task.FromResult(new APIReply { Code=2, Msg = Tool.Setting.ServerInfo  });
                     }
 
                     var server = Tool.Setting.ServerList.FirstOrDefault();

@@ -84,6 +84,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DirectoryMonitor.cs" />
     <Compile Include="Common\ExString.cs" />
     <Compile Include="Common\GrpcImpl.cs" />
     <Compile Include="Common\MyEx.cs" />

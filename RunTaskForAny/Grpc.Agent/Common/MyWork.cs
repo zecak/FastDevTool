@@ -18,10 +18,13 @@ namespace Grpc.Agent.Common
         List<GrpcClient> grpcClientList = new List<GrpcClient>();
 
         List<KeyValuePair<string,string>> rpcExceptions = new List<KeyValuePair<string, string>>();
+
+       
         public void Start()
         {
             try
             {
+
                 server = new Core.Server
                 {
                     Services = { gRPC.BindService(new GrpcImpl()) },
@@ -37,7 +40,7 @@ namespace Grpc.Agent.Common
                     var client = new GrpcClient(serverinfo.IP + ":" + serverinfo.Port);
                     client.NewChatFailed += Client_GrpcFailed;
                     client.NewChating += Client_Chating;
-                    //client.InitChat();
+
                     grpcClientList.Add(client);
                     var task2TokenSource = new CancellationTokenSource();
                     task2TokenSourceList.Add(task2TokenSource);

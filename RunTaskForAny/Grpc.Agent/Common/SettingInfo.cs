@@ -18,7 +18,8 @@ namespace Grpc.Agent.Common
         public string AgentKey { get; set; }
 
         public string ServerRun { get; set; }
-       public List<ServerInfo> ServerList { get; set; }
+        public string ServerInfo { get; set; }
+        public List<ServerInfo> ServerList { get; set; }
     }
 
     public class ServerInfo

@@ -16,15 +16,6 @@ namespace GrpcLib
     {
         public delegate void GrpcFailedHandler(object sender, GrpcFailedEventArgs args);
 
-        private event GrpcFailedHandler _chatFailed;
-
-        public event GrpcFailedHandler ChatFailed
-        {
-            add => _chatFailed += value;
-            remove => _chatFailed -= value;
-        }
-        public event GrpcFailedHandler RespChatFailed;
-
         private event GrpcFailedHandler _newchatFailed;
 
         public event GrpcFailedHandler NewChatFailed
@@ -34,12 +25,12 @@ namespace GrpcLib
         }
 
         public event GrpcFailedHandler ExecFailed;
-        public event Action<object, APIReply> Chating;
+
         public event Action<object, APIReply> NewChating;
         public string Target { get; set; }
         Channel channel = null;
         gRPC.gRPCClient client = null;
-        AsyncDuplexStreamingCall<APIRequest, APIReply> call = null;
+        //AsyncDuplexStreamingCall<APIRequest, APIReply> call = null;
         public GrpcClient(string target)
         {
             Target = target;
@@ -47,52 +38,6 @@ namespace GrpcLib
             client = new gRPC.gRPCClient(channel);
         }
 
-        public void InitChat()
-        {
-            call = client.Chat();
-            Task.Run(async () =>
-            {
-                while (await call.ResponseStream.MoveNext())
-                {
-                    try
-                    {
-                        var note = call.ResponseStream.Current;
-                        Chating?.Invoke(this, note);
-                    }
-                    catch (RpcException ex)
-                    {
-                        RespChatFailed?.Invoke(this, new GrpcFailedEventArgs() { Exception = ex });
-                    }
-                }
-            });
-        }
-
-        public void EndChat()
-        {
-            if(call!=null)
-            {
-                call.RequestStream.CompleteAsync().GetAwaiter().GetResult();
-                call.Dispose();
-                call = null;
-            }
-        }
-
-        public void Chat(APIRequest reqData)
-        {
-            try
-            {
-                call?.RequestStream.WriteAsync(reqData).GetAwaiter().GetResult();
-            }
-            catch (RpcException ex)
-            {
-                _chatFailed?.Invoke(this, new GrpcFailedEventArgs() { Exception = ex });
-                if (ex.Status.Detail== "failed to connect to all addresses"|| ex.Status.Detail == "Stream removed")
-                {
-                    EndChat();
-                    InitChat();
-                }
-            }
-        }
 
         public void NewChat(APIRequest reqData)
         {
