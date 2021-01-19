@@ -6,7 +6,7 @@
   "AgentPort": "8080",
   "AgentKey": "123456",
   "ServerRun": "1",
-  "ServerInfo": "服务器维护中,维护时间:15:00-16:00",
+  "ServerInfo": "服务器维护中,维护时间:大约半个小时",
   "ServerList": [
     {
       "IP": "172.16.1.60",

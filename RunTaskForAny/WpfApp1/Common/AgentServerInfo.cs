@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.Common
 {
-    public class ServerInfo
+    public class AgentServerInfo
     {
         public string IP { get; set; }
         public string Port { get; set; }

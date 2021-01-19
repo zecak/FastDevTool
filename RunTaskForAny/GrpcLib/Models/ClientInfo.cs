@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Grpc.Server.Common
+namespace GrpcLib.Models
 {
     public class ClientInfo
     {

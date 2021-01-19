@@ -93,7 +93,7 @@
   <ItemGroup>
     <Compile Include="Common\ResourceDictionaryInfo.cs" />
     <Compile Include="Common\MyEx.cs" />
-    <Compile Include="Common\ServerInfo.cs" />
+    <Compile Include="Common\AgentServerInfo.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Pages\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>

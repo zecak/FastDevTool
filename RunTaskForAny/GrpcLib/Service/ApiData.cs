@@ -24,19 +24,19 @@ namespace GrpcLib.Service {
     static ApiDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg1BcGlEYXRhLnByb3RvEg9HcnBjTGliLlNlcnZpY2UiVgoKQVBJUmVxdWVz",
+            "Cg1BcGlEYXRhLnByb3RvEg9HcnBjTGliLlNlcnZpY2UiZQoKQVBJUmVxdWVz",
             "dBIPCgdBcGlQYXRoGAEgASgJEgwKBERhdGEYAiABKAkSDQoFQXBwSUQYAyAB",
-            "KAkSDAoEU2lnbhgEIAEoCRIMCgRUaW1lGAUgASgDIjMKCEFQSVJlcGx5EgwK",
-            "BENvZGUYASABKAUSDAoERGF0YRgCIAEoCRILCgNNc2cYAyABKAkyjgEKBGdS",
-            "UEMSQAoERXhlYxIbLkdycGNMaWIuU2VydmljZS5BUElSZXF1ZXN0GhkuR3Jw",
-            "Y0xpYi5TZXJ2aWNlLkFQSVJlcGx5IgASRAoEQ2hhdBIbLkdycGNMaWIuU2Vy",
-            "dmljZS5BUElSZXF1ZXN0GhkuR3JwY0xpYi5TZXJ2aWNlLkFQSVJlcGx5IgAo",
-            "ATABYgZwcm90bzM="));
+            "KAkSDAoEU2lnbhgEIAEoCRIMCgRUaW1lGAUgASgDEg0KBVRva2VuGAYgASgJ",
+            "IkMKCEFQSVJlcGx5EgwKBENvZGUYASABKAUSDAoERGF0YRgCIAEoCRILCgNN",
+            "c2cYAyABKAkSDgoGQWN0aW9uGAQgASgJMo4BCgRnUlBDEkAKBEV4ZWMSGy5H",
+            "cnBjTGliLlNlcnZpY2UuQVBJUmVxdWVzdBoZLkdycGNMaWIuU2VydmljZS5B",
+            "UElSZXBseSIAEkQKBENoYXQSGy5HcnBjTGliLlNlcnZpY2UuQVBJUmVxdWVz",
+            "dBoZLkdycGNMaWIuU2VydmljZS5BUElSZXBseSIAKAEwAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::GrpcLib.Service.APIRequest), global::GrpcLib.Service.APIRequest.Parser, new[]{ "ApiPath", "Data", "AppID", "Sign", "Time" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GrpcLib.Service.APIReply), global::GrpcLib.Service.APIReply.Parser, new[]{ "Code", "Data", "Msg" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GrpcLib.Service.APIRequest), global::GrpcLib.Service.APIRequest.Parser, new[]{ "ApiPath", "Data", "AppID", "Sign", "Time", "Token" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GrpcLib.Service.APIReply), global::GrpcLib.Service.APIReply.Parser, new[]{ "Code", "Data", "Msg", "Action" }, null, null, null, null)
           }));
     }
     #endregion
@@ -77,6 +77,7 @@ namespace GrpcLib.Service {
       appID_ = other.appID_;
       sign_ = other.sign_;
       time_ = other.time_;
+      token_ = other.token_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -140,6 +141,17 @@ namespace GrpcLib.Service {
       }
     }
 
+    /// <summary>Field number for the "Token" field.</summary>
+    public const int TokenFieldNumber = 6;
+    private string token_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Token {
+      get { return token_; }
+      set {
+        token_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as APIRequest);
@@ -158,6 +170,7 @@ namespace GrpcLib.Service {
       if (AppID != other.AppID) return false;
       if (Sign != other.Sign) return false;
       if (Time != other.Time) return false;
+      if (Token != other.Token) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -169,6 +182,7 @@ namespace GrpcLib.Service {
       if (AppID.Length != 0) hash ^= AppID.GetHashCode();
       if (Sign.Length != 0) hash ^= Sign.GetHashCode();
       if (Time != 0L) hash ^= Time.GetHashCode();
+      if (Token.Length != 0) hash ^= Token.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -205,6 +219,10 @@ namespace GrpcLib.Service {
         output.WriteRawTag(40);
         output.WriteInt64(Time);
       }
+      if (Token.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(Token);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -234,6 +252,10 @@ namespace GrpcLib.Service {
         output.WriteRawTag(40);
         output.WriteInt64(Time);
       }
+      if (Token.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(Token);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -257,6 +279,9 @@ namespace GrpcLib.Service {
       }
       if (Time != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(Time);
+      }
+      if (Token.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Token);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -283,6 +308,9 @@ namespace GrpcLib.Service {
       }
       if (other.Time != 0L) {
         Time = other.Time;
+      }
+      if (other.Token.Length != 0) {
+        Token = other.Token;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -318,6 +346,10 @@ namespace GrpcLib.Service {
             Time = input.ReadInt64();
             break;
           }
+          case 50: {
+            Token = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -350,6 +382,10 @@ namespace GrpcLib.Service {
           }
           case 40: {
             Time = input.ReadInt64();
+            break;
+          }
+          case 50: {
+            Token = input.ReadString();
             break;
           }
         }
@@ -391,6 +427,7 @@ namespace GrpcLib.Service {
       code_ = other.code_;
       data_ = other.data_;
       msg_ = other.msg_;
+      action_ = other.action_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -432,6 +469,17 @@ namespace GrpcLib.Service {
       }
     }
 
+    /// <summary>Field number for the "Action" field.</summary>
+    public const int ActionFieldNumber = 4;
+    private string action_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Action {
+      get { return action_; }
+      set {
+        action_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as APIReply);
@@ -448,6 +496,7 @@ namespace GrpcLib.Service {
       if (Code != other.Code) return false;
       if (Data != other.Data) return false;
       if (Msg != other.Msg) return false;
+      if (Action != other.Action) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -457,6 +506,7 @@ namespace GrpcLib.Service {
       if (Code != 0) hash ^= Code.GetHashCode();
       if (Data.Length != 0) hash ^= Data.GetHashCode();
       if (Msg.Length != 0) hash ^= Msg.GetHashCode();
+      if (Action.Length != 0) hash ^= Action.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -485,6 +535,10 @@ namespace GrpcLib.Service {
         output.WriteRawTag(26);
         output.WriteString(Msg);
       }
+      if (Action.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Action);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -506,6 +560,10 @@ namespace GrpcLib.Service {
         output.WriteRawTag(26);
         output.WriteString(Msg);
       }
+      if (Action.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Action);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -523,6 +581,9 @@ namespace GrpcLib.Service {
       }
       if (Msg.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Msg);
+      }
+      if (Action.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Action);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -543,6 +604,9 @@ namespace GrpcLib.Service {
       }
       if (other.Msg.Length != 0) {
         Msg = other.Msg;
+      }
+      if (other.Action.Length != 0) {
+        Action = other.Action;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -570,6 +634,10 @@ namespace GrpcLib.Service {
             Msg = input.ReadString();
             break;
           }
+          case 34: {
+            Action = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -594,6 +662,10 @@ namespace GrpcLib.Service {
           }
           case 26: {
             Msg = input.ReadString();
+            break;
+          }
+          case 34: {
+            Action = input.ReadString();
             break;
           }
         }

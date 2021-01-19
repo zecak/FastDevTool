@@ -62,6 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionApiPath.cs" />
+    <Compile Include="AExecAtion.cs" />
+    <Compile Include="Models\ClientInfo.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\ServerInfo.cs" />
     <Compile Include="UserInfo.cs" />
     <Compile Include="ChatInfo.cs" />
     <Compile Include="GroupInfo.cs" />
