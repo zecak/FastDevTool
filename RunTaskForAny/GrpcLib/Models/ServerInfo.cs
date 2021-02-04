@@ -8,8 +8,8 @@ namespace GrpcLib.Models
 {
     public class ServerInfo
     {
-        public List<ClientInfo> ClientInfos { get; set; } = new List<ClientInfo>();
-        public List<string> OnlineUserTokens { get; set; } = new List<string>();
+        //public List<ClientInfo> ClientInfos { get; set; } = new List<ClientInfo>();
+        public List<ClientInfo> OnlineUserTokens { get; set; } = new List<ClientInfo>();
         public GroupInfo GroupInfo { get; set; } = new GroupInfo() { Name = "在线组", Users = new List<string>(), ChatInfos = new List<ChatInfo>() };
 
     }

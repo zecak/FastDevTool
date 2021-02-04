@@ -14,7 +14,8 @@ namespace Grpc.Server
         {
             try
             {
-
+                //var sql = "UPDATE t_employee_wallet set Balance=Balance+{0} WHERE EmployeeID=(SELECT ID FROM t_employee WHERE MobileNo='{1}' and LastTransCode<>'D' LIMIT 1)";
+                //Tool.Log.Debug(string.Format(sql,new string[] { "1","18718842697" }));
                 Tool.Log.Info(Tool.Setting.ServerIP+":"+Tool.Setting.ServerPort);
                 HostFactory.Run(x =>
                 {

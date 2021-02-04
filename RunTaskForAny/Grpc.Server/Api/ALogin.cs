@@ -30,7 +30,7 @@ namespace Grpc.Server.Api
 #warning 根据用户和密码获取用户信息并产生token
 
             var token = Guid.NewGuid().ToString();
-            serverInfo.OnlineUserTokens.Add(token);
+            serverInfo.OnlineUserTokens.Add(new ClientInfo() { Key= token, StartTime=DateTime.Now, LastTime=DateTime.Now });
             //groupInfo.Users.Add(info.UserName);
 
             resp.Code = 1;

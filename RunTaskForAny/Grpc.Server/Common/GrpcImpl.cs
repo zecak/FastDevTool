@@ -32,7 +32,7 @@ namespace Grpc.Server.Common
                 {
                     if (api.LimitAction)
                     {
-                        var curToken = serverInfo.OnlineUserTokens.FirstOrDefault(t => t == request.Token);
+                        var curToken = serverInfo.OnlineUserTokens.FirstOrDefault(t => t.Key == request.Token);
                         if (string.IsNullOrWhiteSpace(request.Token)||(curToken == null))
                         {
                             return Task.FromResult(new APIReply { Code = 1001, Msg = "未登录或登录已失效" });
@@ -58,17 +58,17 @@ namespace Grpc.Server.Common
         {
             //Tool.Log.Debug("Client:" + context.Peer + " Status:" + context.Status.StatusCode);
 
-            var clientInfo = serverInfo.ClientInfos.FirstOrDefault(f => f.Key == context.Peer);
-            if (clientInfo == null)
-            {
-                clientInfo = new ClientInfo() { Key = context.Peer, StartTime = DateTime.Now, LastTime = DateTime.Now, HitCount = 1 };
-                serverInfo.ClientInfos.Add(clientInfo);
-            }
-            else
-            {
-                clientInfo.LastTime = DateTime.Now;
-                clientInfo.HitCount++;
-            }
+            //var clientInfo = serverInfo.ClientInfos.FirstOrDefault(f => f.Key == context.Peer);
+            //if (clientInfo == null)
+            //{
+            //    clientInfo = new ClientInfo() { Key = context.Peer, StartTime = DateTime.Now, LastTime = DateTime.Now, HitCount = 1 };
+            //    serverInfo.ClientInfos.Add(clientInfo);
+            //}
+            //else
+            //{
+            //    clientInfo.LastTime = DateTime.Now;
+            //    clientInfo.HitCount++;
+            //}
 
             //for (int i = 0; i < context.RequestHeaders.Count; i++)
             //{
@@ -157,7 +157,7 @@ namespace Grpc.Server.Common
                             await responseStream.WriteAsync(resp);
                             return;
                         }
-                        var user = serverInfo.OnlineUserTokens.FirstOrDefault(n => n == userInfo.Action);
+                        var user = serverInfo.OnlineUserTokens.FirstOrDefault(n => n.Key == userInfo.Action);
                         if (user == null)
                         {
                             resp.Code = 1002;
@@ -165,7 +165,7 @@ namespace Grpc.Server.Common
                             await responseStream.WriteAsync(resp);
                             return;
                         }
-                        var chatInfo = new ChatInfo() { UserName = user, Msg = userInfo.Data, SendTime = DateTime.Now.ToTimestamp() };
+                        var chatInfo = new ChatInfo() { UserName = user.Key, Msg = userInfo.Data, SendTime = DateTime.Now.ToTimestamp() };
 
                         serverInfo.GroupInfo.ChatInfos.Add(chatInfo);
                         {
@@ -180,7 +180,7 @@ namespace Grpc.Server.Common
                     {
                         resp.Code = 1;
                         resp.Msg = "请求成功";
-                        resp.Data = serverInfo.ClientInfos.ToJson();
+                        //resp.Data = serverInfo.ClientInfos.ToJson();
                         await responseStream.WriteAsync(resp);
                     }
                     break;
