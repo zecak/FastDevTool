@@ -47,3 +47,5 @@
 /RunTaskForAny/GrpcLib/obj/Debug
 /RunTaskForAny/Grpc.Client.DC/bin/Debug
 /RunTaskForAny/Grpc.Client.DC/obj/Debug
+/RunTaskForAny/Grpc.Manage/obj/Debug
+/RunTaskForAny/Grpc.Manage/bin/Debug
