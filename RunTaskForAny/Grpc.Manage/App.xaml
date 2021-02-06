@@ -8,6 +8,14 @@
             <s:ApplicationLoader.Bootstrapper>
                 <local:Bootstrapper/>
             </s:ApplicationLoader.Bootstrapper>
+            <s:ApplicationLoader.MergedDictionaries>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="Themes/Default.xaml"/>
+                        <ResourceDictionary Source="Language/Default.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </s:ApplicationLoader.MergedDictionaries>
         </s:ApplicationLoader>
     </Application.Resources>
 </Application>
