@@ -1,7 +1,9 @@
 ﻿using Grpc.Core;
 using Grpc.Server.Api;
 using GrpcLib;
+using GrpcLib.Common;
 using GrpcLib.Models;
+using GrpcLib.Security.Encrypt;
 using GrpcLib.Service;
 using System;
 using System.Collections.Generic;
@@ -21,31 +23,30 @@ namespace Grpc.Server.Common
             {
                 Init(context);
 
-                var sign = (request.AppID + request.Data + request.Time + Tool.Setting.ServerKey).ToMd5();
-                if (sign != request.Sign)
-                {
-                    return Task.FromResult(new APIReply { Code = 1002, Msg = "电子签名不一致" });
-                }
-
                 var api = FactoryApi.CreateFunction(request.ApiPath);
                 if (api != null)
                 {
+                    if (!api.CheckSign(request, serverInfo))
+                    {
+                        return Task.FromResult(new APIReply { Code = 222, Msg = "电子签名不一致" });
+                    }
                     if (api.LimitAction)
                     {
-                        var curToken = serverInfo.OnlineUserTokens.FirstOrDefault(t => t.Key == request.Token);
-                        if (string.IsNullOrWhiteSpace(request.Token)||(curToken == null))
+                        var client = serverInfo.Clients.FirstOrDefault(c => c.Name == context.Peer);
+                        if (client == null)
                         {
-                            return Task.FromResult(new APIReply { Code = 1001, Msg = "未登录或登录已失效" });
+                            return Task.FromResult(new APIReply { Code = 101, Msg = "未建立连接" });
                         }
-                        //根据token检查是否已经登录了
-                        //数据库检查
-#warning 需要登录检查
+                        if (client.Token != request.Token)
+                        {
+                            return Task.FromResult(new APIReply { Code = 102, Msg = "未登录或登录已过期" });
+                        }
 
                     }
-                    return api.ApiAction(request, context, serverInfo);
+                    return Task.FromResult(api.ApiAction(request, context, serverInfo));
                 }
 
-                return Task.FromResult(new APIReply { Code = 1000, Msg = "未知操作" });
+                return Task.FromResult(new APIReply { Code = 100, Msg = "未知操作" });
             }
             catch (Exception ex)
             {
@@ -56,24 +57,27 @@ namespace Grpc.Server.Common
 
         void Init(ServerCallContext context)
         {
-            //Tool.Log.Debug("Client:" + context.Peer + " Status:" + context.Status.StatusCode);
+            var clientInfo = serverInfo.Clients.FirstOrDefault(f => f.Name == context.Peer);
+            if (clientInfo == null)
+            {
+                var clientType = context.RequestHeaders.FirstOrDefault(f => f.Key == "ClientType");
+                var computerName = context.RequestHeaders.FirstOrDefault(f => f.Key == "ComputerName");
+                var systemName = context.RequestHeaders.FirstOrDefault(f => f.Key == "SystemName");
+                var userName = context.RequestHeaders.FirstOrDefault(f => f.Key == "UserName");
+                var token = context.RequestHeaders.FirstOrDefault(f => f.Key == "Token");
 
-            //var clientInfo = serverInfo.ClientInfos.FirstOrDefault(f => f.Key == context.Peer);
-            //if (clientInfo == null)
-            //{
-            //    clientInfo = new ClientInfo() { Key = context.Peer, StartTime = DateTime.Now, LastTime = DateTime.Now, HitCount = 1 };
-            //    serverInfo.ClientInfos.Add(clientInfo);
-            //}
-            //else
-            //{
-            //    clientInfo.LastTime = DateTime.Now;
-            //    clientInfo.HitCount++;
-            //}
+                clientInfo = new ClientInfo() { Name = context.Peer, ClientType = EncryptHelper.DeBase64(clientType.Value), ComputerName = EncryptHelper.DeBase64(computerName.Value), SystemName = EncryptHelper.DeBase64(systemName.Value), UserName = EncryptHelper.DeBase64(userName.Value), Token = EncryptHelper.DeBase64(token.Value), Status = 1, StartTime = DateTime.Now, LastTime = DateTime.Now, HitCount = 1 };
+                serverInfo.Clients.Add(clientInfo);
 
-            //for (int i = 0; i < context.RequestHeaders.Count; i++)
-            //{
-            //    Console.WriteLine("Key:" + context.RequestHeaders.ElementAt(i).Key+ " Value:" + context.RequestHeaders.ElementAt(i).Value);
-            //}
+                Tool.Log.Debug("ClientInfo:" + clientInfo.ToJson());
+            }
+            else
+            {
+                clientInfo.Status = 1;
+                clientInfo.LastTime = DateTime.Now;
+                clientInfo.HitCount++;
+            }
+
         }
 
         public override async Task Chat(IAsyncStreamReader<APIRequest> requestStream, IServerStreamWriter<APIReply> responseStream, ServerCallContext context)
@@ -87,7 +91,7 @@ namespace Grpc.Server.Common
                 {
                     var req = requestStream.Current;
 
-                    await DoworkAsync(req, responseStream, serverInfo);
+                    await DoworkAsync(req, responseStream, context, serverInfo);
 
                 }
                 catch (Exception ex)
@@ -100,96 +104,39 @@ namespace Grpc.Server.Common
             }
         }
 
-        async Task DoworkAsync(APIRequest reqData, IServerStreamWriter<APIReply> responseStream, ServerInfo serverInfo)
+        async Task DoworkAsync(APIRequest request, IServerStreamWriter<APIReply> responseStream, ServerCallContext context, ServerInfo serverInfo)
         {
-            var resp = new APIReply();
-            if (reqData.ApiPath == ActionApiPath.Heartbeat)
+            StartWork(request);
+            APIReply resp = new APIReply() { Code = 100, Msg = "未知操作" };
+            var api = FactoryApi.CreateFunction(request.ApiPath);
+            if (api != null)
             {
-                var sign2 = (reqData.AppID + reqData.Data + reqData.Time + Tool.Setting.ServerKey).ToMd5();
-                if (sign2 != reqData.Sign)
+                if (!api.CheckSign(request, serverInfo))
                 {
-                    resp.Code = 2222;
+                    resp.Code = 222;
                     resp.Msg = "电子签名不一致";
                     await responseStream.WriteAsync(resp);
                     return;
                 }
-
-                var userInfo = reqData.Data.JsonTo<UserInfo>();
-                if (userInfo == null)
+                if (api.LimitAction)
                 {
-                    resp.Code = 1001;
-                    resp.Msg = "请求参数不正确";
-                    await responseStream.WriteAsync(resp);
-                    return;
-                }
-                var toChats = serverInfo.GroupInfo.ChatInfos.FindAll(c => (c.SendTime > userInfo.LoingTime) && c.UserName != userInfo.UserName);
+                    var client = serverInfo.Clients.FirstOrDefault(c => c.Name == context.Peer);
+                    if (client == null)
+                    {
+                        await responseStream.WriteAsync(new APIReply { Code = 101, Msg = "未建立连接" });
+                        return;
+                    }
+                    if (client.Token != request.Token)
+                    {
+                        await responseStream.WriteAsync(new APIReply { Code = 102, Msg = "未登录或登录已过期" });
+                        return;
+                    }
 
-                foreach (var chat in toChats)
-                {
-                    resp.Code = 1;
-                    resp.Data = new RespData() { Action = "ChatMsg", Data = chat.ToJson() }.ToJson();
-                    resp.Msg = "请求成功";
-                    await responseStream.WriteAsync(resp);
                 }
-                return;
-            }
-            StartWork(reqData);
-
-            var sign = (reqData.AppID + reqData.Data + reqData.Time + Tool.Setting.ServerKey).ToMd5();
-            if (sign != reqData.Sign)
-            {
-                resp.Code = 2222;
-                resp.Msg = "电子签名不一致";
-                await responseStream.WriteAsync(resp);
+                await api.ChatAction(request, responseStream, context, serverInfo);
                 return;
             }
 
-            switch (reqData.ApiPath)
-            {
-
-                case "/api/wordchat":
-                    {
-                        var userInfo = reqData.Data.JsonTo<RespData>();
-                        if (userInfo == null)
-                        {
-                            resp.Code = 1001;
-                            resp.Msg = "请求参数不正确";
-                            await responseStream.WriteAsync(resp);
-                            return;
-                        }
-                        var user = serverInfo.OnlineUserTokens.FirstOrDefault(n => n.Key == userInfo.Action);
-                        if (user == null)
-                        {
-                            resp.Code = 1002;
-                            resp.Msg = "未登录";
-                            await responseStream.WriteAsync(resp);
-                            return;
-                        }
-                        var chatInfo = new ChatInfo() { UserName = user.Key, Msg = userInfo.Data, SendTime = DateTime.Now.ToTimestamp() };
-
-                        serverInfo.GroupInfo.ChatInfos.Add(chatInfo);
-                        {
-                            resp.Code = 1;
-                            resp.Data = new RespData() { Action = "ChatMsg", Data = chatInfo.ToJson() }.ToJson();
-                            await responseStream.WriteAsync(resp);
-                        }
-
-                    }
-                    break;
-                case "/api/getclients":
-                    {
-                        resp.Code = 1;
-                        resp.Msg = "请求成功";
-                        //resp.Data = serverInfo.ClientInfos.ToJson();
-                        await responseStream.WriteAsync(resp);
-                    }
-                    break;
-                default:
-                    {
-                        await responseStream.WriteAsync(new APIReply() { Code = 10000, Msg = "未知Action" });
-                    }
-                    break;
-            }
             EndWork(resp);
         }
 

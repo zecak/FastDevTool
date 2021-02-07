@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GrpcLib
+namespace GrpcLib.Models
 {
     public class GroupInfo
     {

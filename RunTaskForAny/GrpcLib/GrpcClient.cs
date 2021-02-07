@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using GrpcLib.Security.Encrypt;
 using GrpcLib.Service;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,10 @@ namespace GrpcLib
         Channel channel = null;
         gRPC.gRPCClient client = null;
         //AsyncDuplexStreamingCall<APIRequest, APIReply> call = null;
+
+        public string ClientType { get; set; } = "";
+        public string UserName { get; set; } = "";
+        public string Token { get; set; } = "";
         public GrpcClient(string target)
         {
             Target = target;
@@ -71,7 +76,13 @@ namespace GrpcLib
         {
             try
             {
-                return client.ExecAsync(reqData).GetAwaiter().GetResult();
+                var meta = new Metadata();
+                meta.Add("ClientType", EncryptHelper.EnBase64(ClientType));
+                meta.Add("ComputerName", EncryptHelper.EnBase64(Environment.MachineName));
+                meta.Add("SystemName", EncryptHelper.EnBase64(Environment.OSVersion.VersionString));
+                meta.Add("UserName", EncryptHelper.EnBase64(UserName));
+                meta.Add("Token", EncryptHelper.EnBase64(Token));
+                return client.ExecAsync(reqData, meta).GetAwaiter().GetResult();
             }
             catch (RpcException ex)
             {

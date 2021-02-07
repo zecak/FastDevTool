@@ -15,12 +15,12 @@ namespace Grpc.Server.Api
         public override bool LimitAction => false;
         public override string ActionName => ActionApiPath.ServerOline;
 
-        public override Task<APIReply> ApiAction(APIRequest request, ServerCallContext context, ServerInfo serverInfo)
+        public override APIReply ApiAction(APIRequest request, ServerCallContext context, ServerInfo serverInfo)
         {
             var resp = new APIReply();
             resp.Code = 1;
             resp.Msg = "请求成功";
-            return Task.FromResult(resp);
+            return resp;
         }
     }
 }

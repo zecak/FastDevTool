@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using GrpcLib.Common;
 using GrpcLib.Models;
 using GrpcLib.Service;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GrpcLib
 {
-   public abstract class AExecAtion
+    public abstract class AExecAtion
     {
         /// <summary>
         /// 受限制的操作:true需要登录后才能操作,false无需登录就能操作
@@ -25,6 +26,25 @@ namespace GrpcLib
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public abstract Task<APIReply> ApiAction(APIRequest request, ServerCallContext context, ServerInfo serverInfo);
+        public virtual APIReply ApiAction(APIRequest request, ServerCallContext context, ServerInfo serverInfo)
+        {
+            return new APIReply() { Code=100, Msg= "UnimplementedOperation" };
+        }
+
+        public virtual async Task ChatAction(APIRequest request, IServerStreamWriter<APIReply> responseStream, ServerCallContext context, ServerInfo serverInfo)
+        {
+            await responseStream.WriteAsync(new APIReply { Code = 100, Msg = "UnimplementedOperation" });
+        }
+
+        public bool CheckSign(APIRequest request, ServerInfo serverInfo)
+        {
+            var sign = (request.AppID + request.Data + request.Time + serverInfo.Setting.ServerKey).ToMd5();
+            if (sign != request.Sign)
+            {
+                return false;
+            }
+            return true;
+        }
+
     }
 }

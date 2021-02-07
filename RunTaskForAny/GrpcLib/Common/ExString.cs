@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Grpc.Server.Common
+namespace GrpcLib.Common
 {
     public static class MyString
     {

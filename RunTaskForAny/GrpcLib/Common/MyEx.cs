@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Grpc.Server.Common
+namespace GrpcLib.Common
 {
     public static class MyEx
     {

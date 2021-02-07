@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Grpc.Server.Common
+namespace GrpcLib.Common
 {
     public delegate void FileSystemEvent(String _path);
 
