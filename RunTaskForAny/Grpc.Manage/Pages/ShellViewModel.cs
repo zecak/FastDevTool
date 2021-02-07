@@ -1,4 +1,5 @@
-﻿using Grpc.Manage.Models;
+﻿using Grpc.Manage.Common;
+using Grpc.Manage.Models;
 using Stylet;
 using System;
 using System.Collections.Generic;
@@ -12,16 +13,14 @@ namespace Grpc.Manage.Pages
     {
         public string Title { get; set; }
 
-        public Class1 class1 { get; set; }
+        public AgentModel Agent { get; set; } = Helper.Agent;
 
         public ShellViewModel()
         {
             Title = "Grpc管理";
-            class1 = new Class1() { Name = "sssss" };
         }
         public void SayHello()
         {
-            class1.Name = "SayHello";
 
         }
     }

@@ -1,4 +1,9 @@
-﻿using Grpc.Manage.Pages;
+﻿using Grpc.Manage.Common;
+using Grpc.Manage.Models;
+using Grpc.Manage.Pages;
+using GrpcLib;
+using GrpcLib.Common;
+using GrpcLib.Service;
 using Stylet;
 using StyletIoC;
 using System;
@@ -15,6 +20,55 @@ namespace Grpc.Manage
     {
         protected override void OnStart()
         {
+            {
+                Helper.Agent = new AgentModel();
+                Helper.Agent.Name = "默认代理";
+                Helper.Agent.Status = 0;
+                Helper.Agent.StatusMsg = "离线";
+                Helper.Agent.Msg = "未连接";
+                Helper.Agent.LinkTime = DateTime.Now;
+
+                Helper.GrpcClientAgent = new GrpcClient(Helper.Setting.ServerIP + ":" + Helper.Setting.ServerPort);
+                Helper.GrpcClientAgent.ClientType = "代理服务";
+                var req = new APIRequest() { ApiPath = "GetServerList", Time = DateTime.Now.ToTimestamp() };
+                req.Sign = (req.AppID + req.Data + req.Time + Helper.Setting.ServerKey).ToMd5();
+                var resp = Helper.GrpcClientAgent.Exec(req);
+                if (resp == null)
+                {
+                    Helper.Agent.Status = 2;
+                    Helper.Agent.Msg = "连接失败";
+                }
+                else
+                {
+                    if (resp.Code == 1)
+                    {
+                        var server = resp.Data.JsonTo<ServerModel>();
+                        if(server!=null)
+                        {
+                            if (server.Status != "1")
+                            {
+                                Helper.Agent.Status = 3;
+                                Helper.Agent.Msg = "服务端不在线";
+                            }
+                            else
+                            {
+                                Helper.Agent.Status = 1;
+                                Helper.Agent.StatusMsg = "在线";
+                                Helper.Agent.Msg = "连接成功";
+                                Helper.Agent.IP = server.IP;
+                                Helper.Agent.Port = server.Port;
+                                Helper.Agent.Key = server.Key;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Helper.Agent.Status = 4;
+                        Helper.Agent.Msg = "错误信息:"+ resp.Msg;
+                    }
+                }
+                
+            }
 
         }
 

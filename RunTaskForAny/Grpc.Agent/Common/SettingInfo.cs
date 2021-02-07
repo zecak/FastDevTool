@@ -19,10 +19,10 @@ namespace Grpc.Agent.Common
 
         public string ServerRun { get; set; }
         public string ServerInfo { get; set; }
-        public List<ServerInfo> ServerList { get; set; }
+        public List<ServerModel> ServerList { get; set; }
     }
 
-    public class ServerInfo
+    public class ServerModel
     {
         public string IP { get; set; }
         public string Port { get; set; }

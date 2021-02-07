@@ -116,6 +116,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
+    <None Include="log4net.config" />
+    <None Include="setting.json" />
     <None Include="Themes\WhiteLight.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -123,7 +125,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Class1.cs" />
+    <Compile Include="Common\Helper.cs" />
+    <Compile Include="Common\ResourceDictionaryInfo.cs" />
+    <Compile Include="Models\AgentModel.cs" />
+    <Compile Include="Models\ServerModel.cs" />
     <Compile Include="Pages\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
@@ -160,6 +165,7 @@
       <Name>GrpcLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Grpc.Core.2.35.0\build\net45\Grpc.Core.targets" Condition="Exists('..\packages\Grpc.Core.2.35.0\build\net45\Grpc.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
