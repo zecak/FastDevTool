@@ -5,14 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GrpcLib.Models
+namespace Grpc.Manage.Models
 {
-    public class ClientInfo 
+    public class ClientInfo : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         public string Name { get; set; }
         public string Token { get; set; }
         public string ComputerName { get; set; }
-        public string SystemName { get; set; } 
+        public string SystemName { get; set; }
 
         public string ClientHost { get; set; }
         public string ClientType { get; set; }

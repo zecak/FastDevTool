@@ -33,6 +33,7 @@ namespace GrpcLib
         gRPC.gRPCClient client = null;
         //AsyncDuplexStreamingCall<APIRequest, APIReply> call = null;
 
+        public string ClientHost { get; set; } = "";
         public string ClientType { get; set; } = "";
         public string UserName { get; set; } = "";
         public string Token { get; set; } = "";
@@ -46,7 +47,14 @@ namespace GrpcLib
 
         public void NewChat(APIRequest reqData)
         {
-            var call_temp = client.Chat();
+            var meta = new Metadata();
+            meta.Add(nameof(ClientHost), EncryptHelper.EnBase64(ClientHost));
+            meta.Add(nameof(ClientType), EncryptHelper.EnBase64(ClientType));
+            meta.Add("ComputerName", EncryptHelper.EnBase64(Environment.MachineName));
+            meta.Add("SystemName", EncryptHelper.EnBase64(Environment.OSVersion.VersionString));
+            meta.Add(nameof(UserName), EncryptHelper.EnBase64(UserName));
+            meta.Add(nameof(Token), EncryptHelper.EnBase64(Token));
+            var call_temp = client.Chat(meta);
             Task.Run(async () =>
             {
                 var responseReaderTask = Task.Run(async () =>
@@ -77,11 +85,12 @@ namespace GrpcLib
             try
             {
                 var meta = new Metadata();
-                meta.Add("ClientType", EncryptHelper.EnBase64(ClientType));
+                meta.Add(nameof(ClientHost), EncryptHelper.EnBase64(ClientHost));
+                meta.Add(nameof(ClientType), EncryptHelper.EnBase64(ClientType));
                 meta.Add("ComputerName", EncryptHelper.EnBase64(Environment.MachineName));
                 meta.Add("SystemName", EncryptHelper.EnBase64(Environment.OSVersion.VersionString));
-                meta.Add("UserName", EncryptHelper.EnBase64(UserName));
-                meta.Add("Token", EncryptHelper.EnBase64(Token));
+                meta.Add(nameof(UserName), EncryptHelper.EnBase64(UserName));
+                meta.Add(nameof(Token), EncryptHelper.EnBase64(Token));
                 return client.ExecAsync(reqData, meta).GetAwaiter().GetResult();
             }
             catch (RpcException ex)

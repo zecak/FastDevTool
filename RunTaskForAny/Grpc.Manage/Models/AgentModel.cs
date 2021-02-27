@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using GrpcLib.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,6 +22,11 @@ namespace Grpc.Manage.Models
         public string Port { get; set; }
 
         public string Key { get; set; }
+
+        public int ServerStatus { get; set; }
+        public string ServerStatusMsg { get; set; }
+
+        public List<ClientInfo> Clients { get; set; }
 
     }
 }

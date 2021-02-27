@@ -117,7 +117,9 @@
       <SubType>Designer</SubType>
     </Resource>
     <None Include="log4net.config" />
-    <None Include="setting.json" />
+    <None Include="setting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Themes\WhiteLight.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -128,6 +130,7 @@
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\ResourceDictionaryInfo.cs" />
     <Compile Include="Models\AgentModel.cs" />
+    <Compile Include="Models\ClientInfo.cs" />
     <Compile Include="Models\ServerModel.cs" />
     <Compile Include="Pages\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>

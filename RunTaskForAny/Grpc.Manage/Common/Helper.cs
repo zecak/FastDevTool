@@ -15,8 +15,6 @@ namespace Grpc.Manage.Common
     {
         public static AgentModel Agent { get; set; }
 
-        public static List<ClientInfo> Clients { get; set; }
-
         public static GrpcClient GrpcClientAgent { get; set; }
 
         public static GrpcClient GrpcClientClient { get; set; }

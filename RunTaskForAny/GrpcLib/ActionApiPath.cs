@@ -13,5 +13,7 @@ namespace GrpcLib
 
         public const string Heartbeat = "/api/heartbeat";
         public const string ServerOline = "/server/online";
+
+        public const string GetClients = "/api/getclients";
     }
 }

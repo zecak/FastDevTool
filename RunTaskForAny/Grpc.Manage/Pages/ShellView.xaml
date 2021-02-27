@@ -7,16 +7,16 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="600" Width="800"
+        Title="{Binding Title}" Height="600" Width="1024"
         xmlns:s="https://github.com/canton7/Stylet"
         d:DataContext="{d:DesignInstance local:ShellViewModel}">
     <Grid>
         <DockPanel>
             <DockPanel DockPanel.Dock="Top" Margin="4">
-                <TextBox Text="{Binding class1.Name,Mode=TwoWay}"></TextBox>
+                <!--<TextBox Text="{Binding class1.Name,Mode=TwoWay}"></TextBox>
                 <Button Content="断开连接" Margin="2"></Button>
                 <Button Content="ceshi" Margin="2" Command="{s:Action SayHello}"></Button>
-                <TextBlock Text="{Binding class1.Name}" Margin="2"></TextBlock>
+                <TextBlock Text="{Binding class1.Name}" Margin="2"></TextBlock>-->
             </DockPanel>
             <DockPanel DockPanel.Dock="Bottom" Margin="0 4 0 8">
 
@@ -52,13 +52,45 @@
                 <DockPanel Margin="8 0 8 0">
                     <TextBlock Text="{DynamicResource lang_Status}" ></TextBlock>
                     <TextBlock>:</TextBlock>
-                    <TextBlock></TextBlock>
+                    <TextBlock Text="{Binding Agent.ServerStatusMsg}" ToolTip="{Binding Agent.Msg}">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Agent.ServerStatus}" Value="0">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Agent.ServerStatus}" Value="2">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Agent.ServerStatus}" Value="3">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Agent.ServerStatus}" Value="4">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Agent.ServerStatus}" Value="1">
+                                        <Setter Property="Foreground" Value="#FF51B02E"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </DockPanel>
                 <DockPanel></DockPanel>
             </DockPanel>
             <DockPanel Margin="4">
-                <DataGrid>
-
+                <DataGrid ItemsSource="{Binding Agent.Clients}" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Token" Binding="{Binding Token}"/>
+                        <DataGridTextColumn Header="ComputerName" Binding="{Binding ComputerName}"/>
+                        <DataGridTextColumn Header="SystemName" Binding="{Binding SystemName}"/>
+                        <DataGridTextColumn Header="ClientHost" Binding="{Binding ClientHost}"/>
+                        <DataGridTextColumn Header="ClientType" Binding="{Binding ClientType}"/>
+                        <DataGridTextColumn Header="StartTime" Binding="{Binding StartTime,StringFormat='yyyy-MM-dd HH:mm:ss'}"/>
+                        <DataGridTextColumn Header="LastTime" Binding="{Binding LastTime,StringFormat='yyyy-MM-dd HH:mm:ss'}"/>
+                        <DataGridTextColumn Header="HitCount" Binding="{Binding HitCount}"/>
+                    </DataGrid.Columns>
                 </DataGrid>
             </DockPanel>
         </DockPanel>

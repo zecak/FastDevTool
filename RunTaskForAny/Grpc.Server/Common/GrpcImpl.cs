@@ -15,7 +15,7 @@ namespace Grpc.Server.Common
 {
     public class GrpcImpl : gRPC.gRPCBase
     {
-        ServerInfo serverInfo { get; set; } = new ServerInfo();
+        ServerInfo serverInfo { get; set; } = new ServerInfo() { Setting = Tool.Setting, };
 
         public override Task<APIReply> Exec(APIRequest request, ServerCallContext context)
         {
@@ -60,13 +60,21 @@ namespace Grpc.Server.Common
             var clientInfo = serverInfo.Clients.FirstOrDefault(f => f.Name == context.Peer);
             if (clientInfo == null)
             {
-                var clientType = context.RequestHeaders.FirstOrDefault(f => f.Key == "ClientType");
-                var computerName = context.RequestHeaders.FirstOrDefault(f => f.Key == "ComputerName");
-                var systemName = context.RequestHeaders.FirstOrDefault(f => f.Key == "SystemName");
-                var userName = context.RequestHeaders.FirstOrDefault(f => f.Key == "UserName");
-                var token = context.RequestHeaders.FirstOrDefault(f => f.Key == "Token");
+                var peerHostHeader = context.RequestHeaders.FirstOrDefault(f => f.Key == "ClientHost".ToLower());
+                var clientTypeHeader = context.RequestHeaders.FirstOrDefault(f => f.Key == "ClientType".ToLower());
+                var computerNameHeader = context.RequestHeaders.FirstOrDefault(f => f.Key == "ComputerName".ToLower());
+                var systemNameHeader = context.RequestHeaders.FirstOrDefault(f => f.Key == "SystemName".ToLower());
+                var userNameHeader = context.RequestHeaders.FirstOrDefault(f => f.Key == "UserName".ToLower());
+                var tokenHeader = context.RequestHeaders.FirstOrDefault(f => f.Key == "Token".ToLower());
 
-                clientInfo = new ClientInfo() { Name = context.Peer, ClientType = EncryptHelper.DeBase64(clientType.Value), ComputerName = EncryptHelper.DeBase64(computerName.Value), SystemName = EncryptHelper.DeBase64(systemName.Value), UserName = EncryptHelper.DeBase64(userName.Value), Token = EncryptHelper.DeBase64(token.Value), Status = 1, StartTime = DateTime.Now, LastTime = DateTime.Now, HitCount = 1 };
+                var peerHost = peerHostHeader == null ? "" : (peerHostHeader.Value ?? "");
+                var clientType = clientTypeHeader == null ? "" : (clientTypeHeader.Value ?? "");
+                var computerName = computerNameHeader == null ? "" : (computerNameHeader.Value ?? "");
+                var systemName = systemNameHeader == null ? "" : (systemNameHeader.Value ?? "");
+                var userName = userNameHeader == null ? "" : (userNameHeader.Value ?? "");
+                var token = tokenHeader == null ? "" : (tokenHeader.Value ?? "");
+
+                clientInfo = new ClientInfo() { Name = context.Peer, ClientHost = EncryptHelper.DeBase64(peerHost), ClientType = EncryptHelper.DeBase64(clientType), ComputerName = EncryptHelper.DeBase64(computerName), SystemName = EncryptHelper.DeBase64(systemName), UserName = EncryptHelper.DeBase64(userName), Token = EncryptHelper.DeBase64(token), Status = 1, StartTime = DateTime.Now, LastTime = DateTime.Now, HitCount = 1 };
                 serverInfo.Clients.Add(clientInfo);
 
                 Tool.Log.Debug("ClientInfo:" + clientInfo.ToJson());
@@ -77,7 +85,7 @@ namespace Grpc.Server.Common
                 clientInfo.LastTime = DateTime.Now;
                 clientInfo.HitCount++;
             }
-
+            serverInfo.Clients.RemoveAll(c=>DateTime.Now.Subtract(c.LastTime).TotalSeconds>=5);
         }
 
         public override async Task Chat(IAsyncStreamReader<APIRequest> requestStream, IServerStreamWriter<APIReply> responseStream, ServerCallContext context)

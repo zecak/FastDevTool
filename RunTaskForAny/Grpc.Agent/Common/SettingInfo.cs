@@ -26,9 +26,13 @@ namespace Grpc.Agent.Common
     {
         public string IP { get; set; }
         public string Port { get; set; }
-
+        /// <summary>
+        /// 通讯Key
+        /// </summary>
         public string Key { get; set; }
-
+        /// <summary>
+        /// 状态:-1维护;0离线;1在线
+        /// </summary>
         public string Status { get; set; }
     }
 }

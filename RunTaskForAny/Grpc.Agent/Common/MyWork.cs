@@ -33,11 +33,15 @@ namespace Grpc.Agent.Common
                 server.Start();
 
                 Tool.Log.Info("ServerCount:" + Tool.Setting.ServerList?.Count);
+
                 foreach (var serverinfo in Tool.Setting.ServerList)
                 {
                     Tool.Log.Info("ServerInfo:" + serverinfo.IP + ":" + serverinfo.Port);
                     var client = new GrpcClient(serverinfo.IP + ":" + serverinfo.Port);
-
+                    client.ClientHost = Tool.Setting.AgentIP + ":" + Tool.Setting.AgentPort;
+                    client.ClientType = "Agent";
+                    client.UserName = "代理服务";
+                    client.Token = "";
                     client.ExecFailed += Client_ExecFailed;
 
                     grpcClientList.Add(client);
@@ -49,6 +53,14 @@ namespace Grpc.Agent.Common
                         {
                             try
                             {
+                                if(Tool.Setting.ServerRun!="1")
+                                {
+                                    //维护
+                                    serverinfo.Status = "-1";
+                                    System.Threading.Thread.Sleep(2000);
+                                    continue;
+                                }
+
                                 var req = new APIRequest() { ApiPath = ActionApiPath.ServerOline, AppID = "代理服务", Time = DateTime.Now.ToTimestamp() };
                                 req.Sign = (req.AppID + req.Data + req.Time + serverinfo.Key).ToMd5();
                                 var resp = client.Exec(req);

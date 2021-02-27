@@ -101,6 +101,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\AGetClients.cs" />
     <Compile Include="Api\AHeartbeat.cs" />
     <Compile Include="Api\ALogin.cs" />
     <Compile Include="Api\ALoginOut.cs" />
