@@ -79,7 +79,7 @@
                 <DockPanel></DockPanel>
             </DockPanel>
             <DockPanel Margin="4">
-                <DataGrid ItemsSource="{Binding Agent.Clients}" AutoGenerateColumns="False">
+                <DataGrid ItemsSource="{Binding Agent.Clients}" AutoGenerateColumns="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="Token" Binding="{Binding Token}"/>
@@ -87,8 +87,8 @@
                         <DataGridTextColumn Header="SystemName" Binding="{Binding SystemName}"/>
                         <DataGridTextColumn Header="ClientHost" Binding="{Binding ClientHost}"/>
                         <DataGridTextColumn Header="ClientType" Binding="{Binding ClientType}"/>
-                        <DataGridTextColumn Header="StartTime" Binding="{Binding StartTime,StringFormat='yyyy-MM-dd HH:mm:ss'}"/>
-                        <DataGridTextColumn Header="LastTime" Binding="{Binding LastTime,StringFormat='yyyy-MM-dd HH:mm:ss'}"/>
+                        <DataGridTextColumn Header="StartTime" Binding="{Binding StartTime,StringFormat='yyyy/MM/dd HH:mm:ss'}"/>
+                        <DataGridTextColumn Header="LastTime" Binding="{Binding LastTime,StringFormat='yyyy/MM/dd HH:mm:ss'}"/>
                         <DataGridTextColumn Header="HitCount" Binding="{Binding HitCount}"/>
                     </DataGrid.Columns>
                 </DataGrid>

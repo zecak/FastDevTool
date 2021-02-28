@@ -11,5 +11,5 @@
     <sys:String x:Key="lang_Switch_Theme">切换皮肤</sys:String>
 
     <sys:String x:Key="lang_Status_Agent">代理状态</sys:String>
-    <sys:String x:Key="lang_Status">状态</sys:String>
+    <sys:String x:Key="lang_Status">服务状态</sys:String>
 </ResourceDictionary>

@@ -32,7 +32,7 @@ namespace Grpc.Manage
                 Helper.Agent.LinkTime = DateTime.Now;
 
                 Helper.GrpcClientAgent = new GrpcClient(Helper.Setting.ServerIP + ":" + Helper.Setting.ServerPort);
-                Helper.GrpcClientAgent.ClientType = "ClientManage";
+                Helper.GrpcClientAgent.ClientType = "Manage";
                 Helper.GrpcClientAgent.UserName = "客户端管理";
                 var req = new APIRequest() { ApiPath = "GetServerList", Time = DateTime.Now.ToTimestamp() };
                 req.Sign = (req.AppID + req.Data + req.Time + Helper.Setting.ServerKey).ToMd5();
@@ -68,7 +68,7 @@ namespace Grpc.Manage
                                 Helper.Agent.Key = server.Key;
 
                                 Helper.GrpcClientClient = new GrpcClient(Helper.Agent.IP + ":" + Helper.Agent.Port);
-                                Helper.GrpcClientClient.ClientType = "ClientManage";
+                                Helper.GrpcClientClient.ClientType = "Manage";
                                 Helper.GrpcClientClient.UserName = "客户端管理";
                                 var task2 = Task.Factory.StartNew(() =>
                                 {
@@ -117,29 +117,43 @@ namespace Grpc.Manage
                                                     if (resp2.Code == 1)
                                                     {
                                                         var clients = resp2.Data.JsonTo<List<Models.ClientInfo>>();
-
+                                                        if(clients==null)
+                                                        {
+                                                            Helper.Agent.Msg = "客户端信息解析为空";
+                                                            continue;
+                                                        }
                                                         if (Helper.Agent.Clients==null)
                                                         {
                                                             Helper.Agent.Clients = clients;
                                                         }
                                                         else
                                                         {
-                                                            Helper.Agent.Clients.ForEach(c=> {
-                                                                var temp = clients.FirstOrDefault(t=>t.Name==c.Name);
-                                                                if(temp!=null)
-                                                                {
-                                                                    c.ClientHost = temp.ClientHost;
-                                                                    c.ClientType = temp.ClientType;
-                                                                    c.ComputerName = temp.ComputerName;
-                                                                    c.HitCount = temp.HitCount;
-                                                                    c.LastTime = temp.LastTime;
-                                                                    c.StartTime = temp.StartTime;
-                                                                    c.Status = temp.Status;
-                                                                    c.SystemName = temp.SystemName;
-                                                                    c.Token = temp.Token;
-                                                                    c.UserName = temp.UserName;
-                                                                }
-                                                            });
+                                                            if(clients.Count!= Helper.Agent.Clients.Count)
+                                                            {
+                                                                Helper.Agent.Clients = clients;
+                                                            }
+                                                            else
+                                                            {
+                                                                Helper.Agent.Clients.ForEach(c => {
+                                                                    var temp = clients.FirstOrDefault(t => t.Name == c.Name);
+                                                                    if (temp != null)
+                                                                    {
+                                                                        c.ClientHost = temp.ClientHost;
+                                                                        c.ClientType = temp.ClientType;
+                                                                        c.ComputerName = temp.ComputerName;
+                                                                        c.HitCount = temp.HitCount;
+                                                                        c.LastTime = temp.LastTime;
+                                                                        c.StartTime = temp.StartTime;
+                                                                        c.Status = temp.Status;
+                                                                        c.SystemName = temp.SystemName;
+                                                                        c.Token = temp.Token;
+                                                                        c.UserName = temp.UserName;
+                                                                    }
+
+                                                                });
+                                                            }
+
+                                                           
                                                         }
 
                                                     }
