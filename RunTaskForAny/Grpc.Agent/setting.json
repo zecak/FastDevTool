@@ -7,6 +7,7 @@
   "AgentKey": "123456",
   "ServerRun": "1",
   "ServerInfo": "服务器维护中,维护时间:大约半个小时",
+  "MaxClientCount": 1,
   "ServerList": [
     {
       "IP": "172.16.1.60",

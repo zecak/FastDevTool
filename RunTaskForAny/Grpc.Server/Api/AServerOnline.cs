@@ -20,6 +20,7 @@ namespace Grpc.Server.Api
             var resp = new APIReply();
             resp.Code = 1;
             resp.Msg = "请求成功";
+            resp.Data = serverInfo.Clients.Where(s=>s.ClientType.Contains("Client")).Count().ToString();
             return resp;
         }
     }

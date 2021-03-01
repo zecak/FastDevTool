@@ -53,7 +53,7 @@ namespace Grpc.Agent.Common
                         {
                             try
                             {
-                                if(Tool.Setting.ServerRun!="1")
+                                if (Tool.Setting.ServerRun != "1")
                                 {
                                     //维护
                                     serverinfo.Status = "-1";
@@ -73,6 +73,11 @@ namespace Grpc.Agent.Common
                                     if (resp.Code == 1)
                                     {
                                         serverinfo.Status = "1";
+                                        var maxcount = resp.Data.ToInt();
+                                        if (Tool.Setting.MaxClientCount < maxcount)
+                                        {
+                                            serverinfo.Status = "2";
+                                        }
                                     }
                                     else
                                     {

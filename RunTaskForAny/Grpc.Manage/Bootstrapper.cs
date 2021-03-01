@@ -54,11 +54,23 @@ namespace Grpc.Manage
                         var server = resp.Data.JsonTo<ServerModel>();
                         if (server != null)
                         {
-                            if (server.Status != "1")
+                            if (server.Status == "0")
                             {
-                                Helper.Agent.ServerStatus = 3;
+                                Helper.Agent.ServerStatus = 0;
                                 Helper.Agent.ServerStatusMsg = "离线";
                                 Helper.Agent.Msg = "服务端不在线";
+                            }
+                            else if(server.Status == "-1")
+                            {
+                                Helper.Agent.ServerStatus = -1;
+                                Helper.Agent.ServerStatusMsg = "维护";
+                                Helper.Agent.Msg = "服务端维护中";
+                            }
+                            else if (server.Status == "2")
+                            {
+                                Helper.Agent.ServerStatus = 2;
+                                Helper.Agent.ServerStatusMsg = "受限";
+                                Helper.Agent.Msg = "客户端连接数上限";
                             }
                             else
                             {

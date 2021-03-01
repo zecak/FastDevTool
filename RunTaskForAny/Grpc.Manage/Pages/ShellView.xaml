@@ -9,7 +9,10 @@
         mc:Ignorable="d"
         Title="{Binding Title}" Height="600" Width="1024"
         xmlns:s="https://github.com/canton7/Stylet"
-        d:DataContext="{d:DesignInstance local:ShellViewModel}">
+        d:DataContext="{d:DesignInstance local:ShellViewModel}" Style="{DynamicResource ShellView_WindowStyle}">
+    <Window.Resources>
+
+    </Window.Resources>
     <Grid>
         <DockPanel>
             <DockPanel DockPanel.Dock="Top" Margin="4">
@@ -79,7 +82,7 @@
                 <DockPanel></DockPanel>
             </DockPanel>
             <DockPanel Margin="4">
-                <DataGrid ItemsSource="{Binding Agent.Clients}" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid ItemsSource="{Binding Agent.Clients}" AutoGenerateColumns="False" IsReadOnly="True" Background="#FFF0F0F0">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="Token" Binding="{Binding Token}"/>

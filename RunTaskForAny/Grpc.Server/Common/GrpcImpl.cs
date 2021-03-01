@@ -78,6 +78,9 @@ namespace Grpc.Server.Common
                 serverInfo.Clients.Add(clientInfo);
 
                 Tool.Log.Debug("ClientInfo:" + clientInfo.ToJson());
+                Tool.Log.Debug("[---------------------------------------------------------");
+                Tool.Log.Debug(" 总连接数:" + serverInfo.Clients.Count+" "+ "代理服务:" + serverInfo.Clients.Where(w => w.ClientType.Contains("Agent")).Count()+" "+ "管理:" + serverInfo.Clients.Where(w => w.ClientType.Contains("Manage")).Count()+" "+ "客户端:" + serverInfo.Clients.Where(w => w.ClientType.Contains("Client")).Count());
+                Tool.Log.Debug(" ---------------------------------------------------------]");
             }
             else
             {

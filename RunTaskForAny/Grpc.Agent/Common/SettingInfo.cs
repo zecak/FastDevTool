@@ -19,6 +19,7 @@ namespace Grpc.Agent.Common
 
         public string ServerRun { get; set; }
         public string ServerInfo { get; set; }
+        public int MaxClientCount { get; set; }
         public List<ServerModel> ServerList { get; set; }
     }
 
@@ -31,7 +32,7 @@ namespace Grpc.Agent.Common
         /// </summary>
         public string Key { get; set; }
         /// <summary>
-        /// 状态:-1维护;0离线;1在线
+        /// 状态:-1维护;0离线;1在线,2受限(客户端数达到上限)
         /// </summary>
         public string Status { get; set; }
     }
