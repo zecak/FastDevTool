@@ -73,8 +73,8 @@ namespace Grpc.Agent.Common
                                     if (resp.Code == 1)
                                     {
                                         serverinfo.Status = "1";
-                                        var maxcount = resp.Data.ToInt();
-                                        if (Tool.Setting.MaxClientCount < maxcount)
+                                        var runClientCount = resp.Data.ToInt();
+                                        if (Tool.Setting.MaxClientCount < runClientCount+1)
                                         {
                                             serverinfo.Status = "2";
                                         }
