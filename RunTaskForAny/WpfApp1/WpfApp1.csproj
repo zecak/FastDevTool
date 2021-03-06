@@ -174,12 +174,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GrpcLib\GrpcLib.csproj">
-      <Project>{9971e83d-da4c-4d24-8f2a-3973714ff3ad}</Project>
-      <Name>GrpcLib</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

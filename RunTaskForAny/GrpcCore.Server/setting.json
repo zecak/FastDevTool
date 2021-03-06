@@ -1,0 +1,8 @@
+{
+  "Name": "GrpcCore Server Service",
+  "ServiceName": "GrpcCore Server Service",
+  "Description": "GrpcCore Server Service",
+  "ServerIP": "172.16.1.60",
+  "ServerPort": "8090",
+  "ServerKey": "12345678"
+}

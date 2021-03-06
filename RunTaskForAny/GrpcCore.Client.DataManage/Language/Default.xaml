@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    >
+    <sys:String x:Key="lang_Title">中文</sys:String>
+    <sys:String x:Key="lang_Login">登录</sys:String>
+    <sys:String x:Key="lang_ChatMsg">聊天内容</sys:String>
+    <sys:String x:Key="lang_Send">发送</sys:String>
+
+    <sys:String x:Key="lang_Switch_Language">切换语言</sys:String>
+    <sys:String x:Key="lang_Switch_Theme">切换皮肤</sys:String>
+
+    <sys:String x:Key="lang_Status_Agent">代理状态</sys:String>
+    <sys:String x:Key="lang_Status">服务状态</sys:String>
+</ResourceDictionary>
