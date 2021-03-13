@@ -1,0 +1,9 @@
+{
+  "MerchantName": "SuperRich",
+  "MerchantUUID": "c9d10bc5859448568fdcd5020562a1ea",
+  "MerchantWalletUUID": "5de0b3790a744bb185d257d0ad240b23",
+  "ConnectionString_WanjuOffline": "Server=127.0.0.1;Port=3306;database=wanju_rich;uid=root;password=123456;Convert Zero Datetime=True;SslMode = none;CharSet=utf8mb4;",
+  "ConnectionString_WanjuOnline": "Server=localhost;port=3306;database=wanju;uid=root;pwd=123456",
+  "ConnectionString_Redis": "127.0.0.1:6379,password=123456"
+
+}

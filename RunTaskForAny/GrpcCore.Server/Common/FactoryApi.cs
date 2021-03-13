@@ -25,7 +25,7 @@ namespace GrpcCore.Server.Common
 
         public static void LoadScript()
         {
-            functions = new List<AExecAtion>();
+            functions = new List<AExecAtion>() { new ANoneAtion() };
             var scriptPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts");
             var files = System.IO.Directory.GetFiles(scriptPath, "*.cs", System.IO.SearchOption.AllDirectories);
             foreach (var file in files)
@@ -42,7 +42,11 @@ namespace GrpcCore.Server.Common
         public static AExecAtion CreateFunction(string apiPath = "")
         {
             var api = Functions.FirstOrDefault(m => m.ActionName == apiPath);
-            return api ?? new ANoneAtion();
+            if(api==null)
+            {
+                api= Functions.FirstOrDefault(m => m.ActionName == "");
+            }
+            return api;
         }
 
     }

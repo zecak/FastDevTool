@@ -77,3 +77,7 @@
 /RunTaskForAny/ProjectPlan/obj/Release
 /RunTaskForAny/WpfApp_Scripting/bin/Debug/netcoreapp3.1
 /RunTaskForAny/WpfApp_Scripting/obj
+/RunTaskForAny/GrpcCore.DB/bin/Debug/netcoreapp3.1
+/RunTaskForAny/GrpcCore.DB/obj
+/RunTaskForAny/GrpcCore.Test.DB/bin/Debug/netcoreapp3.1
+/RunTaskForAny/GrpcCore.Test.DB/obj

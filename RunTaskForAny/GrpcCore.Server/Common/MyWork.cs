@@ -21,6 +21,7 @@ namespace GrpcCore.Server.Common
 
                 server.Start();
 
+                FactoryApi.LoadScript();
 
             }
             catch (Exception ex)
