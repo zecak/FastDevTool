@@ -42,7 +42,7 @@ namespace GrpcCore.Server.Common
                 });
 
                 task.Wait();
-
+                Tool.Log.Debug("[CScript]脚本->开始加载");
                 FactoryApi.LoadScript();
                 Tool.Log.Info("[CScript]脚本->加载成功");
 
