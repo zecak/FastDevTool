@@ -40,7 +40,7 @@ namespace GrpcCore.Server.Common
                     var settingPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, settingFileName);
                     if (!System.IO.File.Exists(settingPath))
                     {
-                        var temp = new SettingInfo() { Name = "GrpcCore Server Service", ServiceName = "GrpcCore Server Service", Description = "GrpcCore Server Service", ServerIP = "127.0.0.1", ServerKey = "12345678", ServerPort = "8090" };
+                        var temp = new SettingInfo() { Name = "GrpcCore Server Service", ServiceName = "GrpcCore Server Service", Description = "GrpcCore Server Service", ServerIP = "127.0.0.1", ServerKey = "12345678", ServerPort = "8090", HttpPort="8080" };
                         File.WriteAllText(settingPath, temp.ToJson());
                     }
                     settingjson = System.IO.File.ReadAllText(settingPath).JsonTo<SettingInfo>();

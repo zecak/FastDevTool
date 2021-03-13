@@ -21,10 +21,20 @@ namespace GrpcCore.Server.Common
             {
                 Init(context);
 
-                var api = FactoryApi.CreateFunction(request.ApiPath);
+                var dataReq = new DataRequest()
+                {
+                    ApiPath = request.ApiPath,
+                    AppID = request.AppID,
+                    Data = request.Data,
+                    Sign = request.Sign,
+                    Time = request.Time,
+                    Token = request.Token
+                };
+
+                var api = FactoryApi.CreateFunction(dataReq.ApiPath);
                 if (api != null)
                 {
-                    if (!api.CheckSign(request, serverInfo))
+                    if (!api.CheckSign(dataReq, serverInfo))
                     {
                         return Task.FromResult(new APIReply { Code = 222, Msg = "电子签名不一致" });
                     }
@@ -41,7 +51,9 @@ namespace GrpcCore.Server.Common
                         }
 
                     }
-                    return Task.FromResult(api.ApiAction(request, context, serverInfo));
+                    var dataReply = api.ApiAction(dataReq, serverInfo);
+                    var apiReply = new APIReply() { Action = dataReply.Action, Code = dataReply.Code, Data = dataReply.Data, Msg = dataReply.Msg };
+                    return Task.FromResult(apiReply);
                 }
 
                 return Task.FromResult(new APIReply { Code = 100, Msg = "未知操作" });
@@ -117,6 +129,7 @@ namespace GrpcCore.Server.Common
         {
             StartWork(request);
             APIReply resp = new APIReply() { Code = 100, Msg = "未知操作" };
+
             var api = FactoryApi.CreateFunction(request.ApiPath);
             if (api != null)
             {

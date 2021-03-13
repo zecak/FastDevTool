@@ -10,9 +10,9 @@ public class ALoginOut : AExecAtion
 {
     public override string ActionName => ActionApiPath.LoginOut;
 
-    public override APIReply ApiAction(APIRequest request, ServerCallContext context, ServerInfo serverInfo)
+    public override DataReply ApiAction(DataRequest request, ServerInfo serverInfo)
     {
-        var resp = new APIReply();
+        var resp = new DataReply();
         resp.Code = 1;
         resp.Msg = "请求成功";
         //serverInfo.OnlineUserTokens.Remove(request.Token);

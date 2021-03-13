@@ -16,6 +16,8 @@ namespace GrpcCore.Common.Models
         public string ServerPort { get; set; }
 
         public string ServerKey { get; set; }
+
+        public string HttpPort { get; set; }
     }
 }
 

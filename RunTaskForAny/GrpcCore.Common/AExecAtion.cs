@@ -24,9 +24,9 @@ namespace GrpcCore.Common
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public virtual APIReply ApiAction(APIRequest request, ServerCallContext context, ServerInfo serverInfo)
+        public virtual DataReply ApiAction(DataRequest request, ServerInfo serverInfo)
         {
-            return new APIReply() { Code = 100, Msg = "UnimplementedOperation" };
+            return new DataReply() { Code = 100, Msg = "UnimplementedOperation" };
         }
 
         public virtual async Task ChatAction(APIRequest request, IServerStreamWriter<APIReply> responseStream, ServerCallContext context, ServerInfo serverInfo)
@@ -34,6 +34,15 @@ namespace GrpcCore.Common
             await responseStream.WriteAsync(new APIReply { Code = 100, Msg = "UnimplementedOperation" });
         }
 
+        public bool CheckSign(DataRequest request, ServerInfo serverInfo)
+        {
+            var sign = (request.AppID + request.Data + request.Time + serverInfo.Setting.ServerKey).ToMd5();
+            if (sign != request.Sign)
+            {
+                return false;
+            }
+            return true;
+        }
         public bool CheckSign(APIRequest request, ServerInfo serverInfo)
         {
             var sign = (request.AppID + request.Data + request.Time + serverInfo.Setting.ServerKey).ToMd5();
@@ -43,6 +52,5 @@ namespace GrpcCore.Common
             }
             return true;
         }
-
     }
 }

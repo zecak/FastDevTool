@@ -11,9 +11,9 @@ public class ALogin : AExecAtion
     public override bool LimitAction => false;
     public override string ActionName => ActionApiPath.Login;
 
-    public override APIReply ApiAction(APIRequest request, ServerCallContext context, ServerInfo serverInfo)
+    public override DataReply ApiAction(DataRequest request, ServerInfo serverInfo)
     {
-        var resp = new APIReply();
+        var resp = new DataReply();
         var info = request.Data.JsonTo<LoginModel>();
         if (info == null)
         {

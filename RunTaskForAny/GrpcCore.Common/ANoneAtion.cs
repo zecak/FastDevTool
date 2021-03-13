@@ -11,9 +11,9 @@ namespace GrpcCore.Common
     public class ANoneAtion : AExecAtion
     {
         public override string ActionName => "";
-        public override APIReply ApiAction(APIRequest request, ServerCallContext context, ServerInfo serverInfo)
+        public override DataReply ApiAction(DataRequest request, ServerInfo serverInfo)
         {
-            return base.ApiAction(request, context, serverInfo);
+            return base.ApiAction(request, serverInfo);
         }
 
         public override Task ChatAction(APIRequest request, IServerStreamWriter<APIReply> responseStream, ServerCallContext context, ServerInfo serverInfo)

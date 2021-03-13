@@ -11,9 +11,9 @@ public class AGetClients : AExecAtion
     public override bool LimitAction => false;
     public override string ActionName => ActionApiPath.GetClients;
 
-    public override APIReply ApiAction(APIRequest request, ServerCallContext context, ServerInfo serverInfo)
+    public override DataReply ApiAction(DataRequest request, ServerInfo serverInfo)
     {
-        var resp = new APIReply();
+        var resp = new DataReply();
         resp.Code = 1;
         resp.Msg = "Success";
         resp.Data = serverInfo.Clients.ToJson();
